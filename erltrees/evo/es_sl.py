@@ -2,6 +2,7 @@ import argparse
 from datetime import datetime
 import json
 import pdb
+import time
 from rich import print
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,13 +23,17 @@ class EvolutionaryStrategySL(EvolutionaryAlgorithm):
         super(EvolutionaryStrategySL, self).__init__(**kwargs)
         self.tournament_size = tournament_size
     
-    def run(self, generations, initial_pop_filename=None,
+    def run(self, generations, initial_pop=None,
             should_plot=False, should_save_plot=False, 
             should_render=False, render_every=None):
         
         # Seeding initial population
-        initial_pop = self.get_initial_pop(self.lamb, self.initial_depth, initial_pop_filename)
-        population = [i.copy() for i in initial_pop]
+        population = evo.fill_initial_pop(self.config, initial_pop, self.lamb, self.initial_depth,
+            (0 if args["should_attenuate_alpha"] else args["alpha"]),
+            jobs_to_parallelize=self.jobs_to_parallelize, should_penalize_std=self.should_penalize_std,
+            should_norm_state=self.should_norm_state, episodes=50)
+        population = [i.copy() for i in population]
+        self.allbest = population[np.argmax([i.fitness for i in population])]
 
         for generation in range(generations):
             current_alpha = self.calc_alpha(population, generation, generations)
@@ -65,7 +70,7 @@ class EvolutionaryStrategySL(EvolutionaryAlgorithm):
                 self.print_last_metrics()
             
         self.plot_metrics(should_plot, should_save_plot)
-        self.allbest = self.evaluate_popbests(candidate_pool_size=10, verbose=self.verbose)
+        # self.allbest = self.evaluate_popbests(candidate_pool_size=10, verbose=self.verbose)
         rl.fill_metrics(self.config, [self.allbest], self.alpha, 1000, 
             self.should_norm_state, self.should_penalize_std)
 
@@ -99,6 +104,8 @@ if __name__ == "__main__":
 
     config = configs.get_config(args["task"])
     
+    TIME_START = time.time()
+
     command_line = str(args)
     command_line += "\n\npython -m erltrees.evo.es_sl " + " ".join([f"--{key} {val}" for (key, val) in args.items()]) + "\n\n---\n\n"
     output_path = ("data/log_" + datetime.now().strftime("%Y_%m_%d-%I_%M_%S") + ".txt") if args['output_path'] in [None, ""] else args['output_path']
@@ -106,8 +113,16 @@ if __name__ == "__main__":
     print(f"output_path: '{output_path}'")
     io.save_history_to_file(config, None, output_path, prefix=command_line)
 
+    # Setting up initial population
+    initial_pop = evo.get_initial_pop(config, args["lambda"], args["initial_depth"],
+        alpha=(0 if args["should_attenuate_alpha"] else args["alpha"]),
+        jobs_to_parallelize=args["jobs_to_parallelize"], should_penalize_std=args["should_penalize_std"], 
+        should_norm_state=args["should_norm_state"], episodes=100, filename=args["initial_pop"])    
+
+    # Running simulations
     sim_history = []
     for _ in range(args['simulations']):
+        # Executing EA
         es = EvolutionaryStrategySL(tournament_size=args["tournament_size"], 
             config=config,
             mu=args["mu"], lamb=args["lambda"], alpha=args["alpha"], 
@@ -121,12 +136,16 @@ if __name__ == "__main__":
             should_prune_best_by_visits=args["should_prune_best_by_visits"],
             jobs_to_parallelize=args["jobs_to_parallelize"], 
             verbose=args["verbose"])
+        es.run(args['generations'], initial_pop, args['should_plot'], args['should_save_plot'])
 
-        es.run(args['generations'], args['initial_pop'], args['should_plot'], args['should_save_plot'])
+        # Logging results
+        sim_history.append((es.allbest, es.allbest.reward, es.allbest.get_tree_size(), None))
 
-        sim_history.append((es.allbest, es.allbest.reward, es.allbest.get_tree_size()))
-
+        # Printing results
         print(f"Simulations run until now: {len(sim_history)} / {args['simulations']}")
         print(sim_history)
         print(f"output_path: '{output_path}'")
-        io.save_history_to_file(config, sim_history, output_path, prefix=command_line)
+
+        TIME_END = time.time()
+        io.save_history_to_file(config, sim_history, output_path, 
+            elapsed_time=TIME_END-TIME_START, prefix=command_line)

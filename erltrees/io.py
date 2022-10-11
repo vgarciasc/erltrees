@@ -7,7 +7,7 @@ def printv(str, verbose=False):
     if verbose:
         console.log(str)
 
-def save_history_to_file(config, history, filepath, prefix=""):
+def save_history_to_file(config, history, filepath, elapsed_time=None, prefix=""):
     string = prefix
     
     if history is not None:
@@ -19,6 +19,8 @@ def save_history_to_file(config, history, filepath, prefix=""):
         string += f"Mean Best Size: {np.mean(sizes)}\n"
         string += f"Average Evaluations to Success: -------\n"
         string += f"Success Rate: {np.mean(successes)}\n"
+        if elapsed_time:
+            string += f"Elapsed time: {elapsed_time} seconds"
         string += "\n-----\n\n"
 
         for i, tree in enumerate(trees):

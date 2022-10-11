@@ -25,13 +25,10 @@ class EvolutionaryStrategySL2(EvolutionaryAlgorithm):
     def run(self, generations, initial_pop=None,
             should_plot=False, should_save_plot=False, 
             should_render=False, render_every=None):
-
-        # Initialization
-        population = evo.initialize_population(self.config, self.initial_depth, self.lamb,
-            initial_pop, 0 if self.should_attenuate_alpha else self.alpha,
-            episodes=100, norm_state=self.should_norm_state, 
-            should_penalize_std=self.should_penalize_std, 
-            jobs_to_parallelize=self.jobs_to_parallelize)
+        
+        # Seeding initial population
+        initial_pop = self.get_initial_pop(self.lamb, self.initial_depth, episodes=100, filename=initial_pop)
+        population = [i.copy() for i in initial_pop]
         best = population[np.argmax([i.fitness for i in population])]
         self.allbest = best
         evaluations_to_success = 0
@@ -40,24 +37,23 @@ class EvolutionaryStrategySL2(EvolutionaryAlgorithm):
         for generation in range(generations):
             current_alpha = self.calc_alpha(population, generation, generations)
 
-            # Creating pool of children
+            # Parent selection
             population.sort(key=lambda x : x.fitness, reverse=True)
-            child_population = []
+            parent_population = population[:self.mu]
 
-            for parent in population[:self.mu]:
+            # Offspring generation
+            child_population = []
+            for parent in parent_population:
                 for _ in range(self.lamb // self.mu):
                     child = parent.copy()
                     mutate(child, mutation=self.mutation_type)
                     child_population.append(child)
-                
-            rl.fill_metrics(self.config, child_population,
-                alpha=current_alpha,
-                episodes=self.fit_episodes, 
-                should_norm_state=self.should_norm_state, 
-                penalize_std=self.should_penalize_std, 
-                n_jobs=self.jobs_to_parallelize)
+
+            rl.fill_metrics(self.config, child_population, alpha=current_alpha, 
+                episodes=self.fit_episodes, should_norm_state=self.should_norm_state, 
+                penalize_std=self.should_penalize_std, n_jobs=self.jobs_to_parallelize)
             
-            # Selecting next generation
+            # Survivor selection
             population = child_population
 
             fitnesses = [i.fitness for i in population]

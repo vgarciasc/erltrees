@@ -210,31 +210,3 @@ class EvolutionaryAlgorithm():
             figure_file = "data/plots/" + self.config['name'] + "_" + datetime.now().strftime("%Y_%m_%d-%H_%M_%S") + ".png"
             print(f"Saving figure to '{figure_file}'.")
             plt.savefig(figure_file)
-    
-    def get_initial_pop(self, popsize, initial_depth, filename=None):
-        # Initialize from file
-        file_pop = []
-        if filename:
-            with open(filename) as f:
-                json_obj = json.load(f)
-            
-            file_pop = [evo_tree.Individual.read_from_string(self.config, json_str) for json_str in json_obj]
-        
-            for tree in file_pop:
-                if self.should_norm_state:
-                    tree = tree.copy()
-                    tree.normalize_thresholds()
-
-        population = [] + file_pop
-
-        # Fill with the rest
-        for _ in range(len(population), popsize):
-            tree = evo_tree.Individual.generate_random_tree(
-                self.config, depth=initial_depth)
-            population.append(tree)
-        
-        rl.fill_metrics(self.config, population, alpha=self.alpha, 
-            episodes=self.fit_episodes, should_norm_state=self.should_norm_state,
-            penalize_std=self.should_penalize_std)
-        
-        return population
