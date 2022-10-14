@@ -17,6 +17,7 @@ class EvolutionaryAlgorithm():
                  should_prune_by_visits=False,
                  recheck_popbest_episodes=False,
                  should_recheck_popbest=False,
+                 should_include_allbest=False,
                  should_prune_best_by_visits=False,
                  jobs_to_parallelize=-1,
                  verbose=False, **kwargs):
@@ -30,6 +31,7 @@ class EvolutionaryAlgorithm():
         self.mutation_type = mutation_type
         self.tournament_size = tournament_size
         self.should_attenuate_alpha = should_attenuate_alpha
+        self.should_include_allbest = should_include_allbest
         self.should_recheck_popbest = should_recheck_popbest
         self.recheck_popbest_episodes = recheck_popbest_episodes
         self.should_norm_state = should_norm_state

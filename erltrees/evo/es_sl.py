@@ -31,7 +31,7 @@ class EvolutionaryStrategySL(EvolutionaryAlgorithm):
         population = evo.fill_initial_pop(self.config, initial_pop, self.lamb, self.initial_depth,
             (0 if args["should_attenuate_alpha"] else args["alpha"]),
             jobs_to_parallelize=self.jobs_to_parallelize, should_penalize_std=self.should_penalize_std,
-            should_norm_state=self.should_norm_state, episodes=50)
+            should_norm_state=self.should_norm_state, episodes=100)
         population = [i.copy() for i in population]
         self.allbest = population[np.argmax([i.fitness for i in population])]
 
@@ -58,6 +58,8 @@ class EvolutionaryStrategySL(EvolutionaryAlgorithm):
 
             # Survivor selection (truncation selection)
             population = child_population
+            if self.should_include_allbest:
+                population += [self.allbest.copy()]
 
             if self.should_attenuate_alpha and self.allbest:
                 # in this case, fitness of best individual needs to be updated
@@ -92,6 +94,7 @@ if __name__ == "__main__":
     parser.add_argument('--should_prune_by_visits', help='Should prune every tree by visits?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_prune_best_by_visits', help='Should prune best tree by visits?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_recheck_popbest', help='Should recheck population best?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--should_include_allbest', help='Should always include all-time best individual in the population?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--recheck_popbest_episodes', help='How many episodes to run a recheck on popbest?', required=False, default=100, type=int)
     parser.add_argument('--should_attenuate_alpha', help='Should attenuate alpha?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_penalize_std', help='Should penalize standard deviation?', required=False, default=True, type=lambda x: (str(x).lower() == 'true'))
@@ -130,6 +133,7 @@ if __name__ == "__main__":
             mutation_type=args["mutation_type"], should_norm_state=args["should_norm_state"],
             should_penalize_std=args["should_penalize_std"], 
             should_recheck_popbest=args["should_recheck_popbest"],
+            should_include_allbest=args["should_include_allbest"],
             recheck_popbest_episodes=args["recheck_popbest_episodes"],
             should_prune_by_visits=args["should_prune_by_visits"],
             should_attenuate_alpha=args["should_attenuate_alpha"],
