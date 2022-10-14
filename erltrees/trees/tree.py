@@ -29,6 +29,21 @@ class TreeNode:
         return f"[attrib: {self.attribute}, threshold: {self.threshold}, " + \
             f"label: {self.label}, is_leaf: {self.is_leaf()}]"
     
+    def copy(self):
+        if self.is_leaf:
+            return TreeNode(self.config, self.attribute, self.threshold, self.label)
+        else:
+            new_left = self.left.copy()
+            new_right = self.right.copy()
+
+            new_node = TreeNode(self.config, self.attribute, 
+                self.threshold, self.label, new_left, new_right)
+            
+            new_left.parent = new_node
+            new_right.parent = new_node
+
+            return new_node
+    
     def is_root(self):
         return self.parent is None
     
@@ -44,17 +59,38 @@ class TreeNode:
         if self.is_root():
             return False
         return self.parent.right == self
+    
+    def get_path(self, path=[]):
+        if self.is_root():
+            return path
 
-    def act(self, state):
+        if self.is_left_child():
+            return self.parent.get_path(path) + ["left"] 
+        else:
+            return self.parent.get_path(path) + ["right"] 
+
+    def get_node_by_path(self, path):
+        node = self
+        for direction in path:
+            if hasattr(node, direction):
+                node = getattr(node, direction)
+            else:
+                return None
+        return node
+
+    def get_leaf(self, state):
         self.visits += 1
 
         if self.is_leaf():
-            return self.label
+            return self
         
         if state[self.attribute] <= self.threshold:
-            return self.left.act(state)
+            return self.left.get_leaf(state)
         else:
-            return self.right.act(state)
+            return self.right.get_leaf(state)
+
+    def act(self, state):
+        return self.get_leaf(state).label
     
     def get_tree_size(self):
         total = 1
@@ -93,6 +129,8 @@ class TreeNode:
                 if include_visits:
                     output += f" (visits: {node.visits})"
                 # output += (self.config['actions'][np.argmax(node.q_values)]).upper() + " " + str(node.q_values)
+                if hasattr(node, "q_values"):
+                    output += ", ".join([str((action_name, node.q_values[action_id])) + ("*" if np.argmax(node.q_values) == action_id else "") for action_id, action_name in enumerate(self.config["actions"])])
             else:
                 output += self.config['attributes'][node.attribute][0]
                 output += " <= "

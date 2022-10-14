@@ -1,3 +1,4 @@
+import pdb
 import numpy as np
 from rich.console import Console
 
@@ -42,7 +43,7 @@ def get_trees_from_logfile(filepath):
             if lines[curr_line_idx].strip() == "----------":
                 curr_line_idx += 1
                 start_line = curr_line_idx
-                while lines[curr_line_idx] != "\n":
+                while curr_line_idx < len(lines)-1 and lines[curr_line_idx] != "\n":
                     curr_line_idx += 1
                 end_line = curr_line_idx
                 tree_string = "\n" + "".join(lines[start_line:end_line]).rstrip()

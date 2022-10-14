@@ -29,6 +29,35 @@ def calc_fitness(mean_reward, std_reward, tree_size, alpha, should_penalize_std)
     penalized_reward = (mean_reward - std_reward) if should_penalize_std else mean_reward
     return penalized_reward - alpha * tree_size
 
+def run_episode(tree, env, config, should_norm_state=False, render=False):
+    state = env.reset()
+    total_reward = 0
+    done = False
+    
+    while not done:
+        if should_norm_state:
+            state = normalize_state(config, state)
+        
+        action = tree.act(state)
+        state, reward, done, _ = env.step(action)
+        total_reward += reward
+
+        if render:
+            env.render()
+    
+    return total_reward
+
+def collect_rewards(config, tree, episodes, should_norm_state, render=False):
+    env = gym.make(config["name"])
+    total_rewards = []
+
+    for episode in range(episodes):
+        total_reward = run_episode(tree, env, config, should_norm_state, render)
+        total_rewards.append(total_reward)
+    
+    env.close()
+    return total_rewards
+
 def collect_metrics(config, trees, alpha=0.5, episodes=10,
     should_norm_state=False, penalize_std=False,
     should_fill_attributes=False,
@@ -37,29 +66,7 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
     output = []
 
     for tree in trees:
-        env = gym.make(config["name"])
-        total_rewards = []
-
-        for episode in range(episodes):
-            state = env.reset()
-            total_reward = 0
-            done = False
-            
-            while not done:
-                if should_norm_state:
-                    state = normalize_state(config, state)
-                
-                action = tree.act(state)
-                state, reward, done, _ = env.step(action)
-                total_reward += reward
-
-                if render:
-                    env.render()
-
-            # printv(f"Episode #{episode} finished with total reward {total_reward}", verbose)
-            total_rewards.append(total_reward)
-        
-        env.close()
+        total_rewards = collect_rewards(config, tree, episodes, should_norm_state, render)
 
         tree_avg_reward = np.mean(total_rewards)
         # tree_avg_reward = np.min(total_rewards)

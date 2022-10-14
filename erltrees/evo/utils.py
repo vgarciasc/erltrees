@@ -1,4 +1,5 @@
 import json
+import pdb
 import numpy as np
 import erltrees.evo.evo_tree as evo_tree
 import erltrees.rl.utils as rl
@@ -27,25 +28,25 @@ def initialize_population(config, initial_depth, popsize, initial_pop, alpha,
 
 def get_initial_pop(config, popsize, initial_depth, alpha, jobs_to_parallelize,
         should_penalize_std=False, should_norm_state=True, episodes=10, filename=None):
-        # Initialize from file
-        population = []
-        if filename:
-            with open(filename) as f:
-                json_obj = json.load(f)
-            
-            population = [evo_tree.Individual.read_from_string(config, json_str) for json_str in json_obj]
+    
+    # Initialize from file
+    population = []
+    if filename:
+        with open(filename) as f:
+            json_obj = json.load(f)
         
+        population = [evo_tree.Individual.read_from_string(config, json_str) for json_str in json_obj]
+        
+        if should_norm_state:
             for tree in population:
-                if should_norm_state:
-                    tree = tree.copy()
-                    tree.normalize_thresholds()
+                tree.normalize_thresholds()
 
-        rl.fill_metrics(config, population, alpha=alpha, 
-            episodes=episodes, should_norm_state=should_norm_state,
-            penalize_std=should_penalize_std, 
-            n_jobs=jobs_to_parallelize)
-        
-        return population
+    rl.fill_metrics(config, population, alpha=alpha, 
+        episodes=episodes, should_norm_state=should_norm_state,
+        penalize_std=should_penalize_std, 
+        n_jobs=jobs_to_parallelize)
+
+    return population
 
 def fill_initial_pop(config, population, popsize, initial_depth, alpha, jobs_to_parallelize,
         should_penalize_std=False, should_norm_state=True, episodes=10):
