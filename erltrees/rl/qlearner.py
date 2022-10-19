@@ -11,7 +11,7 @@ from rich.console import Console
 console = Console()
 
 def init_qlearning(tree, config):
-    leaves = tree.get_node_list(get_inner=False, get_leaf=True)
+    leaves = tree.get_node_list(get_inners=False, get_leaves=True)
     for leaf in leaves:
         # leaf.q_values = np.random.uniform(-1, 1, (config["n_actions"], 1))
         leaf.q_values = np.zeros(config["n_actions"])
@@ -92,7 +92,7 @@ def run_watkinsQ(tree, config, episodes=10, lamb=0.9, lr=0.1, discount=0.9, shou
 
             leaf.elig_trace += 1
 
-            for lf in tree.get_node_list(get_inner=False, get_leaf=True):
+            for lf in tree.get_node_list(get_inners=False, get_leaves=True):
                 lf.q_values[action] += lr * delta_q * lf.elig_trace
                 lf.elig_trace *= lamb * discount
 

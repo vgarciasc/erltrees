@@ -65,11 +65,30 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
 
     output = []
 
+    env = gym.make(config["name"])
+
     for tree in trees:
-        total_rewards = collect_rewards(config, tree, episodes, should_norm_state, render)
+        total_rewards = []
+        
+        for episode in range(episodes):
+            state = env.reset()
+            total_reward = 0
+            done = False
+
+            while not done:
+                if should_norm_state:
+                    state = normalize_state(config, state)
+                
+                action = tree.act(state)
+                state, reward, done, _ = env.step(action)
+                total_reward += reward
+
+                if render:
+                    env.render()
+            
+            total_rewards.append(total_reward)
 
         tree_avg_reward = np.mean(total_rewards)
-        # tree_avg_reward = np.min(total_rewards)
         tree_std_reward = np.std(total_rewards)
         tree_fitness = calc_fitness(
             tree_avg_reward, tree_std_reward, 
@@ -81,6 +100,8 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
             tree.fitness = tree_fitness
 
         output.append((tree_avg_reward, tree_std_reward, tree_fitness))
+
+    env.close()
 
     return output
 

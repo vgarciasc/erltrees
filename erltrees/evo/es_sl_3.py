@@ -18,9 +18,9 @@ import erltrees.rl.configs as configs
 # Implementation of (λ, μ) Evolutionary Strategy as defined in 
 # 'Essentials of Metaheuristics' (Sean Luke, 2016)
 
-class EvolutionaryStrategySL(EvolutionaryAlgorithm):
+class EvolutionaryStrategySL3(EvolutionaryAlgorithm):
     def __init__(self, tournament_size=0, **kwargs):
-        super(EvolutionaryStrategySL, self).__init__(**kwargs)
+        super(EvolutionaryStrategySL3, self).__init__(**kwargs)
         self.tournament_size = tournament_size
     
     def run(self, generations, initial_pop=None,

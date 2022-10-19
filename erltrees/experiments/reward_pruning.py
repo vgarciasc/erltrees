@@ -8,7 +8,7 @@ import erltrees.rl.utils as rl
 from scipy.stats import ks_2samp
 
 def reward_pruning(tree, node, config, episodes=100, alpha=0, should_norm_state=True, n_jobs=4):
-    nodes = tree.get_node_list(get_inner=True, get_leaf=False)
+    nodes = tree.get_node_list(get_inners=True, get_leaves=False)
     # nodes = filter(lambda x : x.get_tree_size() == 3, nodes)
     nodes.sort(key=lambda x : x.get_tree_size())
     node_paths = [node.get_path() for node in nodes]

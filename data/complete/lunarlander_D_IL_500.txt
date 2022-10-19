@@ -1,0 +1,1037 @@
+{'task': 'lunar_lander', 'simulations': 20, 'mu': 5, 'lambda': 100, 'generations': 500, 'tournament_size': 0, 'mutation_type': 'D', 'norm_state': True, 'initial_depth': 3, 'initial_pop': 'data/dagger_ll_population.txt', 'elitism': 0.0, 'mutation_qt': 1, 'output_path': None, 'alpha': 1.0, 'should_prune_by_visits': False, 'should_prune_best_by_visits': True, 'should_adapt_sigma': False, 'should_atenuate_alpha': False, 'should_consider_top_splits': False, 'should_penalize_std': True, 'top_splits_to_consider': 10, 'episodes': 10, 'should_plot': False, 'should_save_plot': True, 'should_render': False, 'render_every': 1, 'should_print_individuals': False, 'jobs_to_parallelize': 4, 'verbose': True}
+
+python es.py --task lunar_lander --simulations 20 --mu 5 --lambda 100 --generations 500 --tournament_size 0 --mutation_type D --norm_state True --initial_depth 3 --initial_pop data/dagger_ll_population.txt --elitism 0.0 --mutation_qt 1 --output_path None --alpha 1.0 --should_prune_by_visits False --should_prune_best_by_visits True --should_adapt_sigma False --should_atenuate_alpha False --should_consider_top_splits False --should_penalize_std True --top_splits_to_consider 10 --episodes 10 --should_plot False --should_save_plot True --should_render False --render_every 1 --should_print_individuals False --jobs_to_parallelize 4 --verbose True
+
+---
+
+Mean Best Reward: 212.00150295148697 +- 12.315090043141396
+Mean Best Size: 46.2
+Average Evaluations to Success: 12.2
+Success Rate: 1.0
+
+-----
+
+Tree #0 (Reward: 189.5294689086215, Size: 31)
+σ: [0.08169078 0.59323047 0.5818031  0.92675925 0.56832394 0.65968148
+ 0.26830973 0.99685213]
+----------
+- Leg 1 is Touching <= 0.00000
+-- Angle <= 0.00064
+--- Y Velocity <= -0.02000
+---- Y Position <= 0.78800
+----- Y Velocity <= -0.06020
+------ Angle <= -0.08276
+------- LEFT ENGINE
+------- MAIN ENGINE
+------ Angle <= -0.03342
+------- LEFT ENGINE
+------- MAIN ENGINE
+----- X Velocity <= -0.02540
+------ NOP
+------ LEFT ENGINE
+---- LEFT ENGINE
+--- Y Velocity <= -0.06460
+---- X Velocity <= -0.04260
+----- RIGHT ENGINE
+----- MAIN ENGINE
+---- X Velocity <= -0.01680
+----- RIGHT ENGINE
+----- Angle <= 0.07257
+------ Angular Velocity <= 0.01540
+------- NOP
+------- Leg 2 is Touching <= 0.50000
+-------- RIGHT ENGINE
+-------- RIGHT ENGINE
+------ RIGHT ENGINE
+-- Y Velocity <= -0.01140
+--- MAIN ENGINE
+--- NOP
+
+Tree #1 (Reward: 214.0346011600919, Size: 47)
+σ: [0.75908121 0.21230215 0.24458755 0.59574255 0.68204933 0.72366782
+ 0.4393702  0.24354125]
+----------
+- Leg 1 is Touching <= 0.50000
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- Angular Velocity <= -0.03520
+----- LEFT ENGINE
+----- Y Position <= 0.47592
+------ Y Velocity <= -0.06740
+------- MAIN ENGINE
+------- LEFT ENGINE
+------ X Velocity <= -0.01060
+------- MAIN ENGINE
+------- Angular Velocity <= 0.02240
+-------- LEFT ENGINE
+-------- RIGHT ENGINE
+---- X Velocity <= 0.01240
+----- RIGHT ENGINE
+----- LEFT ENGINE
+--- Y Velocity <= -0.01660
+---- X Velocity <= -0.01300
+----- Y Velocity <= -0.05960
+------ MAIN ENGINE
+------ RIGHT ENGINE
+----- Y Position <= 0.16467
+------ Y Velocity <= -0.02020
+------- MAIN ENGINE
+------- Leg 2 is Touching <= -0.75940
+-------- RIGHT ENGINE
+-------- NOP
+------ Y Velocity <= -0.05060
+------- Angle <= 0.07257
+-------- X Position <= -0.01733
+--------- Angular Velocity <= 0.01700
+---------- MAIN ENGINE
+---------- RIGHT ENGINE
+--------- Angle <= 0.00000
+---------- LEFT ENGINE
+---------- MAIN ENGINE
+-------- RIGHT ENGINE
+------- Angle <= 0.05061
+-------- NOP
+-------- RIGHT ENGINE
+---- NOP
+-- Y Velocity <= -0.01360
+--- MAIN ENGINE
+--- X Position <= 0.08144
+---- NOP
+---- LEFT ENGINE
+
+Tree #2 (Reward: 215.29754041634268, Size: 93)
+σ: [0.65230227 0.18945478 0.44766178 0.73754247 0.47951362 0.05405589
+ 0.40491015 0.72609871]
+----------
+- Leg 1 is Touching <= 0.00000
+-- Angle <= 0.00064
+--- Y Velocity <= -0.02000
+---- Y Position <= 0.78800
+----- Y Velocity <= -0.06020
+------ Angle <= -0.08276
+------- MAIN ENGINE
+------- Angular Velocity <= -0.01460
+-------- Y Position <= 0.38000
+--------- MAIN ENGINE
+--------- X Position <= -0.03333
+---------- MAIN ENGINE
+---------- LEFT ENGINE
+-------- Y Velocity <= -0.08040
+--------- MAIN ENGINE
+--------- X Velocity <= -0.03400
+---------- RIGHT ENGINE
+---------- MAIN ENGINE
+------ Y Position <= 0.11000
+------- X Velocity <= 0.02300
+-------- MAIN ENGINE
+-------- LEFT ENGINE
+------- Angle <= -0.03342
+-------- LEFT ENGINE
+-------- NOP
+----- X Velocity <= -0.02540
+------ Angular Velocity <= 0.00840
+------- Angle <= -0.04997
+-------- LEFT ENGINE
+-------- NOP
+------- LEFT ENGINE
+------ LEFT ENGINE
+---- LEFT ENGINE
+--- Y Velocity <= -0.06460
+---- X Velocity <= -0.04260
+----- RIGHT ENGINE
+----- Y Velocity <= -0.09520
+------ Angle <= 0.16998
+------- MAIN ENGINE
+------- MAIN ENGINE
+------ X Velocity <= -0.01540
+------- Angle <= 0.02706
+-------- MAIN ENGINE
+-------- RIGHT ENGINE
+------- Angle <= 0.10918
+-------- Y Position <= 0.24067
+--------- MAIN ENGINE
+--------- Angular Velocity <= -0.02620
+---------- LEFT ENGINE
+---------- MAIN ENGINE
+-------- RIGHT ENGINE
+---- X Velocity <= -0.01680
+----- Y Position <= 0.08267
+------ Y Velocity <= -0.02200
+------- MAIN ENGINE
+------- RIGHT ENGINE
+------ RIGHT ENGINE
+----- Y Velocity <= -0.01560
+------ Y Position <= 0.18200
+------- Y Velocity <= -0.02380
+-------- MAIN ENGINE
+-------- RIGHT ENGINE
+------- Angle <= 0.07257
+-------- X Velocity <= 0.02300
+--------- Angular Velocity <= 0.01540
+---------- Y Position <= 0.45000
+----------- Y Velocity <= -0.05000
+------------ X Position <= 0.00000
+------------- RIGHT ENGINE
+------------- MAIN ENGINE
+------------ MAIN ENGINE
+----------- Angular Velocity <= -0.02220
+------------ LEFT ENGINE
+------------ LEFT ENGINE
+---------- RIGHT ENGINE
+--------- X Position <= 0.09200
+---------- Angle <= 0.03056
+----------- LEFT ENGINE
+----------- Angular Velocity <= 0.03980
+------------ RIGHT ENGINE
+------------ MAIN ENGINE
+---------- LEFT ENGINE
+-------- RIGHT ENGINE
+------ RIGHT ENGINE
+-- Angle <= -0.06016
+--- X Position <= -0.22467
+---- NOP
+---- LEFT ENGINE
+--- Angle <= 0.09581
+---- Leg 2 is Touching <= 0.00000
+----- MAIN ENGINE
+----- NOP
+---- RIGHT ENGINE
+
+Tree #3 (Reward: 208.34527473595696, Size: 37)
+σ: [0.78722014 0.10715115 0.44027127 0.16019086 0.01623193 0.26916764
+ 0.04795435 0.46121354]
+----------
+- Leg 1 is Touching <= 0.50000
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- Angular Velocity <= -0.03520
+----- LEFT ENGINE
+----- X Velocity <= -0.01060
+------ Y Position <= 0.75933
+------- MAIN ENGINE
+------- X Velocity <= -0.11276
+-------- RIGHT ENGINE
+-------- NOP
+------ Angular Velocity <= 0.02240
+------- LEFT ENGINE
+------- MAIN ENGINE
+---- LEFT ENGINE
+--- X Velocity <= -0.01300
+---- Y Velocity <= -0.05960
+----- MAIN ENGINE
+----- RIGHT ENGINE
+---- Y Position <= 0.16467
+----- Y Velocity <= -0.02020
+------ MAIN ENGINE
+------ NOP
+----- Y Velocity <= -0.04700
+------ Angle <= 0.07257
+------- MAIN ENGINE
+------- Angular Velocity <= -0.02160
+-------- MAIN ENGINE
+-------- RIGHT ENGINE
+------ Angle <= 0.05061
+------- X Position <= -0.00200
+-------- RIGHT ENGINE
+-------- LEFT ENGINE
+------- NOP
+-- Y Velocity <= -0.01360
+--- MAIN ENGINE
+--- NOP
+
+Tree #4 (Reward: 200.76164865158785, Size: 27)
+σ: [0.19916405 0.87219544 0.41414473 0.74890649 0.19736931 0.54364352
+ 0.50084431 0.25526092]
+----------
+- Leg 1 is Touching <= 0.50000
+-- Angle <= -0.01719
+--- Y Velocity <= -0.04320
+---- Y Position <= 0.78533
+----- Angular Velocity <= -0.00360
+------ LEFT ENGINE
+------ MAIN ENGINE
+----- MAIN ENGINE
+---- LEFT ENGINE
+--- Y Velocity <= -0.01680
+---- X Velocity <= -0.02620
+----- RIGHT ENGINE
+----- Y Velocity <= -0.12938
+------ MAIN ENGINE
+------ X Position <= -0.39332
+------- LEFT ENGINE
+------- Angular Velocity <= 0.01740
+-------- Y Position <= 0.75535
+--------- MAIN ENGINE
+--------- LEFT ENGINE
+-------- RIGHT ENGINE
+---- X Position <= -0.00133
+----- RIGHT ENGINE
+----- NOP
+-- Y Velocity <= -0.01143
+--- MAIN ENGINE
+--- NOP
+
+Tree #5 (Reward: 204.8803586602871, Size: 71)
+σ: [0.83016406 0.40098021 0.05226717 0.06996687 0.67221769 0.33403363
+ 0.95862433 0.80131722]
+----------
+- Leg 1 is Touching <= -0.06634
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- Angular Velocity <= -0.03520
+----- LEFT ENGINE
+----- Y Position <= 0.27333
+------ MAIN ENGINE
+------ X Velocity <= -0.01060
+------- Angular Velocity <= -0.01160
+-------- X Velocity <= -0.06680
+--------- Y Position <= 0.75933
+---------- MAIN ENGINE
+---------- NOP
+--------- LEFT ENGINE
+-------- MAIN ENGINE
+------- Angular Velocity <= 0.02240
+-------- Y Position <= 0.35067
+--------- MAIN ENGINE
+--------- LEFT ENGINE
+-------- MAIN ENGINE
+---- X Velocity <= 0.01240
+----- Y Velocity <= -0.01780
+------ NOP
+------ LEFT ENGINE
+----- LEFT ENGINE
+--- Y Velocity <= -0.01660
+---- X Velocity <= -0.01300
+----- Y Velocity <= -0.05960
+------ X Velocity <= -0.05580
+------- RIGHT ENGINE
+------- Angle <= 0.03316
+-------- MAIN ENGINE
+-------- MAIN ENGINE
+------ X Position <= 0.00000
+------- RIGHT ENGINE
+------- MAIN ENGINE
+----- Y Position <= 0.16467
+------ Y Position <= 0.08133
+------- MAIN ENGINE
+------- Y Velocity <= -0.04060
+-------- MAIN ENGINE
+-------- RIGHT ENGINE
+------ Y Velocity <= -0.04700
+------- Angle <= 0.07257
+-------- X Position <= -0.01733
+--------- Angular Velocity <= 0.01700
+---------- Angle <= 0.01528
+----------- LEFT ENGINE
+----------- MAIN ENGINE
+---------- MAIN ENGINE
+--------- Angle <= 0.00000
+---------- LEFT ENGINE
+---------- Y Velocity <= -0.06460
+----------- MAIN ENGINE
+----------- LEFT ENGINE
+-------- X Velocity <= 0.03040
+--------- Angular Velocity <= -0.02160
+---------- MAIN ENGINE
+---------- RIGHT ENGINE
+--------- MAIN ENGINE
+------- RIGHT ENGINE
+---- NOP
+-- Angle <= -0.00743
+--- X Position <= 0.15508
+---- Y Velocity <= -0.00980
+----- MAIN ENGINE
+----- X Position <= 0.00000
+------ NOP
+------ NOP
+---- LEFT ENGINE
+--- NOP
+
+Tree #6 (Reward: 188.8066091758677, Size: 35)
+σ: [0.16563212 0.8286196  0.20340941 0.48353816 0.84600834 0.77410331
+ 0.32299585 0.24958729]
+----------
+- Leg 2 is Touching <= 0.50000
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- X Velocity <= -0.01060
+----- Angular Velocity <= -0.01160
+------ LEFT ENGINE
+------ Y Velocity <= -0.04900
+------- MAIN ENGINE
+------- RIGHT ENGINE
+----- MAIN ENGINE
+---- LEFT ENGINE
+--- Y Velocity <= -0.01660
+---- X Velocity <= 0.07219
+----- Y Velocity <= -0.04641
+------ X Velocity <= -0.05580
+------- RIGHT ENGINE
+------- MAIN ENGINE
+------ X Velocity <= -0.02680
+------- RIGHT ENGINE
+------- MAIN ENGINE
+----- MAIN ENGINE
+---- X Position <= -0.00133
+----- RIGHT ENGINE
+----- X Velocity <= 0.09403
+------ Angle <= 0.00668
+------- X Position <= 0.00000
+-------- NOP
+-------- LEFT ENGINE
+------- Angular Velocity <= 0.00140
+-------- LEFT ENGINE
+-------- RIGHT ENGINE
+------ NOP
+-- Y Velocity <= -0.01360
+--- MAIN ENGINE
+--- NOP
+
+Tree #7 (Reward: 216.4054033313319, Size: 33)
+σ: [0.73392949 0.25524939 0.41268425 0.99430116 0.30630434 0.14646381
+ 0.99148162 0.8053927 ]
+----------
+- Leg 1 is Touching <= 0.50000
+-- Angle <= 0.00064
+--- Y Velocity <= -0.02020
+---- Y Position <= 0.79467
+----- Y Velocity <= -0.05860
+------ Angular Velocity <= -0.03640
+------- LEFT ENGINE
+------- MAIN ENGINE
+------ Angle <= -0.03470
+------- LEFT ENGINE
+------- X Position <= -0.10467
+-------- RIGHT ENGINE
+-------- Leg 2 is Touching <= -0.47134
+--------- NOP
+--------- LEFT ENGINE
+----- X Velocity <= -0.02660
+------ NOP
+------ LEFT ENGINE
+---- LEFT ENGINE
+--- Y Velocity <= -0.06440
+---- MAIN ENGINE
+---- X Velocity <= -0.01720
+----- RIGHT ENGINE
+----- X Position <= -0.02200
+------ RIGHT ENGINE
+------ Angular Velocity <= 0.02180
+------- Leg 2 is Touching <= 0.50000
+-------- NOP
+-------- MAIN ENGINE
+------- RIGHT ENGINE
+-- Y Velocity <= -0.00339
+--- MAIN ENGINE
+--- NOP
+
+Tree #8 (Reward: 204.10611238468152, Size: 53)
+σ: [0.53626319 0.5873149  0.38021935 0.41102466 0.40805067 0.66888021
+ 0.23468312 0.55674133]
+----------
+- Leg 1 is Touching <= 0.50000
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- Y Position <= -0.06695
+----- MAIN ENGINE
+----- Y Position <= 0.27333
+------ MAIN ENGINE
+------ X Velocity <= -0.01060
+------- Angular Velocity <= -0.01160
+-------- Y Position <= 0.75933
+--------- LEFT ENGINE
+--------- MAIN ENGINE
+-------- MAIN ENGINE
+------- MAIN ENGINE
+---- LEFT ENGINE
+--- Y Velocity <= -0.01660
+---- X Velocity <= -0.01300
+----- Y Velocity <= -0.05960
+------ X Velocity <= -0.05580
+------- Angle <= -0.00095
+-------- NOP
+-------- RIGHT ENGINE
+------- MAIN ENGINE
+------ RIGHT ENGINE
+----- Y Position <= 0.16467
+------ Y Velocity <= -0.02020
+------- MAIN ENGINE
+------- NOP
+------ Y Velocity <= -0.04700
+------- Angle <= 0.07257
+-------- X Position <= -0.01733
+--------- MAIN ENGINE
+--------- Angular Velocity <= -0.02180
+---------- LEFT ENGINE
+---------- MAIN ENGINE
+-------- X Velocity <= 0.03040
+--------- RIGHT ENGINE
+--------- MAIN ENGINE
+------- Angle <= 0.05061
+-------- X Position <= -0.00200
+--------- RIGHT ENGINE
+--------- LEFT ENGINE
+-------- RIGHT ENGINE
+---- Leg 2 is Touching <= 0.50000
+----- Y Position <= 0.00000
+------ RIGHT ENGINE
+------ Angular Velocity <= -0.00020
+------- LEFT ENGINE
+------- RIGHT ENGINE
+----- RIGHT ENGINE
+-- Y Velocity <= -0.01360
+--- MAIN ENGINE
+--- NOP
+
+Tree #9 (Reward: 228.6585490106493, Size: 31)
+σ: [0.09361842 0.18788941 0.06748528 0.96328187 0.11148432 0.33859314
+ 0.53161507 0.74896362]
+----------
+- Leg 2 is Touching <= 0.50000
+-- Angle <= 0.00064
+--- Y Position <= 0.79467
+---- Y Velocity <= -0.05860
+----- Angle <= -0.06907
+------ Angular Velocity <= -0.00080
+------- LEFT ENGINE
+------- MAIN ENGINE
+------ MAIN ENGINE
+----- Y Position <= 0.11667
+------ LEFT ENGINE
+------ Angle <= -0.03470
+------- X Position <= -0.14867
+-------- NOP
+-------- LEFT ENGINE
+------- NOP
+---- X Velocity <= -0.02660
+----- NOP
+----- LEFT ENGINE
+--- Y Velocity <= -0.06440
+---- MAIN ENGINE
+---- X Velocity <= -0.01720
+----- RIGHT ENGINE
+----- X Position <= -0.02200
+------ RIGHT ENGINE
+------ Angular Velocity <= 0.02820
+------- NOP
+------- RIGHT ENGINE
+-- Y Velocity <= -0.01140
+--- MAIN ENGINE
+--- NOP
+
+Tree #10 (Reward: 224.48768668338585, Size: 41)
+σ: [0.7344656  0.6834268  0.41419656 0.21526401 0.96780076 0.20423998
+ 0.31943948 0.46601288]
+----------
+- Leg 2 is Touching <= 0.50000
+-- Angle <= 0.00064
+--- Y Velocity <= -0.02000
+---- Y Position <= 0.67131
+----- Angle <= -0.03342
+------ X Velocity <= -0.02820
+------- Angular Velocity <= -0.01160
+-------- LEFT ENGINE
+-------- MAIN ENGINE
+------- Y Position <= 0.17467
+-------- Y Velocity <= -0.03600
+--------- MAIN ENGINE
+--------- LEFT ENGINE
+-------- Angular Velocity <= 0.00560
+--------- LEFT ENGINE
+--------- MAIN ENGINE
+------ MAIN ENGINE
+----- X Velocity <= 0.03331
+------ NOP
+------ LEFT ENGINE
+---- Leg 1 is Touching <= 0.50000
+----- LEFT ENGINE
+----- X Velocity <= 0.04260
+------ NOP
+------ LEFT ENGINE
+--- Y Velocity <= -0.06460
+---- Y Position <= 0.22329
+----- MAIN ENGINE
+----- MAIN ENGINE
+---- X Velocity <= -0.01100
+----- RIGHT ENGINE
+----- X Position <= -0.01467
+------ Y Position <= 0.06133
+------- NOP
+------- RIGHT ENGINE
+------ Angular Velocity <= 0.02820
+------- NOP
+------- RIGHT ENGINE
+-- Y Velocity <= -0.01240
+--- MAIN ENGINE
+--- NOP
+
+Tree #11 (Reward: 198.29765032636817, Size: 61)
+σ: [0.83111397 0.60033095 0.04190061 0.15819413 0.00518662 0.11554591
+ 0.59029935 0.30010402]
+----------
+- Leg 1 is Touching <= 0.00000
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- Y Position <= 0.27333
+----- MAIN ENGINE
+----- X Velocity <= 0.07103
+------ Angular Velocity <= 0.00417
+------- X Velocity <= -0.06680
+-------- Y Position <= 0.75933
+--------- MAIN ENGINE
+--------- MAIN ENGINE
+-------- LEFT ENGINE
+------- MAIN ENGINE
+------ LEFT ENGINE
+---- LEFT ENGINE
+--- Y Velocity <= -0.01660
+---- X Velocity <= -0.01300
+----- Y Position <= 0.61338
+------ Angle <= 0.02737
+------- Angular Velocity <= 0.00740
+-------- MAIN ENGINE
+-------- RIGHT ENGINE
+------- Y Velocity <= -0.09280
+-------- X Position <= 0.00000
+--------- NOP
+--------- MAIN ENGINE
+-------- X Position <= -0.17052
+--------- MAIN ENGINE
+--------- RIGHT ENGINE
+------ RIGHT ENGINE
+----- Y Position <= 0.16467
+------ Leg 2 is Touching <= 0.94554
+------- MAIN ENGINE
+------- RIGHT ENGINE
+------ Y Velocity <= -0.04700
+------- Angle <= 0.07257
+-------- X Position <= -0.01733
+--------- Angular Velocity <= 0.01700
+---------- MAIN ENGINE
+---------- RIGHT ENGINE
+--------- Angle <= 0.01464
+---------- MAIN ENGINE
+---------- Angular Velocity <= -0.02180
+----------- LEFT ENGINE
+----------- MAIN ENGINE
+-------- X Velocity <= 0.03040
+--------- RIGHT ENGINE
+--------- Angular Velocity <= 0.03020
+---------- MAIN ENGINE
+---------- RIGHT ENGINE
+------- NOP
+---- Leg 2 is Touching <= 0.50000
+----- X Velocity <= -0.01000
+------ RIGHT ENGINE
+------ RIGHT ENGINE
+----- MAIN ENGINE
+-- Angle <= 0.06844
+--- Y Velocity <= -0.01360
+---- MAIN ENGINE
+---- NOP
+--- RIGHT ENGINE
+
+Tree #12 (Reward: 226.4303608579332, Size: 33)
+σ: [0.51658593 0.87451887 0.15844369 0.70144589 0.83452332 0.83130294
+ 0.88842351 0.75961733]
+----------
+- Leg 1 is Touching <= 0.50000
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- Angular Velocity <= -0.03520
+----- LEFT ENGINE
+----- Y Position <= 0.27333
+------ MAIN ENGINE
+------ X Velocity <= -0.01060
+------- MAIN ENGINE
+------- Angular Velocity <= 0.02240
+-------- LEFT ENGINE
+-------- MAIN ENGINE
+---- LEFT ENGINE
+--- Y Velocity <= -0.01660
+---- X Velocity <= -0.01300
+----- RIGHT ENGINE
+----- Y Position <= 0.11020
+------ MAIN ENGINE
+------ Y Velocity <= -0.04700
+------- X Velocity <= 0.07274
+-------- Angular Velocity <= 0.01700
+--------- MAIN ENGINE
+--------- RIGHT ENGINE
+-------- MAIN ENGINE
+------- Angle <= 0.04704
+-------- X Position <= -0.04602
+--------- RIGHT ENGINE
+--------- LEFT ENGINE
+-------- RIGHT ENGINE
+---- NOP
+-- Y Velocity <= -0.01360
+--- MAIN ENGINE
+--- NOP
+
+Tree #13 (Reward: 229.12009003290754, Size: 51)
+σ: [0.03825232 0.7480069  0.09665614 0.51458421 0.48079132 0.22744685
+ 0.30853385 0.93782571]
+----------
+- Leg 1 is Touching <= 0.00000
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- Angular Velocity <= -0.03520
+----- LEFT ENGINE
+----- Y Position <= 0.27333
+------ Y Velocity <= -0.06740
+------- MAIN ENGINE
+------- LEFT ENGINE
+------ X Velocity <= -0.01060
+------- Angular Velocity <= -0.01160
+-------- LEFT ENGINE
+-------- MAIN ENGINE
+------- Angular Velocity <= 0.02240
+-------- LEFT ENGINE
+-------- MAIN ENGINE
+---- X Position <= -0.21533
+----- RIGHT ENGINE
+----- NOP
+--- Y Velocity <= -0.01660
+---- X Velocity <= -0.01300
+----- Y Velocity <= -0.05960
+------ MAIN ENGINE
+------ RIGHT ENGINE
+----- Y Position <= 0.16467
+------ MAIN ENGINE
+------ Y Velocity <= -0.04700
+------- X Position <= -0.01733
+-------- Angular Velocity <= 0.01700
+--------- MAIN ENGINE
+--------- RIGHT ENGINE
+-------- Angle <= 0.10670
+--------- Angle <= 0.00000
+---------- LEFT ENGINE
+---------- MAIN ENGINE
+--------- MAIN ENGINE
+------- Angle <= 0.05061
+-------- NOP
+-------- Angular Velocity <= 0.03371
+--------- NOP
+--------- RIGHT ENGINE
+---- X Position <= -0.00133
+----- RIGHT ENGINE
+----- NOP
+-- Angle <= 0.06844
+--- Y Velocity <= -0.01360
+---- MAIN ENGINE
+---- X Position <= 0.00000
+----- NOP
+----- LEFT ENGINE
+--- RIGHT ENGINE
+
+Tree #14 (Reward: 207.19053725613875, Size: 45)
+σ: [0.02537776 0.52386969 0.74128393 0.01552136 0.23021628 0.89545997
+ 0.53097662 0.26948945]
+----------
+- Leg 1 is Touching <= 0.50000
+-- Angle <= 0.00064
+--- Y Velocity <= -0.02000
+---- Leg 2 is Touching <= 0.50000
+----- Angle <= -0.03342
+------ X Velocity <= -0.02820
+------- MAIN ENGINE
+------- Y Velocity <= -0.21338
+-------- LEFT ENGINE
+-------- Angular Velocity <= 0.00560
+--------- LEFT ENGINE
+--------- MAIN ENGINE
+------ X Position <= -0.06733
+------- Y Velocity <= -0.06000
+-------- MAIN ENGINE
+-------- RIGHT ENGINE
+------- Angular Velocity <= -0.01560
+-------- LEFT ENGINE
+-------- Y Velocity <= -0.05000
+--------- MAIN ENGINE
+--------- LEFT ENGINE
+----- NOP
+---- LEFT ENGINE
+--- Y Velocity <= -0.06460
+---- X Velocity <= -0.04480
+----- RIGHT ENGINE
+----- MAIN ENGINE
+---- X Velocity <= -0.01100
+----- RIGHT ENGINE
+----- X Position <= -0.01467
+------ Leg 2 is Touching <= 0.50000
+------- RIGHT ENGINE
+------- MAIN ENGINE
+------ Angle <= 0.08167
+------- Angular Velocity <= 0.02952
+-------- Y Velocity <= 0.01105
+--------- MAIN ENGINE
+--------- NOP
+-------- RIGHT ENGINE
+------- MAIN ENGINE
+-- X Position <= 0.40197
+--- Y Velocity <= -0.01240
+---- MAIN ENGINE
+---- NOP
+--- LEFT ENGINE
+
+Tree #15 (Reward: 209.5869484762354, Size: 45)
+σ: [0.66609856 0.07853702 0.90239432 0.95303662 0.60459288 0.83774815
+ 0.94679524 0.63435572]
+----------
+- Leg 2 is Touching <= -0.24511
+-- Angle <= 0.00064
+--- Y Velocity <= -0.02000
+---- Y Position <= 0.78533
+----- Angle <= -0.03342
+------ X Velocity <= -0.04964
+------- Angular Velocity <= -0.01160
+-------- LEFT ENGINE
+-------- MAIN ENGINE
+------- Y Position <= 0.17467
+-------- Y Velocity <= -0.03600
+--------- MAIN ENGINE
+--------- LEFT ENGINE
+-------- Angular Velocity <= 0.00560
+--------- LEFT ENGINE
+--------- Y Velocity <= -0.08400
+---------- MAIN ENGINE
+---------- NOP
+------ X Position <= -0.06733
+------- MAIN ENGINE
+------- Angular Velocity <= -0.01560
+-------- Y Velocity <= -0.06020
+--------- MAIN ENGINE
+--------- LEFT ENGINE
+-------- Y Velocity <= -0.05000
+--------- MAIN ENGINE
+--------- LEFT ENGINE
+----- X Velocity <= -0.02540
+------ NOP
+------ LEFT ENGINE
+---- NOP
+--- Y Velocity <= -0.06460
+---- MAIN ENGINE
+---- X Velocity <= -0.01100
+----- RIGHT ENGINE
+----- X Position <= -0.00749
+------ Leg 1 is Touching <= 0.06394
+------- RIGHT ENGINE
+------- NOP
+------ Angle <= 0.06844
+------- NOP
+------- RIGHT ENGINE
+-- Y Velocity <= -0.01240
+--- MAIN ENGINE
+--- NOP
+
+Tree #16 (Reward: 210.66388282973162, Size: 35)
+σ: [0.59012756 0.58562957 0.743441   0.60782227 0.41862755 0.59761878
+ 0.12475165 0.24486963]
+----------
+- Leg 1 is Touching <= 0.50000
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- Angular Velocity <= -0.03520
+----- LEFT ENGINE
+----- X Velocity <= -0.01060
+------ MAIN ENGINE
+------ Angular Velocity <= 0.02240
+------- LEFT ENGINE
+------- MAIN ENGINE
+---- NOP
+--- Y Velocity <= -0.01660
+---- X Velocity <= -0.01300
+----- Y Velocity <= -0.05960
+------ MAIN ENGINE
+------ RIGHT ENGINE
+----- Angle <= 0.06700
+------ X Position <= -0.01733
+------- MAIN ENGINE
+------- Angle <= 0.01464
+-------- Y Position <= 0.44667
+--------- MAIN ENGINE
+--------- LEFT ENGINE
+-------- Angular Velocity <= -0.02180
+--------- LEFT ENGINE
+--------- MAIN ENGINE
+------ X Velocity <= 0.03040
+------- RIGHT ENGINE
+------- Angular Velocity <= 0.03020
+-------- MAIN ENGINE
+-------- RIGHT ENGINE
+---- NOP
+-- Y Velocity <= -0.01360
+--- MAIN ENGINE
+--- NOP
+
+Tree #17 (Reward: 223.76359338639406, Size: 49)
+σ: [0.17494584 0.12471707 0.87286969 0.37436125 0.89824695 0.89370392
+ 0.29794251 0.83688818]
+----------
+- Leg 2 is Touching <= -0.17112
+-- Angle <= 0.00064
+--- Y Velocity <= -0.02000
+---- Y Position <= 0.78533
+----- Angle <= -0.03088
+------ X Velocity <= -0.01980
+------- Angular Velocity <= -0.04540
+-------- LEFT ENGINE
+-------- MAIN ENGINE
+------- Y Position <= 0.10800
+-------- Y Velocity <= -0.03300
+--------- MAIN ENGINE
+--------- LEFT ENGINE
+-------- Y Velocity <= -0.06380
+--------- Angular Velocity <= 0.00580
+---------- LEFT ENGINE
+---------- MAIN ENGINE
+--------- LEFT ENGINE
+------ MAIN ENGINE
+----- X Velocity <= -0.02540
+------ NOP
+------ LEFT ENGINE
+---- LEFT ENGINE
+--- Y Velocity <= -0.06460
+---- X Velocity <= -0.04680
+----- RIGHT ENGINE
+----- MAIN ENGINE
+---- X Velocity <= -0.01100
+----- RIGHT ENGINE
+----- X Position <= -0.01467
+------ Y Position <= 0.06133
+------- NOP
+------- RIGHT ENGINE
+------ Angle <= 0.06525
+------- X Velocity <= 0.02140
+-------- Y Velocity <= -0.00520
+--------- Angular Velocity <= -0.02220
+---------- LEFT ENGINE
+---------- MAIN ENGINE
+--------- LEFT ENGINE
+-------- NOP
+------- X Velocity <= 0.01760
+-------- RIGHT ENGINE
+-------- MAIN ENGINE
+-- Angle <= 0.09963
+--- Y Velocity <= -0.01240
+---- MAIN ENGINE
+---- NOP
+--- NOP
+
+Tree #18 (Reward: 207.88958597050984, Size: 53)
+σ: [0.48292835 0.0082526  0.34683595 0.94070084 0.55293676 0.20795023
+ 0.02452728 0.25097432]
+----------
+- Leg 2 is Touching <= 0.50000
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- Angular Velocity <= -0.03520
+----- LEFT ENGINE
+----- X Position <= 0.39463
+------ Y Position <= -0.09134
+------- MAIN ENGINE
+------- Y Velocity <= -0.06740
+-------- MAIN ENGINE
+-------- Angle <= -0.06462
+--------- LEFT ENGINE
+--------- MAIN ENGINE
+------ MAIN ENGINE
+---- X Velocity <= 0.01240
+----- X Position <= 0.00000
+------ X Velocity <= 0.01176
+------- RIGHT ENGINE
+------- LEFT ENGINE
+------ LEFT ENGINE
+----- LEFT ENGINE
+--- Y Velocity <= -0.01660
+---- X Velocity <= -0.01300
+----- Y Velocity <= -0.05960
+------ MAIN ENGINE
+------ RIGHT ENGINE
+----- Y Position <= 0.38968
+------ Y Velocity <= -0.04060
+------- MAIN ENGINE
+------- Leg 1 is Touching <= 0.50000
+-------- RIGHT ENGINE
+-------- RIGHT ENGINE
+------ Y Velocity <= -0.04700
+------- Angle <= 0.07257
+-------- X Position <= -0.01733
+--------- Angular Velocity <= 0.01605
+---------- MAIN ENGINE
+---------- RIGHT ENGINE
+--------- Angular Velocity <= -0.02180
+---------- LEFT ENGINE
+---------- Y Velocity <= -0.06020
+----------- MAIN ENGINE
+----------- LEFT ENGINE
+-------- X Velocity <= 0.03040
+--------- RIGHT ENGINE
+--------- Angular Velocity <= 0.03020
+---------- MAIN ENGINE
+---------- RIGHT ENGINE
+------- LEFT ENGINE
+---- NOP
+-- Y Velocity <= -0.01360
+--- MAIN ENGINE
+--- NOP
+
+Tree #19 (Reward: 214.8981598135963, Size: 53)
+σ: [0.82412323 0.52915846 0.01614507 0.14607208 0.25793058 0.06673209
+ 0.98543237 0.61745354]
+----------
+- Leg 2 is Touching <= 0.85125
+-- Angle <= -0.01814
+--- Y Velocity <= -0.04140
+---- Y Position <= 0.21523
+----- Angle <= -0.18685
+------ NOP
+------ MAIN ENGINE
+----- Angular Velocity <= -0.01160
+------ X Velocity <= -0.06680
+------- MAIN ENGINE
+------- LEFT ENGINE
+------ MAIN ENGINE
+---- LEFT ENGINE
+--- Angular Velocity <= 0.02633
+---- X Velocity <= -0.01300
+----- Y Velocity <= -0.05960
+------ X Velocity <= -0.05580
+------- RIGHT ENGINE
+------- Angle <= 0.02737
+-------- MAIN ENGINE
+-------- RIGHT ENGINE
+------ RIGHT ENGINE
+----- Y Position <= 0.16467
+------ Y Velocity <= -0.02020
+------- Y Velocity <= -0.04060
+-------- MAIN ENGINE
+-------- RIGHT ENGINE
+------- NOP
+------ Y Velocity <= -0.04700
+------- Angle <= 0.07257
+-------- X Position <= -0.01733
+--------- Y Position <= 0.76572
+---------- MAIN ENGINE
+---------- NOP
+--------- Angle <= 0.01464
+---------- LEFT ENGINE
+---------- Angular Velocity <= -0.02180
+----------- LEFT ENGINE
+----------- MAIN ENGINE
+-------- RIGHT ENGINE
+------- Angle <= 0.05061
+-------- X Position <= -0.00200
+--------- NOP
+--------- LEFT ENGINE
+-------- RIGHT ENGINE
+---- RIGHT ENGINE
+-- Y Velocity <= -0.01360
+--- MAIN ENGINE
+--- X Velocity <= 0.02320
+---- Angle <= 0.04265
+----- NOP
+----- RIGHT ENGINE
+---- NOP
+

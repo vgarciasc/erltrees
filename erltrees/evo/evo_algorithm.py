@@ -1,5 +1,7 @@
+import csv
 from datetime import datetime
 import json
+import pickle
 import pdb
 from matplotlib import pyplot as plt
 import numpy as np
@@ -40,6 +42,7 @@ class EvolutionaryAlgorithm():
         self.should_prune_best_by_visits = should_prune_best_by_visits
         self.jobs_to_parallelize = jobs_to_parallelize
         self.verbose = verbose
+        self.filename = self.config['name'] + "_" + datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
 
         self.history = []
         self.popbests = []
@@ -53,7 +56,7 @@ class EvolutionaryAlgorithm():
 
     def save_allbest(self, alpha, population):
         fitnesses = [i.fitness for i in population]
-        popbest = population[np.argmax(fitnesses)]
+        self.popbest = population[np.argmax(fitnesses)]
 
         if self.should_attenuate_alpha:
             # in this case, fitness of best individual needs to be updated
@@ -62,21 +65,21 @@ class EvolutionaryAlgorithm():
                 self.allbest.get_tree_size(), alpha,
                 self.should_penalize_std)
         
-        if popbest.fitness > self.allbest.fitness:
+        if self.popbest.fitness > self.allbest.fitness:
             if self.should_recheck_popbest:
-                rl.fill_metrics(self.config, [popbest], alpha, 
+                rl.fill_metrics(self.config, [self.popbest], alpha, 
                     episodes=self.recheck_popbest_episodes,
                     should_norm_state=self.should_norm_state, 
                     penalize_std=self.should_penalize_std, 
                     n_jobs=self.jobs_to_parallelize)
-                
-                print(f"Individual max fitness (rechecked): (reward: {'{:.3f}'.format(popbest.reward)}, " + \
-                    f"fitness: {'{:.3f}'.format(popbest.fitness)})")
 
-                if popbest.fitness > self.allbest.fitness:
-                    self.allbest = popbest.copy()
+                print(f"Individual max fitness (rechecked): (reward: {'{:.3f}'.format(self.popbest.reward)}, " + \
+                    f"fitness: {'{:.3f}'.format(self.popbest.fitness)})")
+
+                if self.popbest.fitness > self.allbest.fitness:
+                    self.allbest = self.popbest.copy()
             else:
-                self.allbest = popbest.copy()
+                self.allbest = self.popbest.copy()
     
     def evaluate_popbests(self, candidate_pool_size=10, verbose=False):
         if len(self.popbests) == 0:
@@ -111,7 +114,7 @@ class EvolutionaryAlgorithm():
         rewards = [i.reward for i in population]
         fitnesses = [i.fitness for i in population]
         tree_sizes = [i.get_tree_size() for i in population]
-        popbest = population[np.argmax(fitnesses)]
+        popbest = population[np.argmax(fitnesses)] if not hasattr(self, "popbest") else self.popbest
 
         popbest_fitness = popbest.fitness
         popbest_avg_reward = popbest.reward
@@ -209,6 +212,13 @@ class EvolutionaryAlgorithm():
             plt.show()
         
         if should_save_plot:
-            figure_file = "data/plots/" + self.config['name'] + "_" + datetime.now().strftime("%Y_%m_%d-%H_%M_%S") + ".png"
+            figure_file = "data/plots/" + self.filename + ".png"
             print(f"Saving figure to '{figure_file}'.")
             plt.savefig(figure_file)
+    
+    def save_history_as_csv(self):
+        with open(f"data/log_{self.filename}.csv", "w") as file:
+            file_writer = csv.writer(file)
+            file_writer.writerow(('popbest_fitness', 'pop_avg_fitness', 'pop_std_fitness', 'allbest_fitness', 'popbest_avg_reward', 'popbest_std_reward', 'pop_avg_reward', 'pop_std_reward', 'allbest_reward', 'allbest_std_reward', 'popbest_size', 'pop_avg_size', 'pop_std_size', 'allbest_size'))
+            for row in self.history:
+                file_writer.writerow([t for tt in row for t in tt])

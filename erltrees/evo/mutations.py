@@ -18,8 +18,12 @@ def mutate(tree, mutation="A"):
         mutate_F(tree)
     elif mutation == "G":
         mutate_G(tree)
+    elif mutation == "G2":
+        mutate_G2(tree)
     elif mutation == "H":
         mutate_H(tree)
+    else:
+        raise(f"Mutation {mutation} not found.")
 
 def mutate_A(tree, top_splits=[]):
     node = tree.get_random_node()
@@ -114,7 +118,7 @@ def mutate_D(tree, top_splits=[], verbose=False):
         if node.is_leaf():
             node.mutate_is_leaf()
         else:
-            node.mutate_add_inner_node()
+            node.mutate_truncate()
 
     elif operation == "remove":
         node_list = tree.get_node_list()
@@ -201,7 +205,7 @@ def mutate_F(tree, removal_depth_param=2, verbose=False):
             node.mutate_add_inner_node(verbose)
 
     if operation == "remove":
-        node_list = tree.get_node_list(get_inner=True, get_leaf=False)
+        node_list = tree.get_node_list(get_inners=True, get_leaves=False)
         
         probabilities = [1 / (node.get_tree_size() ** removal_depth_param) for node in node_list]
         probabilities /= np.sum(probabilities)
@@ -235,7 +239,7 @@ def mutate_G(tree, removal_depth_param=1, p_add=0.5, p_remove=0.5, p_modify=0.5,
 
     if np.random.uniform(0, 1) < p_remove:
         # Remove
-        node_list = tree.get_node_list(get_inner=True, get_leaf=False)
+        node_list = tree.get_node_list(get_inners=True, get_leaves=False)
         
         probabilities = [1 / (node.get_tree_size() ** removal_depth_param) for node in node_list]
         probabilities /= np.sum(probabilities)
@@ -262,10 +266,9 @@ def mutate_G(tree, removal_depth_param=1, p_add=0.5, p_remove=0.5, p_modify=0.5,
         # Prune by visits
         rl.collect_and_prune_by_visits(tree, episodes=20)
 
-def mutate_H(tree, removal_depth_param=2, verbose=False):
-    operation = np.random.choice(["add", "remove", "modify", "prune"], p=[0.2, 0.2, 0.5, 0.1])
-    
-    if operation == "add":
+def mutate_G2(tree, removal_depth_param=1, p_add=0.5, p_remove=0.5, p_modify=0.5, p_prune=0.1, verbose=False):
+    if np.random.uniform(0, 1) < p_add:
+        # Add
         node = tree.get_random_node()
 
         if node.is_leaf():
@@ -273,8 +276,48 @@ def mutate_H(tree, removal_depth_param=2, verbose=False):
         else:
             node.mutate_add_inner_node(verbose)
 
-    if operation == "remove":
-        node_list = tree.get_node_list(get_inner=True, get_leaf=False)
+    if np.random.uniform(0, 1) < p_remove:
+        # Remove
+        node_list = tree.get_node_list(get_inners=True, get_leaves=False)
+        
+        probabilities = [1 / (node.get_tree_size() ** removal_depth_param) for node in node_list]
+        probabilities /= np.sum(probabilities)
+
+        node = np.random.choice(node_list, p=probabilities)
+        node.mutate_truncate_dx(verbose)
+        
+    if np.random.uniform(0, 1) < p_modify:
+        # Modify
+        node = tree.get_random_node()
+        
+        if node.is_leaf():
+            node.mutate_label(verbose)
+        else:
+            operation = np.random.choice(["attribute", "threshold"])
+            
+            if operation == "attribute":
+                node.mutate_attribute(verbose)
+                node.threshold = np.random.uniform(-1, 1)
+            elif operation == "threshold":
+                node.mutate_threshold(0.1, verbose)
+        
+    if np.random.uniform(0, 1) < p_prune:
+        # Prune by visits
+        rl.collect_and_prune_by_visits(tree, episodes=20)
+
+def mutate_H(tree, removal_depth_param=2, verbose=False):
+    operation = np.random.choice(["expand_leaf", "add_inner_node", "remove_risky", "remove_cautious", "modify"], p=[0.2, 0.2, 0.2, 0.2, 0.2])
+    
+    if operation == "expand_leaf":
+        node = tree.get_random_node(get_inners=False, get_leaves=True)
+        node.mutate_is_leaf(verbose)
+
+    if operation == "remove_risky":
+        node = tree.get_random_node(get_inners=True, get_leaves=False)
+        node.mutate_truncate_dx(verbose)
+
+    if operation == "remove_cautious":
+        node_list = tree.get_node_list(get_inners=True, get_leaves=False)
         
         probabilities = [1 / (node.get_tree_size() ** removal_depth_param) for node in node_list]
         probabilities /= np.sum(probabilities)

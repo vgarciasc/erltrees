@@ -1,0 +1,96 @@
+{'task': 'cartpole', 'simulations': 50, 'mu': 5, 'lambda': 100, 'generations': 200, 'tournament_size': 0, 'mutation_type': 'E', 'norm_state': True, 'initial_depth': 4, 'initial_pop': '', 'elitism': 0.0, 'mutation_qt': 1, 'output_path': None, 'alpha': 1.0, 'should_prune_by_visits': False, 'should_prune_best_by_visits': True, 'should_adapt_sigma': False, 'should_atenuate_alpha': True, 'should_consider_top_splits': False, 'should_penalize_std': True, 'top_splits_to_consider': 10, 'episodes': 10, 'should_plot': False, 'should_save_plot': True, 'should_render': False, 'render_every': 1, 'should_print_individuals': False, 'jobs_to_parallelize': 2, 'verbose': True}
+
+python es.py --task cartpole --simulations 50 --mu 5 --lambda 100 --generations 200 --tournament_size 0 --mutation_type E --norm_state True --initial_depth 4 --initial_pop  --elitism 0.0 --mutation_qt 1 --output_path None --alpha 1.0 --should_prune_by_visits False --should_prune_best_by_visits True --should_adapt_sigma False --should_atenuate_alpha True --should_consider_top_splits False --should_penalize_std True --top_splits_to_consider 10 --episodes 10 --should_plot False --should_save_plot True --should_render False --render_every 1 --should_print_individuals False --jobs_to_parallelize 2 --verbose True
+
+---
+
+Mean Best Reward: 497.5898 +- 5.730582340390895
+Mean Best Size: 7.24
+Average Evaluations to Success: 36.91489361702128
+Success Rate: 0.94
+
+-----
+
+Tree #1 (Reward: 465.514, Size: 15)
+σ: [0.4926727  0.36455245 0.93934772 0.76133494]
+----------
+- Pole Angular Velocity <= -0.10336
+-- Cart Velocity <= -0.60797
+--- RIGHT
+--- Pole Angular Velocity <= -0.48423
+---- LEFT
+---- Pole Angle <= -0.03290
+----- Pole Angular Velocity <= -0.19605
+------ LEFT
+------ RIGHT
+----- LEFT
+-- Pole Angle <= -0.08168
+--- Cart Velocity <= -1.32880
+---- LEFT
+---- LEFT
+--- RIGHT
+
+Tree #11 (Reward: 499.011, Size: 7)
+σ: [0.62841205 0.1712621  0.65502823 0.73696552]
+----------
+- Pole Angle <= -0.09631
+-- LEFT
+-- Pole Angle <= -0.04737
+--- LEFT
+--- Pole Angular Velocity <= -0.66516
+---- LEFT
+---- RIGHT
+
+Tree #13 (Reward: 500.0, Size: 9)
+σ: [0.25783069 0.60461214 0.12591022 0.04076701]
+----------
+- Pole Angular Velocity <= 0.26666
+-- Pole Angular Velocity <= -0.20396
+--- LEFT
+--- Cart Velocity <= -0.31748
+---- LEFT
+---- Pole Angle <= -0.13116
+----- LEFT
+----- RIGHT
+-- RIGHT
+
+Tree #14 (Reward: 499.55, Size: 11)
+σ: [0.20958497 0.55842532 0.48719775 0.63161276]
+----------
+- Pole Angular Velocity <= -0.48261
+-- Pole Angular Velocity <= -0.64141
+--- LEFT
+--- Cart Velocity <= 0.53885
+---- LEFT
+---- RIGHT
+-- Pole Angle <= 0.08517
+--- Pole Angular Velocity <= 0.24236
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #22 (Reward: 494.492, Size: 9)
+σ: [0.9299339  0.62177307 0.62708793 0.03623997]
+----------
+- Pole Angle <= 0.08009
+-- Cart Velocity <= 0.23606
+--- Cart Velocity <= -0.60064
+---- RIGHT
+---- LEFT
+--- Pole Angular Velocity <= -0.36333
+---- LEFT
+---- RIGHT
+-- RIGHT
+
+Tree #30 (Reward: 499.994, Size: 7)
+σ: [0.39536356 0.23138687 0.25349768 0.79282468]
+----------
+- Pole Angle <= 0.01449
+-- Pole Angular Velocity <= 0.65196
+--- LEFT
+--- RIGHT
+-- Pole Angular Velocity <= -0.81733
+--- LEFT
+--- RIGHT
+
+

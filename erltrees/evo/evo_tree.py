@@ -128,6 +128,39 @@ class Individual(tree.TreeNode):
         else:
             new_stump.right = self
 
+    def mutate_truncate(self, verbose=False):
+        io.printv("Truncating inner node...", verbose)
+        
+        new_node = Individual.generate_random_node(self.config)
+        self.right = new_node
+        self.left.parent = self
+        self.right.parent = self
+
+        labels = np.random.choice(
+            range(0, self.config["n_actions"]), 
+            size=2, replace=False)
+        self.left.label = labels[0]
+        self.right.label = labels[1]
+
+    def mutate_truncate_dx(self, verbose=False):
+        io.printv("Truncating inner node...", verbose)
+        
+        new_node = Individual.generate_random_node(self.config)
+
+        if np.random.uniform() < 0.5:
+            self.right = new_node
+        else:
+            self.left = new_node
+        
+        self.left.parent = self
+        self.right.parent = self
+
+        labels = np.random.choice(
+            range(0, self.config["n_actions"]), 
+            size=2, replace=False)
+        self.left.label = labels[0]
+        self.right.label = labels[1]
+
     def replace_child(self, verbose=False):
         io.printv("Replacing child...", verbose)
 

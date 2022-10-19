@@ -175,13 +175,13 @@ class TreeNode:
         max_inner_nodes = (max([len(node_list), self.get_tree_size()]) / 2 - 0.5)
         return output / max_inner_nodes
     
-    def get_node_list(self, get_inner=True, get_leaf=True):
+    def get_node_list(self, get_inners=True, get_leaves=True):
         stack = [self]
         output = []
 
         while len(stack) > 0:
             node = stack.pop()
-            if (node.is_leaf() and get_leaf) or (not node.is_leaf() and get_inner):
+            if (node.is_leaf() and get_leaves) or (not node.is_leaf() and get_inners):
                 output.append(node)
 
             if not node.is_leaf():
