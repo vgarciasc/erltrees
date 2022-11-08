@@ -2,6 +2,8 @@ import argparse
 from datetime import datetime
 import json
 import pdb
+import signal
+import sys
 import time
 from rich import print
 import numpy as np
@@ -57,7 +59,7 @@ class EvolutionaryStrategySL(EvolutionaryAlgorithm):
                 penalize_std=self.should_penalize_std, n_jobs=self.jobs_to_parallelize)
 
             # Survivor selection (truncation selection)
-            population = child_population
+            population = candidate_population
             if self.should_include_allbest:
                 population += [self.allbest.copy()]
 
@@ -70,6 +72,11 @@ class EvolutionaryStrategySL(EvolutionaryAlgorithm):
             self.increment_log_history(population)
             if self.verbose:
                 self.print_last_metrics()
+
+        # if self.should_prune_best_by_visits:
+        #     rl.collect_and_prune_by_visits(
+        #         self.allbest, threshold=5, episodes=100, 
+        #         should_norm_state=self.should_norm_state)
             
         self.plot_metrics(should_plot, should_save_plot)
         # self.allbest = self.evaluate_popbests(candidate_pool_size=10, verbose=self.verbose)
@@ -111,7 +118,7 @@ if __name__ == "__main__":
 
     command_line = str(args)
     command_line += "\n\npython -m erltrees.evo.es_sl " + " ".join([f"--{key} {val}" for (key, val) in args.items()]) + "\n\n---\n\n"
-    output_path = ("data/log_" + datetime.now().strftime("%Y_%m_%d-%I_%M_%S") + ".txt") if args['output_path'] in [None, ""] else args['output_path']
+    output_path = ("data/log_" + datetime.now().strftime("%Y_%m_%d-%I_%M_%S") + ".txt") if args['output_path'] in [None, "None", ""] else args['output_path']
     print(f"{command_line}")
     print(f"output_path: '{output_path}'")
     io.save_history_to_file(config, None, output_path, prefix=command_line)
@@ -124,6 +131,15 @@ if __name__ == "__main__":
 
     # Running simulations
     sim_history = []
+    es = None
+
+    def handler(sig, frame):
+        print(f"Saving and exiting... Output path: {output_path}")
+        sim_history.append((es.allbest, es.allbest.reward, es.allbest.get_tree_size(), None))
+        io.save_history_to_file(config, sim_history, output_path, prefix=command_line + "\n(Interrupted)\n\n")
+        sys.exit(1)
+    signal.signal(signal.SIGINT, handler)
+
     for _ in range(args['simulations']):
         # Executing EA
         es = EvolutionaryStrategySL(tournament_size=args["tournament_size"], 

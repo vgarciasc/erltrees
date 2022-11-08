@@ -184,7 +184,7 @@ class Individual(tree.TreeNode):
 
     def prune_by_visits(self, threshold=1):
         if self.is_leaf():
-            return
+            return self
 
         if self.left.visits < threshold:
             self.right.prune_by_visits(threshold)
@@ -216,28 +216,6 @@ class Individual(tree.TreeNode):
         parent_b.replace_node(node_b, node_a)
 
         return parent_a, parent_b
-    
-    def normalize_thresholds(self):
-        (_, _, (xmin, xmax)) = self.config["attributes"][self.attribute]
-        self.threshold = (self.threshold - xmin) / (xmax - xmin) * 2 - 1
-
-        if not self.is_leaf():
-            self.left.normalize_thresholds()
-            self.right.normalize_thresholds()
-    
-    def denormalize_thresholds(self):
-        (_, _, (xmin, xmax)) = self.config["attributes"][self.attribute]
-
-        if abs(xmax) > 9999:
-            xmax = 1
-        if abs(xmin) > 9999:
-            xmin = -1
-        
-        self.threshold = (self.threshold + 1) * (xmax - xmin) / 2 + xmin
-
-        if not self.is_leaf():
-            self.left.denormalize_thresholds()
-            self.right.denormalize_thresholds()
 
     def copy(self):
         if self.is_leaf():

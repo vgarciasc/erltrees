@@ -59,16 +59,21 @@ def simplest_tree(state, actions):
     else:
         return actions[1]
 
+def simplestest_tree(state, actions):
+    return actions[0]
+
 if __name__ == "__main__":
     # reward_vec = [[1, 3], [10, 12], [21, 23], [32, 30]]
-    reward_vec = [[0.2, 0.9], [0.3, 0.6], [0.8, 0.7], [0.5, 0.7]]
+    # reward_vec = [[0.2, 0.9], [0.3, 0.6], [0.8, 0.7], [0.5, 0.7]]
+    reward_vec = [[0.3, 0.8], [0.9, 0.2], [0.7, 0.4], [0.5, 1.0]]
 
     actions = [0, 1, 0, 1]
     max_iter = 1000000
 
     # for iter in range(max_iter):
-        # print(f"\nEvaluating reward_vec:")
-        # print(reward_vec)
+    #     reward_vec = np.random.uniform(0, 1, (4, 2))
+    print(f"\nEvaluating reward_vec:")
+    print(reward_vec)
 
     actions = [0, 1, 0, 1]
     full_tree_reward = evaluate_tree(reward_vec, simple_tree_full, actions)
@@ -87,19 +92,24 @@ if __name__ == "__main__":
     actions = [0, second_leaf_val]
     simplest_tree_reward_2 = evaluate_tree(reward_vec, simplest_tree, actions)
     # print(f"Simplest tree: {simplest_tree_reward}")
+
+    simplestest_tree_reward_1 = evaluate_tree(reward_vec, simplestest_tree, [0])
+    simplestest_tree_reward_2 = evaluate_tree(reward_vec, simplestest_tree, [1])
+    simplestest_tree_reward = max(simplestest_tree_reward_1, simplestest_tree_reward_2)
     
     actions = [0, 0, 1]
     simple_tree_2_reward_1 = evaluate_tree(reward_vec, simple_tree_2, actions)
     actions = [1, 0, 1]
     simple_tree_2_reward_2 = evaluate_tree(reward_vec, simple_tree_2, actions)
     simple_tree_2_reward = max(simple_tree_2_reward_1, simple_tree_2_reward_2)
-    # print(f"Simple tree 1: {simple_tree_1_reward}")
+    # print(f"Simple tree 1: {simple_tree_1_reward}"))
 
     if simple_tree_1_reward > full_tree_reward and \
         simple_tree_2_reward > full_tree_reward and \
         simple_tree_2_reward > simple_tree_1_reward and \
         simple_tree_2_reward > simplest_tree_reward_1 and \
-        simple_tree_2_reward > simplest_tree_reward_2:
+        simple_tree_2_reward > simplest_tree_reward_2 and \
+        simple_tree_2_reward > simplestest_tree_reward:
         
         print(f"\nEvaluating reward_vec:")
         print(reward_vec)
@@ -108,4 +118,7 @@ if __name__ == "__main__":
         print(f"Simple tree 2: {simple_tree_2_reward} ({simple_tree_2_reward_1}, {simple_tree_2_reward_2})")
         print(f"Simplest tree 1: {simplest_tree_reward_1}")
         print(f"Simplest tree 2: {simplest_tree_reward_2}")
+        print(f"Simplestest tree 1: {simplest_tree_reward_1}")
+        print(f"Simplestest tree 2: {simplest_tree_reward_2}")
         print("Found!")
+        # break

@@ -1,5 +1,6 @@
 from gc import collect
 import pdb
+from time import time
 import numpy as np
 import gym
 
@@ -90,9 +91,12 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
 
         tree_avg_reward = np.mean(total_rewards)
         tree_std_reward = np.std(total_rewards)
-        tree_fitness = calc_fitness(
-            tree_avg_reward, tree_std_reward, 
-            tree.get_tree_size(), alpha, penalize_std)
+
+        tree_fitness = None
+        if hasattr(tree, "get_tree_size"):
+            tree_fitness = calc_fitness(
+                tree_avg_reward, tree_std_reward, 
+                tree.get_tree_size(), alpha, penalize_std)
 
         if should_fill_attributes:
             tree.reward = tree_avg_reward
@@ -104,6 +108,124 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
     env.close()
 
     return output
+
+# def collect_metrics(config, trees, alpha=0.5, episodes=10,
+#     should_norm_state=False, penalize_std=False,
+#     should_fill_attributes=False,
+#     render=False, verbose=False):
+
+#     output = []
+
+#     env = gym.make(config["name"])
+
+#     for tree in trees:
+#         total_rewards = []
+
+#         W = tree.get_weight_matrix(W=[])
+#         labels = tree.get_label_vector(L=[])
+#         mask = tree.get_leaf_mask(mask=[], path=[])
+
+#         for episode in range(episodes):
+#             state = env.reset()
+#             total_reward = 0
+#             done = False
+
+#             while not done:
+#                 if should_norm_state:
+#                     state = normalize_state(config, state)
+                
+#                 # action = tree.act(state)
+#                 action = tree.act_by_matrix(state, W, labels, mask)
+                
+#                 state, reward, done, _ = env.step(action)
+#                 total_reward += reward
+
+#                 if render:
+#                     env.render()
+            
+#             total_rewards.append(total_reward)
+
+#         tree_avg_reward = np.mean(total_rewards)
+#         tree_std_reward = np.std(total_rewards)
+#         tree_fitness = calc_fitness(
+#             tree_avg_reward, tree_std_reward, 
+#             tree.get_tree_size(), alpha, penalize_std)
+
+#         if should_fill_attributes:
+#             tree.reward = tree_avg_reward
+#             tree.std_reward = tree_std_reward
+#             tree.fitness = tree_fitness
+
+#         output.append((tree_avg_reward, tree_std_reward, tree_fitness))
+
+#     env.close()
+
+#     return output
+
+# def collect_metrics(config, trees, alpha=0.5, episodes=10,
+#     should_norm_state=False, penalize_std=False,
+#     should_fill_attributes=False,
+#     render=False, verbose=False):
+
+#     output = []
+
+#     envs = [gym.make(config["name"]) for _ in range(episodes)]
+
+#     for tree in trees:
+#         if should_norm_state:
+#             tree_2 = tree.copy()
+#             tree_2.denormalize_thresholds()
+#             W = tree_2.get_weight_matrix(W=[])
+#         else:
+#             W = tree.get_weight_matrix(W=[])
+
+#         labels = tree.get_label_vector(L=[])
+#         mask = tree.get_leaf_mask(mask=[], path=[])
+
+#         X = np.array([env.reset() for env in envs])
+#         dones = [False for env in envs]
+#         done_number = 0
+#         total_rewards = np.zeros(episodes)
+
+#         while done_number < episodes:
+#             actions = tree.act_by_matrix_batch(X, W, labels, mask)
+
+#             X_next = np.zeros_like(X)
+#             for i, env in enumerate(envs):
+#                 if dones[i]:
+#                     # candidate for refactor
+#                     continue
+
+#                 # if should_norm_state:
+#                 #     state = normalize_state(config, X[i])
+#                 # action = tree.act(state)
+#                 state, reward, done, _ = env.step(actions[i])
+#                 X_next[i] = state
+#                 total_rewards[i] += reward
+
+#                 if done:
+#                     dones[i] = True
+#                     done_number += 1
+                
+#             X = X_next
+
+#         tree_avg_reward = np.mean(total_rewards)
+#         tree_std_reward = np.std(total_rewards)
+#         tree_fitness = calc_fitness(
+#             tree_avg_reward, tree_std_reward, 
+#             tree.get_tree_size(), alpha, penalize_std)
+
+#         if should_fill_attributes:
+#             tree.reward = tree_avg_reward
+#             tree.std_reward = tree_std_reward
+#             tree.fitness = tree_fitness
+
+#         output.append((tree_avg_reward, tree_std_reward, tree_fitness))
+        
+#     for env in envs:
+#         env.close()
+
+#     return output
 
 def fill_metrics_par(n_jobs, config, trees, alpha, episodes=10, 
     should_norm_state=False, penalize_std=False):

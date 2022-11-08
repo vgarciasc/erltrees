@@ -191,6 +191,92 @@ class TreeNode:
                     stack.append(node.left)
 
         return output
+    
+    def get_leaf_mask(self, mask=[], path=[]):
+        if self.is_leaf():
+            mask.append(path)
+            return mask
+        
+        l_path = path + [-1 * self.right.get_tree_size()]
+        l_mask = self.left.get_leaf_mask(mask, l_path)
+
+        r_path = path + [+1 * self.left.get_tree_size()] + [0] * (len(mask[-1]) - len(path) - 1)
+        r_mask = self.right.get_leaf_mask(l_mask, r_path)
+
+        if self.is_root():
+            max_len = np.max([len(m_i) for m_i in r_mask])
+            r_mask = [m_i + [0] * (max_len - len(m_i)) for m_i in r_mask]
+            r_mask = np.array(r_mask)
+        
+        return r_mask
+    
+    def get_weight_matrix(self, W = []):
+        if self.is_leaf():
+            return W
+        
+        weights = [0] * (self.config["n_attributes"] + 1)
+        weights[0] = -self.threshold
+        weights[self.attribute + 1] = 1
+
+        W += [weights]
+        W = self.left.get_weight_matrix(W)
+        W = self.right.get_weight_matrix(W)
+    
+        if self.is_root():
+            W = np.array(W)
+        
+        return W
+    
+    def get_label_vector(self, L=[]):
+        if self.is_leaf():
+            return L + [self.label]
+        
+        L = self.left.get_label_vector(L)
+        L = self.right.get_label_vector(L)
+
+        if self.is_root():
+            L = np.array(L)
+
+        return L
+
+    def act_by_matrix(self, state, W, labels, mask):
+        WxT = W[:,1:] @ state + W[:,0]
+        K = mask @ np.sign(WxT)
+        leaf = np.argmax(K)
+
+        return labels[leaf]
+
+    def act_by_matrix_batch(self, X, W, labels, mask):
+        WxT = W @ np.c_[np.ones(len(X)), X].T
+        K = mask @ np.sign(WxT)
+        # L = np.clip(K - (np.max(K) - 1), 0, 1)
+        leaves = np.argmax(K.T, axis=1)
+        y = np.array([labels[l] for l in leaves])
+
+        return y
+    
+    def normalize_thresholds(self):
+        (_, _, (xmin, xmax)) = self.config["attributes"][self.attribute]
+        self.threshold = (self.threshold - xmin) / (xmax - xmin) * 2 - 1
+
+        if not self.is_leaf():
+            self.left.normalize_thresholds()
+            self.right.normalize_thresholds()
+    
+    def denormalize_thresholds(self):
+        (_, _, (xmin, xmax)) = self.config["attributes"][self.attribute]
+
+        if abs(xmax) > 9999:
+            xmax = 1
+        if abs(xmin) > 9999:
+            xmin = -1
+        
+        self.threshold = (self.threshold + 1) * (xmax - xmin) / 2 + xmin
+
+        if self.left is not None:
+            self.left.denormalize_thresholds()
+        if self.right is not None:
+            self.right.denormalize_thresholds()
 
 if __name__ == "__main__":
     config = configs.get_config("cartpole")

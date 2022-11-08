@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
         rewards = [rl.collect_metrics(config, trees=[tree], episodes=1, should_norm_state=False, penalize_std=False)[0][0] for _ in range(args['episodes'])]
         success_rate = np.mean([1 if r > reward_to_solve else 0 for r in rewards])
-        print(f"Mean reward, std reward: {np.mean(rewards)} +- {np.std(rewards)}, SR: {success_rate}")
+        print(f"Mean reward, std reward: {np.mean(rewards)} ± {np.std(rewards)}, SR: {success_rate}")
         avg_rewards_before_pruning.append(np.mean(rewards))
         std_rewards_before_pruning.append(np.std(rewards))
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
         rewards = [rl.collect_metrics(config, trees=[tree], episodes=1, should_norm_state=False, penalize_std=False)[0][0] for _ in range(args['episodes'])]
         success_rate = np.mean([1 if r > reward_to_solve else 0 for r in rewards])
-        print(f"Mean reward, std reward: {np.mean(rewards)} +- {np.std(rewards)}, SR: {success_rate}")
+        print(f"Mean reward, std reward: {np.mean(rewards)} ± {np.std(rewards)}, SR: {success_rate}")
 
         tree_sizes.append(tree.get_tree_size())
         successes_rates.append(success_rate)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
         std_rewards_after_pruning.append(np.std(rewards))
     
     io.console.rule("[red]SUMMARY[/red]")
-    print(f"Average reward before pruning: {'{:.3f}'.format(np.mean(avg_rewards_before_pruning))} +- {'{:.3f}'.format(np.mean(std_rewards_before_pruning))}")
-    print(f"Average reward after pruning: {'{:.3f}'.format(np.mean(avg_rewards_after_pruning))} +- {'{:.3f}'.format(np.mean(std_rewards_after_pruning))}")
-    print(f"Average success rate: {'{:.3f}'.format(np.mean(successes_rates))}")
-    print(f"Average tree size: {'{:.3f}'.format(np.mean(tree_sizes))}")
+    print(f"Average reward before pruning: {'{:.3f}'.format(np.mean(avg_rewards_before_pruning))} ± {'{:.3f}'.format(np.mean(std_rewards_before_pruning))}")
+    print(f"Average reward after pruning: {'{:.3f}'.format(np.mean(avg_rewards_after_pruning))} ± {'{:.3f}'.format(np.mean(std_rewards_after_pruning))}")
+    print(f"Average success rate: {'{:.3f}'.format(np.mean(successes_rates))} ± {'{:.3f}'.format(np.std(successes_rates))}")
+    print(f"Average tree size: {'{:.3f}'.format(np.mean(tree_sizes))} ± {'{:.3f}'.format(np.std(tree_sizes))}")

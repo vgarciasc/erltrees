@@ -51,19 +51,19 @@ def get_initial_pop(config, popsize, initial_depth, alpha, jobs_to_parallelize,
 def fill_initial_pop(config, population, popsize, initial_depth, alpha, jobs_to_parallelize,
         should_penalize_std=False, should_norm_state=True, episodes=10):
 
-        new_population = []
-        # Fill with the rest
-        for _ in range(len(population), popsize):
-            tree = evo_tree.Individual.generate_random_tree(
-                config, depth=initial_depth)
-            new_population.append(tree)
-        
-        rl.fill_metrics(config, new_population, alpha=alpha, 
-            episodes=episodes, should_norm_state=should_norm_state,
-            penalize_std=should_penalize_std, 
-            n_jobs=jobs_to_parallelize)
-        
-        return population + new_population
+    new_population = []
+    # Fill with the rest
+    for _ in range(len(population), popsize):
+        tree = evo_tree.Individual.generate_random_tree(
+            config, depth=initial_depth)
+        new_population.append(tree)
+    
+    rl.fill_metrics(config, new_population, alpha=alpha, 
+        episodes=episodes, should_norm_state=should_norm_state,
+        penalize_std=should_penalize_std, 
+        n_jobs=jobs_to_parallelize)
+    
+    return population + new_population
 
 def tournament_selection(population, q):
     candidates = np.random.choice(population, size=q, replace=False)

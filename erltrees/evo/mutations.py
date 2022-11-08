@@ -22,6 +22,12 @@ def mutate(tree, mutation="A"):
         mutate_G2(tree)
     elif mutation == "H":
         mutate_H(tree)
+    elif mutation == "I":
+        mutate_I(tree)
+    elif mutation == "I2":
+        mutate_I2(tree)
+    elif mutation == "I3":
+        mutate_I3(tree)
     else:
         raise(f"Mutation {mutation} not found.")
 
@@ -280,10 +286,11 @@ def mutate_G2(tree, removal_depth_param=1, p_add=0.5, p_remove=0.5, p_modify=0.5
         # Remove
         node_list = tree.get_node_list(get_inners=True, get_leaves=False)
         
-        probabilities = [1 / (node.get_tree_size() ** removal_depth_param) for node in node_list]
-        probabilities /= np.sum(probabilities)
+        # probabilities = [1 / (node.get_tree_size() ** removal_depth_param) for node in node_list]
+        # probabilities /= np.sum(probabilities)
 
-        node = np.random.choice(node_list, p=probabilities)
+        # node = np.random.choice(node_list, p=probabilities)
+        node = np.random.choice(node_list)
         node.mutate_truncate_dx(verbose)
         
     if np.random.uniform(0, 1) < p_modify:
@@ -302,7 +309,6 @@ def mutate_G2(tree, removal_depth_param=1, p_add=0.5, p_remove=0.5, p_modify=0.5
                 node.mutate_threshold(0.1, verbose)
         
     if np.random.uniform(0, 1) < p_prune:
-        # Prune by visits
         rl.collect_and_prune_by_visits(tree, episodes=20)
 
 def mutate_H(tree, removal_depth_param=2, verbose=False):
@@ -341,3 +347,117 @@ def mutate_H(tree, removal_depth_param=2, verbose=False):
     
     if operation == "prune":
         rl.collect_and_prune_by_visits(tree)
+
+def mutate_I(tree, removal_depth_param=2, verbose=False):
+    operation = np.random.choice(["expand_leaf", "add_inner_node", "remove_risky", "remove_cautious", "modify"], p=[0.2, 0.2, 0.2, 0.2, 0.2])
+    
+    if operation == "expand_leaf":
+        node = tree.get_random_node(get_inners=False, get_leaves=True)
+        node.mutate_is_leaf(verbose)
+
+    if operation == "add_inner_node":
+        node = tree.get_random_node(get_inners=True, get_leaves=False)
+        node.mutate_add_inner_node(verbose)
+
+    if operation == "remove_risky":
+        node = tree.get_random_node(get_inners=True, get_leaves=False)
+        node.mutate_truncate_dx(verbose)
+
+    if operation == "remove_cautious":
+        node_list = tree.get_node_list(get_inners=True, get_leaves=False)
+        
+        probabilities = [1 / (node.get_tree_size() ** removal_depth_param) for node in node_list]
+        probabilities /= np.sum(probabilities)
+
+        node = np.random.choice(node_list, p=probabilities)
+        node.replace_child(verbose)
+    
+    if operation == "modify":
+        node = tree.get_random_node()
+        
+        if node.is_leaf():
+            node.mutate_label(verbose)
+        else:
+            operation = np.random.choice(["attribute", "threshold"], p=[1/3, 2/3])
+            
+            if operation == "attribute":
+                node.mutate_attribute(verbose)
+                node.threshold = np.random.uniform(-1, 1)
+            elif operation == "threshold":
+                node.mutate_threshold(0.1, verbose)
+
+def mutate_I2(tree, removal_depth_param=2, verbose=False):
+    operation = np.random.choice(["expand_leaf", "add_inner_node", "remove_risky", "remove_cautious", "modify"], p=[0.1, 0.1, 0.2, 0.4, 0.2])
+    
+    if operation == "expand_leaf":
+        node = tree.get_random_node(get_inners=False, get_leaves=True)
+        node.mutate_is_leaf(verbose)
+
+    if operation == "add_inner_node":
+        node = tree.get_random_node(get_inners=True, get_leaves=False)
+        node.mutate_add_inner_node(verbose)
+
+    if operation == "remove_risky":
+        node = tree.get_random_node(get_inners=True, get_leaves=False)
+        node.mutate_truncate_dx(verbose)
+
+    if operation == "remove_cautious":
+        node_list = tree.get_node_list(get_inners=True, get_leaves=False)
+        
+        probabilities = [1 / (node.get_tree_size() ** removal_depth_param) for node in node_list]
+        probabilities /= np.sum(probabilities)
+
+        node = np.random.choice(node_list, p=probabilities)
+        node.replace_child(verbose)
+    
+    if operation == "modify":
+        node = tree.get_random_node()
+        
+        if node.is_leaf():
+            node.mutate_label(verbose)
+        else:
+            operation = np.random.choice(["attribute", "threshold"], p=[1/3, 2/3])
+            
+            if operation == "attribute":
+                node.mutate_attribute(verbose)
+                node.threshold = np.random.uniform(-1, 1)
+            elif operation == "threshold":
+                node.mutate_threshold(0.1, verbose)
+
+def mutate_I3(tree, removal_depth_param=2, verbose=False):
+    operation = np.random.choice(["expand_leaf", "add_inner_node", "remove_risky", "remove_cautious", "modify"], p=[0.1, 0.1, 0.4, 0.1, 0.3])
+    
+    if operation == "expand_leaf":
+        node = tree.get_random_node(get_inners=False, get_leaves=True)
+        node.mutate_is_leaf(verbose)
+
+    if operation == "add_inner_node":
+        node = tree.get_random_node(get_inners=True, get_leaves=False)
+        node.mutate_add_inner_node(verbose)
+
+    if operation == "remove_risky":
+        node = tree.get_random_node(get_inners=True, get_leaves=False)
+        node.mutate_truncate_dx(verbose)
+
+    if operation == "remove_cautious":
+        node_list = tree.get_node_list(get_inners=True, get_leaves=False)
+        
+        probabilities = [1 / (node.get_tree_size() ** removal_depth_param) for node in node_list]
+        probabilities /= np.sum(probabilities)
+
+        node = np.random.choice(node_list, p=probabilities)
+        node.replace_child(verbose)
+    
+    if operation == "modify":
+        node = tree.get_random_node()
+        
+        if node.is_leaf():
+            node.mutate_label(verbose)
+        else:
+            operation = np.random.choice(["attribute", "threshold"], p=[1/3, 2/3])
+            
+            if operation == "attribute":
+                node.mutate_attribute(verbose)
+                node.threshold = np.random.uniform(-1, 1)
+            elif operation == "threshold":
+                node.mutate_threshold(0.1, verbose)
