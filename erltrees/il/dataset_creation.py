@@ -58,5 +58,6 @@ if __name__ == "__main__":
         expert = get_model(model_class=args['expert_class'], filename=args['expert'], config=config)
         y = il.label_dataset_with_model(config=config, model=expert, X=X)
     
+    # Saving dataset
     il.save_dataset(args['output'], X, y)
     print(f"[yellow]Saved dataset to '{args['output']}'.[/yellow]")

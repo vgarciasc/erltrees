@@ -61,7 +61,7 @@ def collect_rewards(config, tree, episodes, should_norm_state, render=False):
 
 def collect_metrics(config, trees, alpha=0.5, episodes=10,
     should_norm_state=False, penalize_std=False,
-    should_fill_attributes=False,
+    should_fill_attributes=False, task_solution_threshold=None,
     render=False, verbose=False):
 
     output = []
@@ -92,16 +92,23 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
         tree_avg_reward = np.mean(total_rewards)
         tree_std_reward = np.std(total_rewards)
 
-        tree_fitness = None
         if hasattr(tree, "get_tree_size"):
             tree_fitness = calc_fitness(
                 tree_avg_reward, tree_std_reward, 
                 tree.get_tree_size(), alpha, penalize_std)
+        else:
+            tree_fitness = None
+
+        if task_solution_threshold is not None:
+            tree_success_rate = np.mean([(1 if r > task_solution_threshold else 0) for r in total_rewards])
+        else:
+            tree_success_rate = None
 
         if should_fill_attributes:
             tree.reward = tree_avg_reward
             tree.std_reward = tree_std_reward
             tree.fitness = tree_fitness
+            tree.success_rate = tree_success_rate
 
         output.append((tree_avg_reward, tree_std_reward, tree_fitness))
 

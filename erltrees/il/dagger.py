@@ -12,21 +12,26 @@ from rich import print
 from erltrees.il.behavioral_cloning import get_model_to_train
 from erltrees.il.parser import handle_args
 from erltrees.rl.configs import get_config
+from erltrees.io import console
 import erltrees.rl.utils as rl
 import erltrees.il.utils as il
 
-def run_dagger(config, X, y, model_name, pruning_alpha, 
-    expert, iterations, episodes):
-
-    best_reward = -9999
-    best_model = None
+def run_dagger(config, X, y, model_name, expert, alpha=0.1, 
+    iterations=50, episodes=100, should_penalize_std=False,
+    task_solution_threshold=None, should_attenuate_alpha=False):
 
     dt = get_model_to_train(config, model_name)
-    dt.fit(X, y, pruning=pruning_alpha)
+    dt.fit(X, y, pruning=alpha)
 
     history = []
+    curr_alpha = alpha
+    best_fitness = -9999
+    best_model = None
 
     for i in range(iterations):
+        if should_attenuate_alpha:
+            curr_alpha = alpha * (i/iterations)
+        
         # Collect trajectories from student and correct them with expert
         X2, _ = il.get_dataset_from_model(config, dt, episodes)
         y2 = il.label_dataset_with_model(expert, X2)
@@ -42,27 +47,37 @@ def run_dagger(config, X, y, model_name, pruning_alpha,
 
         # Train new student
         dt = get_model_to_train(config, model_name)
-        dt.fit(X, y, pruning=pruning_alpha)
+        dt.fit(X, y, pruning=curr_alpha)
 
+        # Evaluating student
+        rl.collect_metrics(config, [dt], episodes=iterations, 
+            penalize_std=should_penalize_std, 
+            task_solution_threshold=task_solution_threshold,
+            should_fill_attributes=True)
+        dt.fitness = rl.calc_fitness(dt.reward, dt.std_reward, dt.get_size(),
+            curr_alpha, should_penalize_std=should_penalize_std)
+        
         # Housekeeping
-        print(f"Step #{i}.")
-
-        rl.collect_metrics(config, [dt], episodes=iterations, should_fill_attributes=True)
+        
+        console.rule(f"[red]Step #{i}[/red]")
         print(f"Average reward is {dt.reward} ± {dt.std_reward}.")
-
-        print(f"- Dataset length: {len(X)}")
-        print(f"- Obtained tree with {dt.get_size()} nodes.")
-        print()
+        print(f"Fitness is {dt.fitness}. Success rate is {dt.success_rate}")
+        print(f"-- Dataset length: {len(X)}")
+        print(f"-- Obtained tree with {dt.get_size()} nodes.")
 
         history.append((i, dt.reward, dt.std_reward, dt.get_size(), dt))
+        
+        # Recalculate best fitness according to current alpha
+        best_fitness = rl.calc_fitness(dt.reward, dt.std_reward, dt.get_size(),
+            curr_alpha, should_penalize_std=should_penalize_std)
 
-        if dt.reward > best_reward:
-            best_reward = dt.reward
+        if dt.fitness > best_fitness:
+            best_fitness = dt.fitness
             best_model = dt
     
-    return best_model, best_reward, zip(*history)
+    return best_model, best_fitness, zip(*history)
 
-def plot_dagger(config, avg_rewards, deviations, nodes, pruning_alpha, episodes, show=False):
+def plot_dagger(config, avg_rewards, deviations, nodes, alpha, episodes, show=False):
     avg_rewards = np.array(avg_rewards)
     deviations = np.array(deviations)
 
@@ -75,13 +90,13 @@ def plot_dagger(config, avg_rewards, deviations, nodes, pruning_alpha, episodes,
     ax2.plot(iterations, nodes, color="blue")
     ax2.set_ylabel("Number of leaves")
     ax2.set_xlabel("Iterations")
-    plt.suptitle(f"DAgger for {config['name']} w/ pruning $\\alpha = {pruning_alpha}$" +
+    plt.suptitle(f"DAgger for {config['name']} w/ pruning $\\alpha = {alpha}$" +
         f", {episodes} per iteration")
     
     if show:
         plt.show()
     else:
-        plt.savefig(f"figures/dagger_{config['name']}_{pruning_alpha}.png")
+        plt.savefig(f"figures/dagger_{config['name']}_{alpha}.png")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Behavior Cloning')
@@ -100,30 +115,38 @@ if __name__ == "__main__":
     parser.add_argument('--should_visualize', help='Should visualize final tree?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_plot', help='Should plot performance?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_save_models', help='Should save trees?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--should_attenuate_alpha', help='Should attenuate alpha?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--should_penalize_std', help='Should penalize std?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--save_models_pathname', help='Where to save trees?', required=False, default="imitation_learning/models/tmp.txt", type=str)
     parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=False, default=0, type=int)
     parser.add_argument('--verbose', help='Is verbose?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     args = vars(parser.parse_args())
     
+    # Initializing
     config = get_config(args['task'])
     expert, X, y = handle_args(args, config)
-    
     print(f"Running {args['class']} DAgger for {config['name']} with pruning = {args['pruning']}.")
+
     # Running DAgger
     dt, reward, history = run_dagger(
         config, X, y,
-        pruning_alpha=args['pruning'],
-        model_name=args['class'],
         expert=expert, 
+        model_name=args['class'],
+        alpha=args['pruning'],
         iterations=args['iterations'],
-        episodes=args['episodes'])
+        episodes=args['episodes'],
+        should_penalize_std=args['should_penalize_std'],
+        task_solution_threshold=args['task_solution_threshold'],
+        should_attenuate_alpha=args['should_attenuate_alpha'])
     iterations, avg_rewards, deviations, model_sizes, models = history
 
-    if args['should_save_models']:
-        model_strs = [model.get_as_viztree() for model in models]
-        
-        with open(args['save_models_pathname'], "w") as f:
-            json.dump(model_strs, f)
+    # Printing the best model
+    rewards = [rl.collect_metrics(config, trees=[dt], episodes=1)[0][0] for _ in range(args['episodes_to_evaluate'])]
+    success_rate = np.mean([1 if r > args["task_solution_threshold"] else 0 for r in rewards])
+    print()
+    print(f"- Average reward for the best policy is {np.mean(rewards)} ± {np.std(rewards)}.")
+    print(f"- Success rate is {success_rate}.")
+    print(f"- Obtained tree with {dt.get_size()} nodes.")
 
     # Plotting results
     if args['should_plot']:
@@ -132,19 +155,9 @@ if __name__ == "__main__":
             avg_rewards=avg_rewards,
             deviations=deviations,
             nodes=model_sizes,
-            pruning_alpha=args['pruning'],
+            alpha=args['pruning'],
             episodes=args['episodes'],
             show=args['should_plot'])
-
-    # Printing the best model
-    rewards = [rl.collect_metrics(config, trees=[dt], episodes=1)[0][0] for _ in range(args['episodes_to_evaluate'])]
-    success_rate = np.mean([1 if r > args["task_solution_threshold"] else 0 for r in rewards])
-
-    print()
-    print(f"- Average reward for the best policy is {np.mean(rewards)} ± {np.std(rewards)}.")
-    print(f"- Success rate is {success_rate}.")
-
-    print(f"- Obtained tree with {dt.get_size()} nodes.")
 
     # Visualizing the best model
     if args['should_visualize']:
@@ -156,6 +169,12 @@ if __name__ == "__main__":
     dt.save_model(f"data/dagger_best_tree_{config['name']}")
     date = datetime.now().strftime("tree_%Y-%m-%d_%H-%M")
     filename = f"data/{config['name']}_{date}_dagger_{args['pruning']}"
-
     print(dt.get_as_viztree())
+
+    # Saving models
+    if args['should_save_models']:
+        model_strs = [model.get_as_viztree() for model in models]
+        
+        with open(args['save_models_pathname'], "w") as f:
+            json.dump(model_strs, f)
         
