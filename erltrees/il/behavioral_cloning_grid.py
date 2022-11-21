@@ -16,7 +16,7 @@ from erltrees.rl.configs import get_config
 import erltrees.rl.utils as rl
 
 def run_grid_behavior_cloning(config, X, y, start, end, steps, 
-    episodes_to_grade=100, verbose=False):
+    episodes_to_grade=100, task_solution_threshold=None, verbose=False):
     history = []
 
     for i, pruning_alpha in enumerate(np.linspace(start, end, steps)):
@@ -26,17 +26,19 @@ def run_grid_behavior_cloning(config, X, y, start, end, steps,
             pruning_alpha=pruning_alpha)
 
         # Evaluating tree
-        rl.collect_metrics(config, [dt], episodes=episodes_to_grade, should_fill_attributes=True)
+        rl.collect_metrics(config, [dt], episodes=episodes_to_grade, 
+            should_fill_attributes=True, task_solution_threshold=task_solution_threshold)
         
         # Keeping history of trees
         size = dt.get_size()
         depth = dt.model.get_depth()
-        history.append((pruning_alpha, dt.reward, dt.std_reward, size, depth))
+        success_rate = dt.success_rate
+        history.append((pruning_alpha, dt.reward, dt.std_reward, size, depth, success_rate))
 
         # Logging info if necessary
         printv(f"#({i} / {steps}) PRUNING = {pruning_alpha}: \t"
             + f"REWARD = {'{:.3f}'.format(dt.reward)} ± {'{:.3f}'.format(dt.std_reward)}"
-            + f"\tNODES: {size}, DEPTH: {depth}.",
+            + f"\tNODES: {size}, DEPTH: {depth}, SR: {success_rate}.",
             verbose)
 
         # # Saving tree
@@ -44,11 +46,11 @@ def run_grid_behavior_cloning(config, X, y, start, end, steps,
         #     with open(f"data/{config['name']}_bc_pruning_{pruning_alpha}", "w") as f:
         #         f.write(dt.get_as_viztree())
     
-    # pruning_params, avg_rewards, deviations, leaves, depths = zip(*history)
+    # pruning_params, avg_rewards, deviations, sizes, depths = zip(*history)
     return zip(*history)
 
 def plot_behavior_cloning(history):
-    pruning_params, avg_rewards, deviations, leaves, depths = history
+    pruning_params, avg_rewards, deviations, sizes, depths, success_rates = history
     
     avg_rewards = np.array(avg_rewards)
     deviations = np.array(deviations)
@@ -58,8 +60,8 @@ def plot_behavior_cloning(history):
     ax1.plot(pruning_params, avg_rewards, color="red")
     ax1.set_xlabel("Pruning $\\alpha$")
     ax1.set_ylabel("Average reward")
-    ax2.plot(pruning_params, leaves, color="blue")
-    ax2.set_ylabel("Number of leaves")
+    ax2.plot(pruning_params, sizes, color="blue")
+    ax2.set_ylabel("Number of sizes")
     ax2.set_xlabel("Pruning $\\alpha$")
     plt.suptitle(f"Behavior cloning for {config['name']}")
     plt.show()
@@ -77,6 +79,7 @@ if __name__ == "__main__":
     parser.add_argument('--should_grade_expert', help='Should collect expert\'s metrics?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_visualize', help='Should visualize final tree?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--expert_exploration_rate', help='What is the expert exploration rate?', required=False, default=0, type=float)
+    parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=False, default=None, type=int)
     parser.add_argument('--episodes_to_grade_model', help='How many episodes to grade model?', required=False, default=100, type=int)
     parser.add_argument('--verbose', help='Is verbose?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     args = vars(parser.parse_args())
@@ -91,18 +94,22 @@ if __name__ == "__main__":
         end=args['end'],
         steps=args['steps'],
         episodes_to_grade=args['episodes_to_grade_model'],
+        task_solution_threshold=args['task_solution_threshold'],
         verbose=args['verbose'])
     history = list(history)
     
     output_file = "data/imitation_learning/behavioral_cloning_grid_" + datetime.now().strftime("%Y_%m_%d-%I_%M_%S") + ".txt"
     with open(output_file, "w") as f:
-        pruning_params, avg_rewards, deviations, leaves, depths = history
+        pruning_params, avg_rewards, deviations, sizes, depths, success_rates = history
         string = {
-            "pruning_params": list(pruning_params),
+            "args": str(args),
+            "command_line": "python -m erltrees.il.behavioral_cloning_grid " + " ".join([f"--{key} {val}" for (key, val) in args.items()]),
+            "pruning_alpha": list(pruning_params),
             "avg_rewards": list(avg_rewards),
-            "deviations": list(deviations),
-            "leaves": list([float(l) for l in leaves]),
-            "depths": list([float(d) for d in depths])}
+            "std_rewards": list(deviations),
+            "sizes": list([float(l) for l in sizes]),
+            "depths": list([float(d) for d in depths]),
+            "success_rates": list([float(s) for s in success_rates])}
         json.dump(string, f, indent=1)
 
     # Plotting behavior cloning

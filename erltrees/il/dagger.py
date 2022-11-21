@@ -67,11 +67,12 @@ def run_dagger(config, X, y, model_name, expert, alpha=0.1,
 
         history.append((i, dt.reward, dt.std_reward, dt.get_size(), dt))
         
-        # Recalculate best fitness according to current alpha
-        best_fitness = rl.calc_fitness(dt.reward, dt.std_reward, dt.get_size(),
-            curr_alpha, should_penalize_std=should_penalize_std)
+        if best_model is not None:
+            # Recalculate best fitness according to current alpha
+            best_fitness = rl.calc_fitness(best_model.reward, best_model.std_reward, 
+                best_model.get_size(), curr_alpha, should_penalize_std=should_penalize_std)
 
-        if dt.fitness > best_fitness:
+        if best_model is None or dt.fitness > best_fitness:
             best_fitness = dt.fitness
             best_model = dt
     

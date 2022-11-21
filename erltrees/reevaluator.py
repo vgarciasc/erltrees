@@ -18,22 +18,30 @@ if __name__ == "__main__":
     parser.add_argument('--file', help="Input file", required=True, type=str)
     parser.add_argument('--episodes', help='Number of episodes to run when evaluating model', required=False, default=10, type=int)
     parser.add_argument('--norm_state', help="Should normalize state?", required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
-    parser.add_argument('--reward_to_solve', help="At which reward is the episode considered solved?", required=True, type=int)
+    parser.add_argument('--select_tree', help="Should select a single tree?", required=False, default=None, type=int)
+    parser.add_argument('--task_solution_threshold', help="At which reward is the episode considered solved?", required=True, type=int)
     parser.add_argument('--should_print_tree', help='Should print tree?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--n_jobs', help="How many jobs to run?", type=int, required=False, default=-1)
     args = vars(parser.parse_args())
 
     config = configs.get_config(args['task'])
-    reward_to_solve = args['reward_to_solve']
+    task_solution_threshold = args['task_solution_threshold']
     norm_state = args['norm_state']
+    alpha = 1.0
 
     tree_strings = io.get_trees_from_logfile(args['file'])
 
-    successes_rates = []
     tree_sizes = []
     avg_rewards_before_pruning = []
     std_rewards_before_pruning = []
+    success_rates_before_pruning = []
     avg_rewards_after_pruning = []
     std_rewards_after_pruning = []
+    success_rates_after_pruning = []
+
+    if args["select_tree"] is not None:
+        print(f"Selecting tree #{args['select_tree']}")
+        tree_strings = [tree_strings[args["select_tree"]]]
 
     for i, string in enumerate(tree_strings):
         io.console.rule(f"Evaluating Tree {i} / {len(tree_strings) - 1}")
@@ -48,27 +56,43 @@ if __name__ == "__main__":
         if args['should_print_tree']:
             print(tree)
 
-        rewards = [rl.collect_metrics(config, trees=[tree], episodes=1, should_norm_state=False, penalize_std=False)[0][0] for _ in range(args['episodes'])]
-        success_rate = np.mean([1 if r > reward_to_solve else 0 for r in rewards])
-        print(f"Mean reward, std reward: {np.mean(rewards)} ± {np.std(rewards)}, SR: {success_rate}")
-        avg_rewards_before_pruning.append(np.mean(rewards))
-        std_rewards_before_pruning.append(np.std(rewards))
+        rl.collect_metrics(config, trees=[tree], alpha=alpha,
+            task_solution_threshold=args["task_solution_threshold"],
+            episodes=100, should_norm_state=False, 
+            should_fill_attributes=True, penalize_std=False,
+            n_jobs=-1)
+        print(f"Mean reward, std reward: {tree.reward} ± {tree.std_reward}, SR: {tree.success_rate}")
+
+        avg_rewards_before_pruning.append(tree.reward)
+        std_rewards_before_pruning.append(tree.std_reward)
+        success_rates_before_pruning.append(tree.success_rate)
 
         print("[yellow]> Pruning by visits...[/yellow]")
         tree = tree.prune_by_visits(5)
         print(f"Tree size: {tree.get_tree_size()} nodes")
 
-        rewards = [rl.collect_metrics(config, trees=[tree], episodes=1, should_norm_state=False, penalize_std=False)[0][0] for _ in range(args['episodes'])]
-        success_rate = np.mean([1 if r > reward_to_solve else 0 for r in rewards])
-        print(f"Mean reward, std reward: {np.mean(rewards)} ± {np.std(rewards)}, SR: {success_rate}")
+        rl.collect_metrics(config, trees=[tree], alpha=alpha,
+            task_solution_threshold=args["task_solution_threshold"],
+            episodes=args['episodes'], should_norm_state=False, 
+            should_fill_attributes=True, penalize_std=False,
+            n_jobs=args["n_jobs"])
+        print(f"Mean reward, std reward: {tree.reward} ± {tree.std_reward}, SR: {tree.success_rate}")
 
         tree_sizes.append(tree.get_tree_size())
-        successes_rates.append(success_rate)
-        avg_rewards_after_pruning.append(np.mean(rewards))
-        std_rewards_after_pruning.append(np.std(rewards))
-    
+
+        avg_rewards_after_pruning.append(tree.reward)
+        std_rewards_after_pruning.append(tree.std_reward)
+        success_rates_after_pruning.append(tree.success_rate)
+
+    if args["select_tree"] is not None:
+        print(tree)
+
     io.console.rule("[red]SUMMARY[/red]")
-    print(f"Average reward before pruning: {'{:.3f}'.format(np.mean(avg_rewards_before_pruning))} ± {'{:.3f}'.format(np.mean(std_rewards_before_pruning))}")
-    print(f"Average reward after pruning: {'{:.3f}'.format(np.mean(avg_rewards_after_pruning))} ± {'{:.3f}'.format(np.mean(std_rewards_after_pruning))}")
-    print(f"Average success rate: {'{:.3f}'.format(np.mean(successes_rates))} ± {'{:.3f}'.format(np.std(successes_rates))}")
-    print(f"Average tree size: {'{:.3f}'.format(np.mean(tree_sizes))} ± {'{:.3f}'.format(np.std(tree_sizes))}")
+    print("Before pruning:")
+    print(f"  Average reward before pruning: {'{:.3f}'.format(np.mean(avg_rewards_before_pruning))} ± {'{:.3f}'.format(np.mean(std_rewards_before_pruning))}")
+    print(f"  Average success rate before pruning: {'{:.3f}'.format(np.mean(success_rates_before_pruning))} ± {'{:.3f}'.format(np.std(success_rates_before_pruning))}")
+    print()
+    print("After pruning:")
+    print(f"  Average reward: {'{:.3f}'.format(np.mean(avg_rewards_after_pruning))} ± {'{:.3f}'.format(np.mean(std_rewards_after_pruning))}")
+    print(f"  Average success rate: {'{:.3f}'.format(np.mean(success_rates_after_pruning))} ± {'{:.3f}'.format(np.std(success_rates_after_pruning))}")
+    print(f"  Average tree size: {'{:.3f}'.format(np.mean(tree_sizes))} ± {'{:.3f}'.format(np.std(tree_sizes))}")

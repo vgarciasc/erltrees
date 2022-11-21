@@ -48,7 +48,7 @@ def run_episode(tree, env, config, should_norm_state=False, render=False):
     
     return total_reward
 
-def collect_rewards(config, tree, episodes, should_norm_state, render=False):
+def collect_rewards_seq(config, tree, episodes, should_norm_state, render=False):
     env = gym.make(config["name"])
     total_rewards = []
 
@@ -59,35 +59,38 @@ def collect_rewards(config, tree, episodes, should_norm_state, render=False):
     env.close()
     return total_rewards
 
+def collect_rewards_par(config, tree, episodes, should_norm_state, n_jobs=4):
+    episodes_partition = [episodes // n_jobs for _ in range(n_jobs)]
+    episodes_partition[-1] += episodes % n_jobs
+
+    total_rewards = Parallel(n_jobs=n_jobs)(delayed(collect_rewards_seq)(
+        config, tree, partition, should_norm_state=should_norm_state)
+        for partition in episodes_partition)
+    total_rewards = [item for sublist in total_rewards for item in sublist]
+
+    return total_rewards
+
+def collect_rewards(config, tree, episodes, should_norm_state, render=False, n_jobs=-1):
+    if n_jobs == -1:
+        return collect_rewards_seq(config, tree, episodes, 
+            should_norm_state=should_norm_state, render=render)
+    else:
+        return collect_rewards_par(config, tree, episodes, 
+            should_norm_state=should_norm_state, n_jobs=n_jobs)
+
 def collect_metrics(config, trees, alpha=0.5, episodes=10,
     should_norm_state=False, penalize_std=False,
     should_fill_attributes=False, task_solution_threshold=None,
-    render=False, verbose=False):
+    render=False, verbose=False, n_jobs=-1):
 
     output = []
 
     env = gym.make(config["name"])
 
     for tree in trees:
-        total_rewards = []
-        
-        for episode in range(episodes):
-            state = env.reset()
-            total_reward = 0
-            done = False
-
-            while not done:
-                if should_norm_state:
-                    state = normalize_state(config, state)
-                
-                action = tree.act(state)
-                state, reward, done, _ = env.step(action)
-                total_reward += reward
-
-                if render:
-                    env.render()
-            
-            total_rewards.append(total_reward)
+        total_rewards = collect_rewards(config, tree, episodes, 
+            should_norm_state=should_norm_state, render=render, 
+            n_jobs=n_jobs)
 
         tree_avg_reward = np.mean(total_rewards)
         tree_std_reward = np.std(total_rewards)
@@ -235,7 +238,7 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
 #     return output
 
 def fill_metrics_par(n_jobs, config, trees, alpha, episodes=10, 
-    should_norm_state=False, penalize_std=False):
+    should_norm_state=False, task_solution_threshold=None, penalize_std=False):
 
     partitions = [trees[len(trees)//n_jobs * i : len(trees)//n_jobs * (i+1)] 
         for i in range(n_jobs)]
@@ -244,6 +247,7 @@ def fill_metrics_par(n_jobs, config, trees, alpha, episodes=10,
     metrics = Parallel(n_jobs=n_jobs)(delayed(collect_metrics)(config, 
         partition, alpha=alpha, episodes=episodes, 
         should_norm_state=should_norm_state, 
+        task_solution_threshold=task_solution_threshold,
         penalize_std=penalize_std) for partition in partitions)
     metrics = [tree_metric for tree_metrics in metrics for tree_metric in tree_metrics]
 
@@ -253,25 +257,28 @@ def fill_metrics_par(n_jobs, config, trees, alpha, episodes=10,
         trees[i].fitness = fitness
 
 def fill_metrics_seq(config, trees, alpha, episodes=10,
-    should_norm_state=False, penalize_std=False):
+    should_norm_state=False, task_solution_threshold=None, penalize_std=False):
 
     collect_metrics(config, trees, alpha, episodes=episodes,
         should_norm_state=should_norm_state,
         penalize_std=penalize_std, should_fill_attributes=True,
+        task_solution_threshold=task_solution_threshold,
         render=False, verbose=False)
 
 def fill_metrics(config, trees, alpha, episodes=10, 
-    should_norm_state=False, penalize_std=False, 
-    n_jobs=-1):
+    should_norm_state=False, penalize_std=False,
+    task_solution_threshold=None, n_jobs=-1):
 
     if n_jobs == -1:
         fill_metrics_seq(config, trees, alpha, episodes=episodes,
             should_norm_state=should_norm_state,
+            task_solution_threshold=task_solution_threshold,
             penalize_std=penalize_std)
     else:
         fill_metrics_par(n_jobs, 
             config, trees, alpha, episodes=episodes, 
             should_norm_state=should_norm_state,
+            task_solution_threshold=task_solution_threshold,
             penalize_std=penalize_std)
 
 def collect_and_prune_by_visits(tree, threshold=5, episodes=100, 

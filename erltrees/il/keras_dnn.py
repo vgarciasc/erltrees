@@ -53,9 +53,9 @@ class KerasDNN:
         model.add(Flatten(input_shape=(1,) + (self.n_attributes,)))
         model.add(Dense(128))
         model.add(Activation('relu'))
-        model.add(Dense(128))
-        model.add(Activation('relu'))
         model.add(Dense(64))
+        model.add(Activation('relu'))
+        model.add(Dense(32))
         model.add(Activation('relu'))
         model.add(Dense(self.n_actions))
         model.add(Activation('linear'))
@@ -68,17 +68,18 @@ class KerasDNN:
         self.dqn.model = keras.models.load_model(filename)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Behavior Cloning')
+    parser = argparse.ArgumentParser(description='Keras DNN')
     parser.add_argument('-t','--task',help="Which task to run?", required=True)
     parser.add_argument('-o','--output_filepath', help='Filepath to save expert', required=True)
     parser.add_argument('-i','--iterations', help='Number of iterations to run', required=True, type=int)
+    parser.add_argument('--exploration_rate', help='What is the exploration rate?', required=False, default=0.1, type=float)
     parser.add_argument('--should_visualize', help='Should visualize final tree?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     args = vars(parser.parse_args())
 
     # Initialization    
     config = get_config(args['task'])
     env = gym.make(config['name'])
-    ann = KerasDNN(config)
+    ann = KerasDNN(config, args["exploration_rate"])
 
     # Fitting model
     ann.dqn.fit(env, nb_steps=args['iterations'], visualize=False, verbose=2)
