@@ -1,0 +1,333 @@
+{'task': 'mountain_car', 'simulations': 20, 'generations': 500, 'output_path': None, 'initial_pop': '', 'mu': 5, 'lambda': 100, 'tournament_size': 0, 'mutation_type': 'I', 'initial_depth': 4, 'mutation_qt': 1, 'alpha': 1.0, 'should_norm_state': True, 'should_prune_by_visits': False, 'should_prune_best_by_visits': True, 'should_recheck_popbest': True, 'should_include_allbest': False, 'recheck_popbest_episodes': 100, 'should_attenuate_alpha': True, 'should_penalize_std': True, 'episodes': 10, 'should_plot': False, 'should_save_plot': True, 'jobs_to_parallelize': 8, 'verbose': True}
+
+python -m erltrees.evo.es_sl --task mountain_car --simulations 20 --generations 500 --output_path None --initial_pop  --mu 5 --lambda 100 --tournament_size 0 --mutation_type I --initial_depth 4 --mutation_qt 1 --alpha 1.0 --should_norm_state True --should_prune_by_visits False --should_prune_best_by_visits True --should_recheck_popbest True --should_include_allbest False --recheck_popbest_episodes 100 --should_attenuate_alpha True --should_penalize_std True --episodes 10 --should_plot False --should_save_plot True --jobs_to_parallelize 8 --verbose True
+
+---
+
+Mean Best Reward: -111.0513 +- 7.353480326348878
+Mean Best Size: 7.7
+Average Evaluations to Success: -------
+Success Rate: 0.4
+Elapsed time: 11426.552015542984 seconds
+-----
+
+Tree #0 (Reward: -102.543, Size: 9)
+----------
+- Car Velocity <= -0.00493
+-- Car Position <= -0.70802
+--- RIGHT
+--- LEFT
+-- Car Position <= -0.09714
+--- RIGHT
+--- Car Velocity <= 0.26256
+---- LEFT
+---- RIGHT
+
+Tree #1 (Reward: -115.848, Size: 5)
+----------
+- Car Position <= -0.70739
+-- RIGHT
+-- Car Velocity <= -0.00260
+--- LEFT
+--- RIGHT
+
+Tree #2 (Reward: -115.005, Size: 13)
+----------
+- Car Position <= -1.08620
+-- LEFT
+-- Car Velocity <= -0.40003
+--- LEFT
+--- Car Velocity <= 0.31073
+---- Car Velocity <= 0.00314
+----- Car Position <= -0.24075
+------ RIGHT
+------ LEFT
+----- Car Position <= -0.01201
+------ RIGHT
+------ LEFT
+---- RIGHT
+
+Tree #3 (Reward: -103.893, Size: 9)
+----------
+- Car Velocity <= -0.00991
+-- Car Position <= -0.67439
+--- RIGHT
+--- LEFT
+-- Car Velocity <= 0.17956
+--- Car Position <= -0.09591
+---- RIGHT
+---- LEFT
+--- RIGHT
+
+Tree #4 (Reward: -115.899, Size: 5)
+----------
+- Car Velocity <= -0.00286
+-- Car Position <= -0.67530
+--- RIGHT
+--- LEFT
+-- RIGHT
+
+Tree #5 (Reward: -129.496, Size: 11)
+----------
+- Car Velocity <= -0.52089
+-- LEFT
+-- Car Position <= 0.29448
+--- Car Velocity <= 0.02852
+---- Car Position <= -0.35896
+----- RIGHT
+----- LEFT
+---- Car Position <= 0.19670
+----- RIGHT
+----- LEFT
+--- RIGHT
+
+Tree #6 (Reward: -115.927, Size: 5)
+----------
+- Car Position <= -0.70858
+-- RIGHT
+-- Car Velocity <= -0.00260
+--- LEFT
+--- RIGHT
+
+Tree #7 (Reward: -103.742, Size: 9)
+----------
+- Car Velocity <= 0.18575
+-- Car Position <= -0.09618
+--- Car Position <= -0.69136
+---- RIGHT
+---- Car Velocity <= -0.01513
+----- LEFT
+----- RIGHT
+--- LEFT
+-- RIGHT
+
+Tree #8 (Reward: -115.974, Size: 5)
+----------
+- Car Velocity <= -0.00413
+-- Car Position <= -0.69039
+--- RIGHT
+--- LEFT
+-- RIGHT
+
+Tree #9 (Reward: -102.766, Size: 11)
+----------
+- Car Velocity <= 0.94021
+-- Car Position <= -0.09649
+--- Car Velocity <= -0.00910
+---- Car Position <= -0.71280
+----- RIGHT
+----- LEFT
+---- RIGHT
+--- Car Velocity <= 0.34185
+---- LEFT
+---- RIGHT
+-- NOP
+
+Tree #10 (Reward: -102.949, Size: 9)
+----------
+- Car Velocity <= 0.30227
+-- Car Position <= -0.70973
+--- RIGHT
+--- Car Velocity <= -0.01263
+---- LEFT
+---- Car Position <= -0.09972
+----- RIGHT
+----- LEFT
+-- RIGHT
+
+Tree #11 (Reward: -116.011, Size: 7)
+----------
+- Car Velocity <= -0.86248
+-- NOP
+-- Car Position <= -0.70016
+--- RIGHT
+--- Car Velocity <= -0.00318
+---- LEFT
+---- RIGHT
+
+Tree #12 (Reward: -102.933, Size: 9)
+----------
+- Car Velocity <= 0.27987
+-- Car Position <= -0.09565
+--- Car Position <= -0.71437
+---- RIGHT
+---- Car Velocity <= -0.00984
+----- LEFT
+----- RIGHT
+--- LEFT
+-- RIGHT
+
+Tree #13 (Reward: -102.824, Size: 9)
+----------
+- Car Velocity <= 0.34468
+-- Car Position <= -0.70257
+--- RIGHT
+--- Car Position <= -0.09559
+---- Car Velocity <= -0.00442
+----- LEFT
+----- RIGHT
+---- LEFT
+-- RIGHT
+
+Tree #14 (Reward: -115.61, Size: 5)
+----------
+- Car Velocity <= -0.00006
+-- Car Position <= -0.70080
+--- RIGHT
+--- LEFT
+-- RIGHT
+
+Tree #15 (Reward: -102.689, Size: 9)
+----------
+- Car Position <= -0.70773
+-- RIGHT
+-- Car Velocity <= 0.22544
+--- Car Velocity <= -0.00026
+---- LEFT
+---- Car Position <= -0.09980
+----- RIGHT
+----- LEFT
+--- RIGHT
+
+Tree #16 (Reward: -115.827, Size: 5)
+----------
+- Car Velocity <= -0.00191
+-- Car Position <= -0.68469
+--- RIGHT
+--- LEFT
+-- RIGHT
+
+Tree #17 (Reward: -115.829, Size: 5)
+----------
+- Car Position <= -0.70249
+-- RIGHT
+-- Car Velocity <= -0.00121
+--- LEFT
+--- RIGHT
+
+Tree #18 (Reward: -109.449, Size: 9)
+----------
+- Car Velocity <= 0.07000
+-- Car Position <= -0.08694
+--- Car Position <= -0.62095
+---- RIGHT
+---- Car Velocity <= -0.00679
+----- LEFT
+----- RIGHT
+--- LEFT
+-- RIGHT
+
+Tree #19 (Reward: -115.812, Size: 5)
+----------
+- Car Velocity <= -0.00113
+-- Car Position <= -0.70083
+--- RIGHT
+--- LEFT
+-- RIGHT
+
+Tree #0 (Reward: -102.558, Size: 9)
+----------
+- Car Velocity <= 0.35827
+-- Car Velocity <= -0.00012
+--- Car Position <= -0.71760
+---- RIGHT
+---- LEFT
+--- Car Position <= -0.09867
+---- RIGHT
+---- LEFT
+-- RIGHT
+
+Tree #1 (Reward: -103.713, Size: 9)
+----------
+- Car Velocity <= 0.07000
+-- Car Velocity <= -0.01049
+--- Car Position <= -0.81903
+---- RIGHT
+---- LEFT
+--- Car Position <= -0.19097
+---- RIGHT
+---- LEFT
+-- RIGHT
+
+Tree #2 (Reward: -115.831, Size: 5)
+----------
+- Car Velocity <= -0.00199
+-- Car Position <= -0.68786
+--- RIGHT
+--- LEFT
+-- RIGHT
+
+Tree #3 (Reward: -115.839, Size: 5)
+----------
+- Car Velocity <= -0.00092
+-- Car Position <= -0.67537
+--- RIGHT
+--- LEFT
+-- RIGHT
+
+Tree #4 (Reward: -100.618, Size: 7)
+----------
+- Car Position <= -0.17310
+-- Car Velocity <= -0.02021
+--- LEFT
+--- RIGHT
+-- Car Velocity <= 0.22800
+--- LEFT
+--- RIGHT
+
+Tree #5 (Reward: -102.715, Size: 9)
+----------
+- Car Position <= -0.71659
+-- RIGHT
+-- Car Velocity <= 0.23704
+--- Car Position <= -0.09791
+---- Car Velocity <= -0.00610
+----- LEFT
+----- RIGHT
+---- LEFT
+--- RIGHT
+
+Tree #6 (Reward: -115.767, Size: 5)
+----------
+- Car Position <= -0.68751
+-- RIGHT
+-- Car Velocity <= -0.00055
+--- LEFT
+--- RIGHT
+
+Tree #7 (Reward: -107.896, Size: 7)
+----------
+- Car Velocity <= -0.02202
+-- LEFT
+-- Car Position <= -0.10884
+--- RIGHT
+--- Car Velocity <= 0.34397
+---- LEFT
+---- RIGHT
+
+Tree #8 (Reward: -102.745, Size: 11)
+----------
+- Car Position <= 0.02452
+-- Car Position <= -0.71177
+--- RIGHT
+--- Car Velocity <= 0.42447
+---- Car Position <= -0.09658
+----- Car Velocity <= -0.00731
+------ LEFT
+------ RIGHT
+----- LEFT
+---- RIGHT
+-- RIGHT
+
+Tree #9 (Reward: -109.915, Size: 9)
+----------
+- Car Velocity <= 0.07000
+-- Car Position <= -0.07782
+--- Car Position <= -0.73307
+---- RIGHT
+---- Car Velocity <= -0.01051
+----- LEFT
+----- RIGHT
+--- LEFT
+-- RIGHT
+

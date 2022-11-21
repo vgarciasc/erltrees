@@ -1,0 +1,549 @@
+{'task': 'cartpole', 'simulations': 30, 'generations': 500, 'output_path': None, 'initial_pop': 'models/dagger_cp_population.txt', 'mu': 5, 'lambda': 100, 'tournament_size': 0, 'mutation_type': 'I', 'initial_depth': 4, 'mutation_qt': 1, 'alpha': 1.0, 'should_norm_state': True, 'should_prune_by_visits': False, 'should_prune_best_by_visits': True, 'should_recheck_popbest': True, 'should_include_allbest': False, 'recheck_popbest_episodes': 100, 'should_attenuate_alpha': True, 'should_penalize_std': True, 'episodes': 10, 'should_plot': False, 'should_save_plot': True, 'jobs_to_parallelize': 8, 'verbose': True}
+
+python -m erltrees.evo.es_sl --task cartpole --simulations 30 --generations 500 --output_path None --initial_pop models/dagger_cp_population.txt --mu 5 --lambda 100 --tournament_size 0 --mutation_type I --initial_depth 4 --mutation_qt 1 --alpha 1.0 --should_norm_state True --should_prune_by_visits False --should_prune_best_by_visits True --should_recheck_popbest True --should_include_allbest False --recheck_popbest_episodes 100 --should_attenuate_alpha True --should_penalize_std True --episodes 10 --should_plot False --should_save_plot True --jobs_to_parallelize 8 --verbose True
+
+---
+
+Mean Best Reward: 498.59496666666666 +- 1.5878894479430499
+Mean Best Size: 5.933333333333334
+Average Evaluations to Success: -------
+Success Rate: 0.9666666666666667
+Elapsed time: 25847.91604924202 seconds
+-----
+
+Tree #0 (Reward: 496.604, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- Cart Velocity <= 0.25249
+---- RIGHT
+---- LEFT
+
+Tree #1 (Reward: 495.079, Size: 5)
+----------
+- Pole Angular Velocity <= -0.18543
+-- LEFT
+-- Pole Angle <= -0.02831
+--- LEFT
+--- RIGHT
+
+Tree #2 (Reward: 500.0, Size: 5)
+----------
+- Pole Angle <= -0.05510
+-- LEFT
+-- Cart Velocity <= 0.43490
+--- RIGHT
+--- LEFT
+
+Tree #3 (Reward: 499.574, Size: 7)
+----------
+- Pole Angle <= -0.32471
+-- LEFT
+-- Pole Angular Velocity <= -0.46551
+--- LEFT
+--- Pole Angle <= -0.03984
+---- LEFT
+---- RIGHT
+
+Tree #4 (Reward: 499.542, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Pole Angular Velocity <= -0.70217
+--- LEFT
+--- Pole Angle <= -0.05345
+---- LEFT
+---- RIGHT
+
+Tree #5 (Reward: 498.854, Size: 5)
+----------
+- Pole Angular Velocity <= -0.27501
+-- LEFT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- RIGHT
+
+Tree #6 (Reward: 499.337, Size: 5)
+----------
+- Pole Angular Velocity <= -0.18643
+-- LEFT
+-- Pole Angle <= -0.03508
+--- LEFT
+--- RIGHT
+
+Tree #7 (Reward: 499.519, Size: 5)
+----------
+- Pole Angular Velocity <= -0.28903
+-- LEFT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- RIGHT
+
+Tree #8 (Reward: 495.275, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Cart Velocity <= 0.24634
+--- Pole Angle <= -0.03110
+---- LEFT
+---- RIGHT
+--- LEFT
+
+Tree #9 (Reward: 500.0, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Pole Angular Velocity <= -0.47164
+--- LEFT
+--- Pole Angle <= -0.04418
+---- LEFT
+---- RIGHT
+
+Tree #10 (Reward: 499.657, Size: 5)
+----------
+- Pole Angle <= -0.04247
+-- LEFT
+-- Pole Angular Velocity <= -0.32565
+--- LEFT
+--- RIGHT
+
+Tree #11 (Reward: 499.001, Size: 5)
+----------
+- Pole Angular Velocity <= -0.25115
+-- LEFT
+-- Pole Angle <= -0.04057
+--- LEFT
+--- RIGHT
+
+Tree #12 (Reward: 499.726, Size: 5)
+----------
+- Pole Angular Velocity <= -0.23513
+-- LEFT
+-- Pole Angle <= -0.03135
+--- LEFT
+--- RIGHT
+
+Tree #13 (Reward: 498.898, Size: 5)
+----------
+- Pole Angular Velocity <= -0.26559
+-- LEFT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- RIGHT
+
+Tree #14 (Reward: 496.04, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- RIGHT
+-- Cart Velocity <= 0.33980
+--- Pole Angle <= -0.03110
+---- LEFT
+---- RIGHT
+--- LEFT
+
+Tree #15 (Reward: 498.945, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- RIGHT
+-- Pole Angular Velocity <= -0.24511
+--- LEFT
+--- Pole Angle <= -0.03110
+---- LEFT
+---- RIGHT
+
+Tree #16 (Reward: 499.747, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Cart Velocity <= 0.44938
+--- Pole Angle <= -0.05814
+---- LEFT
+---- RIGHT
+--- LEFT
+
+Tree #17 (Reward: 499.144, Size: 5)
+----------
+- Cart Velocity <= 0.29710
+-- Pole Angle <= -0.03349
+--- LEFT
+--- RIGHT
+-- LEFT
+
+Tree #18 (Reward: 494.475, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- RIGHT
+-- Pole Angular Velocity <= -0.10690
+--- LEFT
+--- Pole Angle <= -0.03382
+---- LEFT
+---- RIGHT
+
+Tree #19 (Reward: 498.037, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Pole Angular Velocity <= -0.21739
+--- LEFT
+--- Pole Angle <= -0.03110
+---- LEFT
+---- RIGHT
+
+Tree #20 (Reward: 500.0, Size: 5)
+----------
+- Pole Angular Velocity <= -0.48666
+-- LEFT
+-- Pole Angle <= -0.04463
+--- LEFT
+--- RIGHT
+
+Tree #21 (Reward: 499.834, Size: 5)
+----------
+- Pole Angle <= -0.03448
+-- LEFT
+-- Pole Angular Velocity <= -0.30439
+--- LEFT
+--- RIGHT
+
+Tree #22 (Reward: 498.624, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- RIGHT
+-- Pole Angular Velocity <= -0.20526
+--- LEFT
+--- Pole Angle <= -0.03110
+---- LEFT
+---- RIGHT
+
+Tree #23 (Reward: 500.0, Size: 7)
+----------
+- Cart Velocity <= -0.95512
+-- RIGHT
+-- Cart Velocity <= -0.24398
+--- RIGHT
+--- Pole Angle <= 0.04387
+---- LEFT
+---- RIGHT
+
+Tree #24 (Reward: 498.881, Size: 5)
+----------
+- Pole Angular Velocity <= -0.68455
+-- LEFT
+-- Pole Angle <= -0.04845
+--- LEFT
+--- RIGHT
+
+Tree #25 (Reward: 499.957, Size: 5)
+----------
+- Pole Angular Velocity <= -0.29992
+-- LEFT
+-- Pole Angle <= -0.03550
+--- LEFT
+--- RIGHT
+
+Tree #26 (Reward: 496.601, Size: 5)
+----------
+- Pole Angle <= -0.04909
+-- LEFT
+-- Pole Angular Velocity <= -0.05439
+--- LEFT
+--- RIGHT
+
+Tree #27 (Reward: 498.169, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- Cart Velocity <= 0.35690
+---- RIGHT
+---- LEFT
+
+Tree #28 (Reward: 498.634, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- RIGHT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- Pole Angular Velocity <= -0.30644
+---- LEFT
+---- RIGHT
+
+Tree #29 (Reward: 499.695, Size: 5)
+----------
+- Pole Angle <= -0.06062
+-- LEFT
+-- Cart Velocity <= 0.56374
+--- RIGHT
+--- LEFT
+
+Tree #0 (Reward: 499.507, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- RIGHT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- Pole Angular Velocity <= -0.28622
+---- LEFT
+---- RIGHT
+
+Tree #1 (Reward: 498.812, Size: 5)
+----------
+- Pole Angular Velocity <= -0.27783
+-- LEFT
+-- Pole Angle <= -0.03099
+--- LEFT
+--- RIGHT
+
+Tree #2 (Reward: 499.382, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- RIGHT
+-- Pole Angular Velocity <= -0.29971
+--- LEFT
+--- Pole Angle <= -0.03110
+---- LEFT
+---- RIGHT
+
+Tree #3 (Reward: 497.042, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Cart Velocity <= 0.29868
+--- Pole Angle <= -0.03110
+---- LEFT
+---- RIGHT
+--- LEFT
+
+Tree #4 (Reward: 499.848, Size: 5)
+----------
+- Cart Velocity <= -0.49293
+-- RIGHT
+-- Pole Angle <= 0.03891
+--- LEFT
+--- RIGHT
+
+Tree #5 (Reward: 498.936, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- RIGHT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- Pole Angular Velocity <= -0.23474
+---- LEFT
+---- RIGHT
+
+Tree #6 (Reward: 496.42, Size: 5)
+----------
+- Cart Velocity <= -0.74522
+-- RIGHT
+-- Pole Angle <= 0.06245
+--- LEFT
+--- RIGHT
+
+Tree #7 (Reward: 497.005, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Cart Velocity <= 0.28286
+--- Pole Angle <= -0.03110
+---- LEFT
+---- RIGHT
+--- LEFT
+
+Tree #8 (Reward: 500.0, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Cart Velocity <= -0.59726
+--- RIGHT
+--- Pole Angle <= 0.05841
+---- LEFT
+---- RIGHT
+
+Tree #9 (Reward: 498.799, Size: 5)
+----------
+- Pole Angular Velocity <= -0.23823
+-- LEFT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- RIGHT
+
+Tree #10 (Reward: 499.732, Size: 5)
+----------
+- Pole Angular Velocity <= -0.57569
+-- LEFT
+-- Pole Angle <= -0.04903
+--- LEFT
+--- RIGHT
+
+Tree #11 (Reward: 497.389, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- Cart Velocity <= 0.24374
+---- RIGHT
+---- LEFT
+
+Tree #12 (Reward: 499.407, Size: 5)
+----------
+- Pole Angular Velocity <= -0.21220
+-- LEFT
+-- Pole Angle <= -0.03438
+--- LEFT
+--- RIGHT
+
+Tree #13 (Reward: 500.0, Size: 7)
+----------
+- Pole Angular Velocity <= -0.45803
+-- LEFT
+-- Pole Angular Velocity <= 0.59608
+--- Pole Angle <= -0.01809
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #14 (Reward: 499.698, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Cart Velocity <= 0.66637
+--- Pole Angle <= -0.06087
+---- LEFT
+---- RIGHT
+--- LEFT
+
+Tree #15 (Reward: 499.858, Size: 7)
+----------
+- Cart Velocity <= -0.67237
+-- RIGHT
+-- Pole Angular Velocity <= -0.13967
+--- LEFT
+--- Pole Angle <= -0.03110
+---- LEFT
+---- RIGHT
+
+Tree #16 (Reward: 499.525, Size: 5)
+----------
+- Pole Angle <= -0.05948
+-- LEFT
+-- Cart Velocity <= 0.55016
+--- RIGHT
+--- LEFT
+
+Tree #17 (Reward: 499.22, Size: 7)
+----------
+- Cart Position <= -0.74186
+-- RIGHT
+-- Pole Angular Velocity <= 0.24244
+--- Pole Angle <= 0.03171
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #18 (Reward: 498.78, Size: 5)
+----------
+- Pole Angular Velocity <= -0.22851
+-- LEFT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- RIGHT
+
+Tree #19 (Reward: 499.927, Size: 5)
+----------
+- Pole Angular Velocity <= -0.19696
+-- LEFT
+-- Pole Angle <= -0.03751
+--- LEFT
+--- RIGHT
+
+Tree #20 (Reward: 498.961, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- RIGHT
+-- Pole Angular Velocity <= -0.29022
+--- LEFT
+--- Pole Angle <= -0.03110
+---- LEFT
+---- RIGHT
+
+Tree #21 (Reward: 500.0, Size: 5)
+----------
+- Pole Angle <= -0.04300
+-- LEFT
+-- Cart Velocity <= 0.32789
+--- RIGHT
+--- LEFT
+
+Tree #22 (Reward: 498.273, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- LEFT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- Cart Velocity <= 0.31445
+---- RIGHT
+---- LEFT
+
+Tree #23 (Reward: 497.49, Size: 5)
+----------
+- Pole Angular Velocity <= -0.11704
+-- LEFT
+-- Pole Angle <= -0.03568
+--- LEFT
+--- RIGHT
+
+Tree #24 (Reward: 498.269, Size: 5)
+----------
+- Pole Angular Velocity <= -0.19441
+-- LEFT
+-- Pole Angle <= -0.03110
+--- LEFT
+--- RIGHT
+
+Tree #25 (Reward: 500.0, Size: 5)
+----------
+- Pole Angular Velocity <= -0.48692
+-- LEFT
+-- Pole Angle <= -0.04349
+--- LEFT
+--- RIGHT
+
+Tree #26 (Reward: 500.0, Size: 7)
+----------
+- Pole Angular Velocity <= nan
+-- RIGHT
+-- Cart Velocity <= -0.52338
+--- RIGHT
+--- Pole Angle <= 0.05181
+---- LEFT
+---- RIGHT
+
+Tree #27 (Reward: 499.908, Size: 5)
+----------
+- Pole Angular Velocity <= -0.51047
+-- LEFT
+-- Pole Angle <= -0.04518
+--- LEFT
+--- RIGHT
+
+Tree #28 (Reward: 498.892, Size: 5)
+----------
+- Pole Angular Velocity <= -0.28469
+-- LEFT
+-- Pole Angle <= -0.03165
+--- LEFT
+--- RIGHT
+
+Tree #29 (Reward: 499.973, Size: 5)
+----------
+- Pole Angular Velocity <= -0.36752
+-- LEFT
+-- Pole Angle <= -0.04258
+--- LEFT
+--- RIGHT
+
