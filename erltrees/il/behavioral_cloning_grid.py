@@ -49,7 +49,7 @@ def run_grid_behavior_cloning(config, X, y, start, end, steps,
     # pruning_params, avg_rewards, deviations, sizes, depths = zip(*history)
     return zip(*history)
 
-def plot_behavior_cloning(history):
+def plot_behavior_cloning(filepath, history):
     pruning_params, avg_rewards, deviations, sizes, depths, success_rates = history
     
     avg_rewards = np.array(avg_rewards)
@@ -64,6 +64,7 @@ def plot_behavior_cloning(history):
     ax2.set_ylabel("Number of sizes")
     ax2.set_xlabel("Pruning $\\alpha$")
     plt.suptitle(f"Behavior cloning for {config['name']}")
+    plt.savefig(filepath)
     plt.show()
 
 if __name__ == "__main__":
@@ -98,7 +99,8 @@ if __name__ == "__main__":
         verbose=args['verbose'])
     history = list(history)
     
-    output_file = "data/imitation_learning/behavioral_cloning_grid_" + datetime.now().strftime("%Y_%m_%d-%I_%M_%S") + ".txt"
+    run_id = datetime.now().strftime("%Y_%m_%d-%I_%M_%S")
+    output_file = "data/imitation_learning/behavioral_cloning_grid_" + run_id + ".txt"
     with open(output_file, "w") as f:
         pruning_params, avg_rewards, deviations, sizes, depths, success_rates = history
         string = {
@@ -113,5 +115,5 @@ if __name__ == "__main__":
         json.dump(string, f, indent=1)
 
     # Plotting behavior cloning
-    plot_behavior_cloning(history)
+    plot_behavior_cloning("data/imitation_learning/" + run_id + ".png", history)
     

@@ -78,6 +78,24 @@ def collect_rewards(config, tree, episodes, should_norm_state, render=False, n_j
         return collect_rewards_par(config, tree, episodes, 
             should_norm_state=should_norm_state, n_jobs=n_jobs)
 
+def calc_metrics(tree, rewards, alpha, penalize_std, task_solution_threshold):
+    avg_reward = np.mean(rewards)
+    std_reward = np.std(rewards)
+
+    if hasattr(tree, "get_tree_size"):
+        fitness = calc_fitness(
+            avg_reward, std_reward, 
+            tree.get_tree_size(), alpha, penalize_std)
+    else:
+        fitness = None
+
+    if task_solution_threshold is not None:
+        success_rate = np.mean([(1 if r > task_solution_threshold else 0) for r in rewards])
+    else:
+        success_rate = None
+
+    return avg_reward, std_reward, fitness, success_rate
+
 def collect_metrics(config, trees, alpha=0.5, episodes=10,
     should_norm_state=False, penalize_std=False,
     should_fill_attributes=False, task_solution_threshold=None,
@@ -88,32 +106,21 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
     env = gym.make(config["name"])
 
     for tree in trees:
-        total_rewards = collect_rewards(config, tree, episodes, 
+        rewards = collect_rewards(config, tree, episodes, 
             should_norm_state=should_norm_state, render=render, 
             n_jobs=n_jobs)
 
-        tree_avg_reward = np.mean(total_rewards)
-        tree_std_reward = np.std(total_rewards)
-
-        if hasattr(tree, "get_tree_size"):
-            tree_fitness = calc_fitness(
-                tree_avg_reward, tree_std_reward, 
-                tree.get_tree_size(), alpha, penalize_std)
-        else:
-            tree_fitness = None
-
-        if task_solution_threshold is not None:
-            tree_success_rate = np.mean([(1 if r > task_solution_threshold else 0) for r in total_rewards])
-        else:
-            tree_success_rate = None
+        metrics = calc_metrics(tree, rewards, alpha, 
+            penalize_std, task_solution_threshold)
+        avg_reward, std_reward, fitness, success_rate = metrics
 
         if should_fill_attributes:
-            tree.reward = tree_avg_reward
-            tree.std_reward = tree_std_reward
-            tree.fitness = tree_fitness
-            tree.success_rate = tree_success_rate
+            tree.reward = avg_reward
+            tree.std_reward = std_reward
+            tree.fitness = fitness
+            tree.success_rate = success_rate
 
-        output.append((tree_avg_reward, tree_std_reward, tree_fitness))
+        output.append((avg_reward, std_reward, fitness))
 
     env.close()
 

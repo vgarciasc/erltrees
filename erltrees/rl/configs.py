@@ -79,6 +79,26 @@ config_BJ = {
         ("Usable Ace", "binary", -1, -1)],
 }
 
+config_AB = {
+    "name": "Acrobot-v1",
+    "can_render": True,
+    "max_score": 0,
+    "should_force_episode_termination_score": False,
+    "should_convert_state_to_array": True,
+    "conversion_fn": lambda a,b,c : c,
+    "episode_termination_score": None,
+    "n_actions": 3,
+    "actions": ["minus_torque", "nop", "plus_torque"],
+    "n_attributes": 6,
+    "attributes": [
+        ("Cosine Theta1", "continuous", (-1, +1)),
+        ("Sine Theta1", "continuous", (-1, +1)),
+        ("Cosine Theta2", "continuous", (-1, +1)),
+        ("Sine Theta2", "continuous", (-1, +1)),
+        ("Angvel Theta1", "continuous", (-12.567, 12.567)),
+        ("Angvel Theta2", "continuous", (-28.274, 28.274))]
+}
+
 def get_config(task_name):
     if task_name == "cartpole":
         return config_CP
@@ -88,6 +108,8 @@ def get_config(task_name):
         return config_LL
     elif task_name == "blackjack":
         return config_BJ
+    elif task_name == "acrobot":
+        return config_AB
         
     print(f"Invalid task_name {task_name}.")
     return None

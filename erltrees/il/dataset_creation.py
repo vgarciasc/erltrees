@@ -24,7 +24,7 @@ def get_model(model_class, filename, config, expert=None):
     return model
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Rulelists')
+    parser = argparse.ArgumentParser(description='Dataset Creation')
     parser.add_argument('-t','--task',help="Which task to run?", required=True)
     parser.add_argument('-c','--imitator', help='Filepath for imitator', required=True)
     parser.add_argument('--imitator_class', help='Which type of file for the imitator?', required=True)

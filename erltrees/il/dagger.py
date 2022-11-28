@@ -18,7 +18,8 @@ import erltrees.il.utils as il
 
 def run_dagger(config, X, y, model_name, expert, alpha=0.1, 
     iterations=50, episodes=100, should_penalize_std=False,
-    task_solution_threshold=None, should_attenuate_alpha=False):
+    task_solution_threshold=None, should_attenuate_alpha=False,
+    n_jobs=-1):
 
     dt = get_model_to_train(config, model_name)
     dt.fit(X, y, pruning=alpha)
@@ -50,10 +51,11 @@ def run_dagger(config, X, y, model_name, expert, alpha=0.1,
         dt.fit(X, y, pruning=curr_alpha)
 
         # Evaluating student
-        rl.collect_metrics(config, [dt], episodes=iterations, 
-            penalize_std=should_penalize_std, 
-            task_solution_threshold=task_solution_threshold,
-            should_fill_attributes=True)
+        rewards = rl.collect_rewards(config, dt, episodes, 
+            should_norm_state=False, n_jobs=n_jobs)
+        metrics = rl.calc_metrics(dt, rewards, curr_alpha, 
+            should_penalize_std, task_solution_threshold)
+        dt.reward, dt.std_reward, _, dt.success_rate = metrics
         dt.fitness = rl.calc_fitness(dt.reward, dt.std_reward, dt.get_size(),
             curr_alpha, should_penalize_std=should_penalize_std)
         
@@ -121,6 +123,7 @@ if __name__ == "__main__":
     parser.add_argument('--save_models_pathname', help='Where to save trees?', required=False, default="imitation_learning/models/tmp.txt", type=str)
     parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=False, default=0, type=int)
     parser.add_argument('--verbose', help='Is verbose?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--n_jobs', help='How many jobs to parallelize?', required=False, default=-1, type=int)
     args = vars(parser.parse_args())
     
     # Initializing
@@ -138,7 +141,8 @@ if __name__ == "__main__":
         episodes=args['episodes'],
         should_penalize_std=args['should_penalize_std'],
         task_solution_threshold=args['task_solution_threshold'],
-        should_attenuate_alpha=args['should_attenuate_alpha'])
+        should_attenuate_alpha=args['should_attenuate_alpha'],
+        n_jobs=args['n_jobs'])
     iterations, avg_rewards, deviations, model_sizes, models = history
 
     # Printing the best model
