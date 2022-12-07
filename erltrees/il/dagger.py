@@ -110,7 +110,6 @@ if __name__ == "__main__":
     parser.add_argument('-p','--pruning', help='Pruning alpha to use', required=True, type=float)
     parser.add_argument('-i','--iterations', help='Number of iterations to run', required=True, type=int)
     parser.add_argument('-j','--episodes', help='Number of episodes to collect every iteration', required=True, type=int)
-    parser.add_argument('--episodes_to_evaluate', help='Number of episodes to run when evaluating best model', required=False, default=100, type=int)
     parser.add_argument('--should_collect_dataset', help='Should collect and save new dataset?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--dataset_size', help='Size of new dataset to create', required=False, default=0, type=int)
     parser.add_argument('--expert_exploration_rate', help='The epsilon to use during dataset collection', required=False, default=0.0, type=float)
@@ -146,11 +145,12 @@ if __name__ == "__main__":
     iterations, avg_rewards, deviations, model_sizes, models = history
 
     # Printing the best model
-    rewards = [rl.collect_metrics(config, trees=[dt], episodes=1)[0][0] for _ in range(args['episodes_to_evaluate'])]
-    success_rate = np.mean([1 if r > args["task_solution_threshold"] else 0 for r in rewards])
+    rewards = rl.collect_metrics(config, [dt], alpha=0.0, episodes=args["episodes"],
+        should_fill_attributes=True, task_solution_threshold=args["task_solution_threshold"],
+        verbose=False, n_jobs=args["n_jobs"])
     print()
-    print(f"- Average reward for the best policy is {np.mean(rewards)} ± {np.std(rewards)}.")
-    print(f"- Success rate is {success_rate}.")
+    print(f"- Average reward for the best policy is {dt.reward} ± {dt.std_reward}.")
+    print(f"- Success rate is {dt.success_rate}.")
     print(f"- Obtained tree with {dt.get_size()} nodes.")
 
     # Plotting results

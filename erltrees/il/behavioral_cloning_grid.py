@@ -16,7 +16,9 @@ from erltrees.rl.configs import get_config
 import erltrees.rl.utils as rl
 
 def run_grid_behavior_cloning(config, X, y, start, end, steps, 
-    episodes_to_grade=100, task_solution_threshold=None, verbose=False):
+    episodes_to_grade=100, task_solution_threshold=None, n_jobs=-1, 
+    verbose=False):
+
     history = []
 
     for i, pruning_alpha in enumerate(np.linspace(start, end, steps)):
@@ -26,7 +28,7 @@ def run_grid_behavior_cloning(config, X, y, start, end, steps,
             pruning_alpha=pruning_alpha)
 
         # Evaluating tree
-        rl.collect_metrics(config, [dt], episodes=episodes_to_grade, 
+        rl.collect_metrics(config, [dt], episodes=episodes_to_grade, n_jobs=n_jobs,
             should_fill_attributes=True, task_solution_threshold=task_solution_threshold)
         
         # Keeping history of trees
@@ -82,6 +84,7 @@ if __name__ == "__main__":
     parser.add_argument('--expert_exploration_rate', help='What is the expert exploration rate?', required=False, default=0, type=float)
     parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=False, default=None, type=int)
     parser.add_argument('--episodes_to_grade_model', help='How many episodes to grade model?', required=False, default=100, type=int)
+    parser.add_argument('--n_jobs', help='How many jobs to parallelize?', required=False, default=-1, type=int)
     parser.add_argument('--verbose', help='Is verbose?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     args = vars(parser.parse_args())
     
@@ -96,6 +99,7 @@ if __name__ == "__main__":
         steps=args['steps'],
         episodes_to_grade=args['episodes_to_grade_model'],
         task_solution_threshold=args['task_solution_threshold'],
+        n_jobs=args["n_jobs"],
         verbose=args['verbose'])
     history = list(history)
     

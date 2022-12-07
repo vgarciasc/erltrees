@@ -52,7 +52,7 @@ class MLPAgent:
         return self.model.predict(s, verbose=0)[0]
     
     def batch_predict(self, X):
-        X = np.reshape(X, (len(X), self.n_attributes))
+        X = np.reshape(X, (len(X), 1, self.n_attributes)) #May need to change!
         return self.model.predict(X)
 
     def fit(self, state, target):
