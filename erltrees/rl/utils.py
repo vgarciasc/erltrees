@@ -120,7 +120,7 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
             tree.fitness = fitness
             tree.success_rate = success_rate
 
-        output.append((avg_reward, std_reward, fitness))
+        output.append((avg_reward, std_reward, fitness, success_rate))
 
     env.close()
 
@@ -258,10 +258,11 @@ def fill_metrics_par(n_jobs, config, trees, alpha, episodes=10,
         penalize_std=penalize_std) for partition in partitions)
     metrics = [tree_metric for tree_metrics in metrics for tree_metric in tree_metrics]
 
-    for (i, (reward, std_reward, fitness)) in enumerate(metrics):
+    for (i, (reward, std_reward, fitness, success_rate)) in enumerate(metrics):
         trees[i].reward = reward
         trees[i].std_reward = std_reward
         trees[i].fitness = fitness
+        trees[i].success_rate = success_rate
 
 def fill_metrics_seq(config, trees, alpha, episodes=10,
     should_norm_state=False, task_solution_threshold=None, penalize_std=False):

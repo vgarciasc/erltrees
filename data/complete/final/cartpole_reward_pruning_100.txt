@@ -1,0 +1,1261 @@
+{'task': 'cartpole', 'input': 'data\\imitation_learning\\cartpole_keras_dnn_dagger.txt', 'alpha': 0.1, 'should_use_pvalue': True, 'rounds': 10, 'simulations': 100, 'episodes': 500, 'norm_state': False, 'n_jobs': 8, 'task_solution_threshold': 495}
+
+python -m erltrees.experiments.reward_pruning --task cartpole --input data\imitation_learning\cartpole_keras_dnn_dagger.txt --alpha 0.1 --should_use_pvalue True --rounds 10 --simulations 100 --episodes 500 --norm_state False --n_jobs 8 --task_solution_threshold 495
+
+Mean Best Reward: 486.96604 +- 47.936707680840996
+Mean Best Size: 9.5
+Average Evaluations to Success: -------
+Success Rate: 0.92502
+Elapsed time: 8649.974598884583 seconds
+-----
+
+Tree #0 (Reward: 499.794 +- 2.952890787008555, Success Rate: 0.994, Size: 9); ((original tree #0))
+----------
+- Pole Angular Velocity <= -0.25200
+-- LEFT
+-- Pole Angle <= -0.01000
+--- Cart Position <= -0.19600
+---- LEFT
+---- Pole Angle <= -0.02900
+----- LEFT
+----- RIGHT
+--- RIGHT
+
+Tree #1 (Reward: 440.066 +- 54.737168761272265, Success Rate: 0.244, Size: 5); ((original tree #1))
+----------
+- Pole Angular Velocity <= -0.25200
+-- LEFT
+-- Pole Angle <= -0.00800
+--- LEFT
+--- RIGHT
+
+Tree #2 (Reward: 497.566 +- 15.208998783614915, Success Rate: 0.968, Size: 11); ((original tree #2))
+----------
+- Cart Position <= -0.22900
+-- Pole Angular Velocity <= -0.21400
+--- LEFT
+--- Pole Angle <= -0.01000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.02900
+--- LEFT
+--- Pole Angular Velocity <= -0.95000
+---- LEFT
+---- RIGHT
+
+Tree #3 (Reward: 493.908 +- 22.699857620698854, Success Rate: 0.9, Size: 5); ((original tree #3))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #4 (Reward: 497.554 +- 15.457395770310082, Success Rate: 0.97, Size: 5); ((original tree #4))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01200
+--- LEFT
+--- RIGHT
+
+Tree #5 (Reward: 499.084 +- 9.754021939692366, Success Rate: 0.99, Size: 5); ((original tree #5))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01300
+--- LEFT
+--- RIGHT
+
+Tree #6 (Reward: 490.712 +- 40.75209265792372, Success Rate: 0.916, Size: 11); ((original tree #6))
+----------
+- Cart Position <= -0.14700
+-- Pole Angular Velocity <= -0.13000
+--- LEFT
+--- Pole Angle <= -0.01000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.04900
+--- LEFT
+--- Pole Angular Velocity <= -0.89400
+---- LEFT
+---- RIGHT
+
+Tree #7 (Reward: 497.344 +- 15.112698766269379, Success Rate: 0.96, Size: 5); ((original tree #7))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01200
+--- LEFT
+--- RIGHT
+
+Tree #8 (Reward: 495.414 +- 19.66638258551887, Success Rate: 0.92, Size: 5); ((original tree #8))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #9 (Reward: 495.756 +- 17.29775892998859, Success Rate: 0.916, Size: 5); ((original tree #9))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #10 (Reward: 498.218 +- 13.772090473127163, Success Rate: 0.978, Size: 5); ((original tree #10))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01200
+--- LEFT
+--- RIGHT
+
+Tree #11 (Reward: 498.278 +- 12.02284142788218, Success Rate: 0.976, Size: 5); ((original tree #11))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01200
+--- LEFT
+--- RIGHT
+
+Tree #12 (Reward: 494.804 +- 23.322126489666417, Success Rate: 0.922, Size: 5); ((original tree #12))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #13 (Reward: 499.46 +- 3.6139175419480725, Success Rate: 0.972, Size: 7); ((original tree #13))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.74100
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #14 (Reward: 496.844 +- 19.20748978914215, Success Rate: 0.964, Size: 5); ((original tree #14))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01200
+--- LEFT
+--- RIGHT
+
+Tree #15 (Reward: 499.502 +- 5.928743205773041, Success Rate: 0.988, Size: 7); ((original tree #15))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.74500
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #16 (Reward: 493.904 +- 25.287996836443966, Success Rate: 0.918, Size: 5); ((original tree #16))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #17 (Reward: 499.064 +- 6.5096777185971355, Success Rate: 0.974, Size: 7); ((original tree #17))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.74500
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #18 (Reward: 492.304 +- 23.740252399669217, Success Rate: 0.872, Size: 7); ((original tree #18))
+----------
+- Pole Angular Velocity <= -0.09000
+-- LEFT
+-- Pole Angle <= -0.00900
+--- Pole Angular Velocity <= 0.61300
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #19 (Reward: 497.648 +- 12.105870311547202, Success Rate: 0.946, Size: 7); ((original tree #19))
+----------
+- Pole Angular Velocity <= -0.09000
+-- LEFT
+-- Pole Angle <= -0.01000
+--- Pole Angular Velocity <= 0.61300
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #20 (Reward: 498.452 +- 9.300091182348698, Success Rate: 0.96, Size: 7); ((original tree #20))
+----------
+- Pole Angular Velocity <= -0.09000
+-- LEFT
+-- Pole Angle <= -0.01000
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #21 (Reward: 496.458 +- 15.5058774663029, Success Rate: 0.936, Size: 7); ((original tree #21))
+----------
+- Pole Angular Velocity <= -0.09000
+-- LEFT
+-- Pole Angle <= -0.01000
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #22 (Reward: 497.452 +- 13.69100785187124, Success Rate: 0.95, Size: 7); ((original tree #22))
+----------
+- Pole Angular Velocity <= -0.10100
+-- LEFT
+-- Pole Angle <= -0.01000
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #23 (Reward: 499.93 +- 1.3961017154921056, Success Rate: 0.998, Size: 7); ((original tree #23))
+----------
+- Pole Angular Velocity <= -0.09900
+-- LEFT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #24 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 9); ((original tree #24))
+----------
+- Pole Angular Velocity <= -0.09900
+-- LEFT
+-- Pole Angular Velocity <= 0.15100
+--- Cart Velocity <= -0.05500
+---- Pole Angle <= 0.03400
+----- LEFT
+----- RIGHT
+---- RIGHT
+--- RIGHT
+
+Tree #25 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 7); ((original tree #25))
+----------
+- Pole Angular Velocity <= -0.09900
+-- LEFT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #26 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 7); ((original tree #26))
+----------
+- Pole Angular Velocity <= -0.09900
+-- LEFT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #27 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 7); ((original tree #27))
+----------
+- Pole Angular Velocity <= -0.09900
+-- LEFT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #28 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 13); ((original tree #28))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Cart Position <= -0.38100
+--- LEFT
+--- Pole Angle <= -0.02100
+---- LEFT
+---- Pole Angular Velocity <= -0.95800
+----- LEFT
+----- RIGHT
+-- Pole Angular Velocity <= 0.15200
+--- Pole Angle <= 0.03300
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #29 (Reward: 496.114 +- 15.407822818295907, Success Rate: 0.918, Size: 13); ((original tree #29))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Cart Position <= -0.38000
+--- LEFT
+--- Pole Angle <= -0.02100
+---- LEFT
+---- Pole Angular Velocity <= -0.93800
+----- LEFT
+----- RIGHT
+-- Pole Angular Velocity <= 0.14500
+--- Pole Angle <= 0.06000
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #30 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 19); ((original tree #30))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Cart Position <= -0.64200
+--- LEFT
+--- Pole Angle <= -0.05200
+---- LEFT
+---- Pole Angular Velocity <= -0.68100
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.14100
+---- Cart Position <= -0.57200
+----- Pole Angle <= 0.06000
+------ LEFT
+------ RIGHT
+----- RIGHT
+---- RIGHT
+
+Tree #31 (Reward: 491.532 +- 37.31896268654851, Success Rate: 0.936, Size: 17); ((original tree #31))
+----------
+- Pole Angular Velocity <= -0.02900
+-- Pole Angle <= -0.04900
+--- LEFT
+--- Cart Position <= -0.12700
+---- LEFT
+---- Pole Angular Velocity <= -0.68100
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.74200
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.15200
+---- Cart Velocity <= -0.05500
+----- LEFT
+----- RIGHT
+---- RIGHT
+
+Tree #32 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 19); ((original tree #32))
+----------
+- Pole Angular Velocity <= -0.03600
+-- Cart Position <= -0.38100
+--- Pole Angle <= 0.08000
+---- LEFT
+---- RIGHT
+--- Pole Angle <= -0.04600
+---- LEFT
+---- Pole Angular Velocity <= -0.90100
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.74000
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.13900
+---- Cart Velocity <= -0.20000
+----- LEFT
+----- RIGHT
+---- RIGHT
+
+Tree #33 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 15); ((original tree #33))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Pole Angle <= -0.02200
+--- LEFT
+--- Pole Angular Velocity <= -0.91900
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01200
+--- Cart Position <= -0.28000
+---- LEFT
+---- Pole Angle <= -0.08700
+----- LEFT
+----- Cart Velocity <= -0.48900
+------ LEFT
+------ RIGHT
+--- RIGHT
+
+Tree #34 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 13); ((original tree #34))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Pole Angle <= -0.04600
+--- LEFT
+--- Pole Angular Velocity <= -0.44100
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01200
+--- Cart Position <= -0.28000
+---- LEFT
+---- Pole Angular Velocity <= 0.74000
+----- LEFT
+----- RIGHT
+--- RIGHT
+
+Tree #35 (Reward: 492.004 +- 47.45418826615834, Success Rate: 0.964, Size: 13); ((original tree #35))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Pole Angle <= -0.04100
+--- LEFT
+--- Pole Angular Velocity <= -0.90300
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angle <= -0.08400
+---- LEFT
+---- Cart Velocity <= -0.48200
+----- LEFT
+----- RIGHT
+--- RIGHT
+
+Tree #36 (Reward: 498.862 +- 10.880577006758417, Success Rate: 0.988, Size: 17); ((original tree #36))
+----------
+- Pole Angular Velocity <= -0.02900
+-- Cart Position <= -0.64200
+--- LEFT
+--- Pole Angle <= -0.02400
+---- LEFT
+---- Pole Angular Velocity <= -0.91000
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.74700
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.14500
+---- Cart Velocity <= -0.23900
+----- LEFT
+----- RIGHT
+---- RIGHT
+
+Tree #37 (Reward: 494.02 +- 45.541756663528034, Success Rate: 0.978, Size: 11); ((original tree #37))
+----------
+- Pole Angular Velocity <= -0.02400
+-- Pole Angle <= -0.02400
+--- LEFT
+--- Pole Angular Velocity <= -0.91000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Cart Velocity <= -0.31300
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #38 (Reward: 178.144 +- 46.03815009315643, Success Rate: 0.0, Size: 3); ((original tree #38))
+----------
+- Pole Angular Velocity <= -0.02400
+-- LEFT
+-- RIGHT
+
+Tree #39 (Reward: 499.762 +- 2.830080564224276, Success Rate: 0.992, Size: 17); ((original tree #39))
+----------
+- Pole Angular Velocity <= -0.02400
+-- Cart Position <= -0.64200
+--- LEFT
+--- Pole Angle <= -0.02100
+---- LEFT
+---- Pole Angular Velocity <= -0.91000
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.74700
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.13200
+---- Pole Angle <= 0.04700
+----- LEFT
+----- RIGHT
+---- RIGHT
+
+Tree #40 (Reward: 390.768 +- 138.27357728792583, Success Rate: 0.572, Size: 7); ((original tree #40))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Pole Angle <= 0.05700
+--- LEFT
+--- RIGHT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #41 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 11); ((original tree #41))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Pole Angle <= -0.02000
+--- LEFT
+--- Pole Angular Velocity <= -0.26000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.77200
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #42 (Reward: 498.17 +- 12.077462481829535, Success Rate: 0.964, Size: 13); ((original tree #42))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Pole Angle <= -0.02000
+--- LEFT
+--- Pole Angular Velocity <= -0.91000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.77200
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.13200
+---- LEFT
+---- RIGHT
+
+Tree #43 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 11); ((original tree #43))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Pole Angle <= -0.02000
+--- LEFT
+--- Pole Angular Velocity <= -0.26000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.79200
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #44 (Reward: 499.076 +- 8.919541692261996, Success Rate: 0.988, Size: 11); ((original tree #44))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Pole Angle <= -0.00800
+--- LEFT
+--- Pole Angular Velocity <= -0.43200
+---- LEFT
+---- RIGHT
+-- Pole Angular Velocity <= 0.13200
+--- Cart Velocity <= -0.05600
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #45 (Reward: 499.26 +- 7.584484161760772, Success Rate: 0.99, Size: 15); ((original tree #45))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Cart Velocity <= 0.00400
+--- LEFT
+--- Pole Angular Velocity <= -0.25200
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.79200
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.13200
+---- Cart Velocity <= -0.05600
+----- LEFT
+----- RIGHT
+---- RIGHT
+
+Tree #46 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 13); ((original tree #46))
+----------
+- Pole Angular Velocity <= -0.02400
+-- Cart Velocity <= -0.05000
+--- LEFT
+--- Pole Angular Velocity <= -0.25200
+---- LEFT
+---- Pole Angle <= -0.06600
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.79200
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #47 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 13); ((original tree #47))
+----------
+- Pole Angular Velocity <= -0.02400
+-- Cart Velocity <= -0.05000
+--- LEFT
+--- Pole Angular Velocity <= -0.25200
+---- LEFT
+---- Pole Angle <= -0.06600
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01000
+--- Pole Angular Velocity <= 0.75400
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #48 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 11); ((original tree #48))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Cart Velocity <= 0.12800
+--- LEFT
+--- Pole Angular Velocity <= -0.25500
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.75400
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #49 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 11); ((original tree #49))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Cart Velocity <= 0.12800
+--- LEFT
+--- Pole Angle <= 0.00700
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.75400
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #50 (Reward: 499.758 +- 3.993924886624684, Success Rate: 0.996, Size: 9); ((original tree #0))
+----------
+- Pole Angular Velocity <= -0.25200
+-- LEFT
+-- Pole Angle <= -0.01000
+--- Cart Position <= -0.19600
+---- LEFT
+---- Pole Angle <= -0.02900
+----- LEFT
+----- RIGHT
+--- RIGHT
+
+Tree #51 (Reward: 441.168 +- 55.08927096994478, Success Rate: 0.256, Size: 5); ((original tree #1))
+----------
+- Pole Angular Velocity <= -0.25200
+-- LEFT
+-- Pole Angle <= -0.00800
+--- LEFT
+--- RIGHT
+
+Tree #52 (Reward: 497.496 +- 17.425211160843933, Success Rate: 0.972, Size: 11); ((original tree #2))
+----------
+- Cart Position <= -0.22900
+-- Pole Angular Velocity <= -0.21400
+--- LEFT
+--- Pole Angle <= -0.01000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.02900
+--- LEFT
+--- Pole Angular Velocity <= -0.95000
+---- LEFT
+---- RIGHT
+
+Tree #53 (Reward: 193.856 +- 12.054678096075397, Success Rate: 0.0, Size: 5); ((original tree #3))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.05000
+--- LEFT
+--- RIGHT
+
+Tree #54 (Reward: 498.056 +- 13.666194203215465, Success Rate: 0.974, Size: 5); ((original tree #4))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01200
+--- LEFT
+--- RIGHT
+
+Tree #55 (Reward: 499.396 +- 7.164020100474314, Success Rate: 0.992, Size: 5); ((original tree #5))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01300
+--- LEFT
+--- RIGHT
+
+Tree #56 (Reward: 491.904 +- 37.38864512121293, Success Rate: 0.922, Size: 11); ((original tree #6))
+----------
+- Cart Position <= -0.14700
+-- Pole Angular Velocity <= -0.13000
+--- LEFT
+--- Pole Angle <= -0.01000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.04900
+--- LEFT
+--- Pole Angular Velocity <= -0.89400
+---- LEFT
+---- RIGHT
+
+Tree #57 (Reward: 498.264 +- 11.94396517074627, Success Rate: 0.968, Size: 5); ((original tree #7))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01200
+--- LEFT
+--- RIGHT
+
+Tree #58 (Reward: 496.08 +- 19.57727253730713, Success Rate: 0.94, Size: 5); ((original tree #8))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #59 (Reward: 494.284 +- 23.201968537173737, Success Rate: 0.918, Size: 5); ((original tree #9))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #60 (Reward: 498.964 +- 9.073185989496745, Success Rate: 0.984, Size: 5); ((original tree #10))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01200
+--- LEFT
+--- RIGHT
+
+Tree #61 (Reward: 497.552 +- 14.198989259802968, Success Rate: 0.96, Size: 5); ((original tree #11))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01200
+--- LEFT
+--- RIGHT
+
+Tree #62 (Reward: 492.446 +- 27.3692360872568, Success Rate: 0.894, Size: 5); ((original tree #12))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #63 (Reward: 491.74 +- 27.380730450446347, Success Rate: 0.886, Size: 5); ((original tree #13))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #64 (Reward: 497.082 +- 17.65285461334795, Success Rate: 0.966, Size: 5); ((original tree #14))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01200
+--- LEFT
+--- RIGHT
+
+Tree #65 (Reward: 499.356 +- 4.861816944312075, Success Rate: 0.976, Size: 7); ((original tree #15))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.74500
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #66 (Reward: 499.306 +- 5.517641162670874, Success Rate: 0.97, Size: 7); ((original tree #16))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.74200
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #67 (Reward: 494.71 +- 31.40518906168215, Success Rate: 0.952, Size: 13); ((original tree #17))
+----------
+- Pole Angular Velocity <= -0.24500
+-- LEFT
+-- Cart Position <= 0.06900
+--- Pole Angle <= -0.01100
+---- Pole Angular Velocity <= 0.74500
+----- LEFT
+----- RIGHT
+---- Pole Angle <= 0.03000
+----- LEFT
+----- RIGHT
+--- Pole Angle <= -0.11800
+---- LEFT
+---- RIGHT
+
+Tree #68 (Reward: 492.748 +- 24.14018425778892, Success Rate: 0.884, Size: 7); ((original tree #18))
+----------
+- Pole Angular Velocity <= -0.09000
+-- LEFT
+-- Pole Angle <= -0.00900
+--- Pole Angular Velocity <= 0.61300
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #69 (Reward: 498.562 +- 9.142765227216545, Success Rate: 0.962, Size: 7); ((original tree #19))
+----------
+- Pole Angular Velocity <= -0.09000
+-- LEFT
+-- Pole Angle <= -0.01000
+--- Pole Angular Velocity <= 0.61300
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #70 (Reward: 498.984 +- 7.59208429879437, Success Rate: 0.976, Size: 7); ((original tree #20))
+----------
+- Pole Angular Velocity <= -0.09000
+-- LEFT
+-- Pole Angle <= -0.01000
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #71 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 11); ((original tree #21))
+----------
+- Pole Angular Velocity <= -0.09000
+-- Cart Velocity <= 0.28400
+--- LEFT
+--- Pole Angular Velocity <= -0.44400
+---- LEFT
+---- RIGHT
+-- Pole Angle <= 0.03800
+--- Pole Angular Velocity <= 0.36500
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #72 (Reward: 498.972 +- 7.750562302181694, Success Rate: 0.976, Size: 7); ((original tree #22))
+----------
+- Pole Angular Velocity <= -0.10100
+-- LEFT
+-- Pole Angle <= -0.01000
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #73 (Reward: 499.868 +- 2.373726184714657, Success Rate: 0.996, Size: 7); ((original tree #23))
+----------
+- Pole Angular Velocity <= -0.09900
+-- LEFT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #74 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 9); ((original tree #24))
+----------
+- Pole Angular Velocity <= -0.09900
+-- LEFT
+-- Pole Angular Velocity <= 0.15100
+--- Cart Velocity <= -0.05500
+---- Pole Angle <= 0.03400
+----- LEFT
+----- RIGHT
+---- RIGHT
+--- RIGHT
+
+Tree #75 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 7); ((original tree #25))
+----------
+- Pole Angular Velocity <= -0.09900
+-- LEFT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #76 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 7); ((original tree #26))
+----------
+- Pole Angular Velocity <= -0.09900
+-- LEFT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #77 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 7); ((original tree #27))
+----------
+- Pole Angular Velocity <= -0.09900
+-- LEFT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #78 (Reward: 495.238 +- 20.782525255608373, Success Rate: 0.934, Size: 17); ((original tree #28))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Cart Position <= -0.38100
+--- LEFT
+--- Pole Angle <= -0.02100
+---- LEFT
+---- Pole Angular Velocity <= -0.95800
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.15200
+---- Pole Angle <= 0.06300
+----- LEFT
+----- RIGHT
+---- RIGHT
+
+Tree #79 (Reward: 499.384 +- 9.849291548126697, Success Rate: 0.99, Size: 13); ((original tree #29))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Pole Angle <= -0.02100
+--- LEFT
+--- Pole Angular Velocity <= -0.93800
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.14500
+---- LEFT
+---- RIGHT
+
+Tree #80 (Reward: 499.836 +- 2.2559042532873597, Success Rate: 0.994, Size: 19); ((original tree #30))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Cart Position <= -0.64200
+--- LEFT
+--- Pole Angle <= -0.05200
+---- LEFT
+---- Pole Angular Velocity <= -0.68100
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.73900
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.14100
+---- Cart Position <= -0.57200
+----- Pole Angle <= 0.06000
+------ LEFT
+------ RIGHT
+----- RIGHT
+---- RIGHT
+
+Tree #81 (Reward: 489.036 +- 45.52848233798267, Success Rate: 0.93, Size: 17); ((original tree #31))
+----------
+- Pole Angular Velocity <= -0.02900
+-- Pole Angle <= -0.04900
+--- LEFT
+--- Cart Position <= -0.12700
+---- LEFT
+---- Pole Angular Velocity <= -0.68100
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.74200
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.15200
+---- Cart Velocity <= -0.05500
+----- LEFT
+----- RIGHT
+---- RIGHT
+
+Tree #82 (Reward: 497.02 +- 16.35174608413426, Success Rate: 0.958, Size: 17); ((original tree #32))
+----------
+- Pole Angular Velocity <= -0.03600
+-- Cart Position <= -0.38100
+--- Pole Angle <= 0.08000
+---- LEFT
+---- RIGHT
+--- Pole Angle <= -0.04600
+---- LEFT
+---- Pole Angular Velocity <= -0.90100
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.74000
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.13900
+---- LEFT
+---- RIGHT
+
+Tree #83 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 15); ((original tree #33))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Pole Angle <= -0.02200
+--- LEFT
+--- Pole Angular Velocity <= -0.91900
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01200
+--- Cart Position <= -0.28000
+---- LEFT
+---- Pole Angle <= -0.08700
+----- LEFT
+----- Cart Velocity <= -0.48900
+------ LEFT
+------ RIGHT
+--- RIGHT
+
+Tree #84 (Reward: 499.926 +- 1.2184104398764815, Success Rate: 0.996, Size: 15); ((original tree #34))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Pole Angle <= -0.04600
+--- LEFT
+--- Cart Velocity <= 0.30400
+---- LEFT
+---- Pole Angular Velocity <= -0.44100
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01200
+--- Cart Position <= -0.28000
+---- LEFT
+---- Pole Angle <= -0.08700
+----- LEFT
+----- RIGHT
+--- RIGHT
+
+Tree #85 (Reward: 489.832 +- 53.377446323330226, Success Rate: 0.954, Size: 13); ((original tree #35))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Pole Angle <= -0.04100
+--- LEFT
+--- Pole Angular Velocity <= -0.90300
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angle <= -0.08400
+---- LEFT
+---- Cart Velocity <= -0.48200
+----- LEFT
+----- RIGHT
+--- RIGHT
+
+Tree #86 (Reward: 499.53 +- 6.340749167093742, Success Rate: 0.994, Size: 17); ((original tree #36))
+----------
+- Pole Angular Velocity <= -0.02900
+-- Cart Position <= -0.64200
+--- LEFT
+--- Pole Angle <= -0.02400
+---- LEFT
+---- Pole Angular Velocity <= -0.91000
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01200
+--- Pole Angular Velocity <= 0.74700
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.14500
+---- Cart Velocity <= -0.23900
+----- LEFT
+----- RIGHT
+---- RIGHT
+
+Tree #87 (Reward: 495.264 +- 38.94778946230454, Success Rate: 0.982, Size: 11); ((original tree #37))
+----------
+- Pole Angular Velocity <= -0.02400
+-- Pole Angle <= -0.02400
+--- LEFT
+--- Pole Angular Velocity <= -0.91000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Cart Velocity <= -0.31300
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #88 (Reward: 397.678 +- 142.05564513950156, Success Rate: 0.626, Size: 5); ((original tree #38))
+----------
+- Pole Angular Velocity <= -0.02400
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #89 (Reward: 496.92 +- 15.874054302540358, Success Rate: 0.95, Size: 13); ((original tree #39))
+----------
+- Pole Angular Velocity <= -0.02400
+-- Pole Angle <= -0.02100
+--- LEFT
+--- Pole Angular Velocity <= -0.91000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.74700
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.13200
+---- LEFT
+---- RIGHT
+
+Tree #90 (Reward: 362.818 +- 153.35793711445132, Success Rate: 0.508, Size: 5); ((original tree #40))
+----------
+- Pole Angular Velocity <= -0.01900
+-- LEFT
+-- Pole Angle <= -0.01100
+--- LEFT
+--- RIGHT
+
+Tree #91 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 11); ((original tree #41))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Pole Angle <= -0.02000
+--- LEFT
+--- Pole Angular Velocity <= -0.26000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.77200
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #92 (Reward: 497.194 +- 17.628509976739384, Success Rate: 0.956, Size: 13); ((original tree #42))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Pole Angle <= -0.02000
+--- LEFT
+--- Pole Angular Velocity <= -0.91000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.77200
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.13200
+---- LEFT
+---- RIGHT
+
+Tree #93 (Reward: 499.776 +- 3.925534868014803, Success Rate: 0.996, Size: 11); ((original tree #43))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Pole Angle <= -0.02000
+--- LEFT
+--- Pole Angular Velocity <= -0.26000
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.79200
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #94 (Reward: 499.668 +- 5.2999788678824, Success Rate: 0.996, Size: 11); ((original tree #44))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Pole Angle <= -0.00800
+--- LEFT
+--- Pole Angular Velocity <= -0.43200
+---- LEFT
+---- RIGHT
+-- Pole Angular Velocity <= 0.13200
+--- Cart Velocity <= -0.05600
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #95 (Reward: 499.704 +- 5.196189372992482, Success Rate: 0.996, Size: 15); ((original tree #45))
+----------
+- Pole Angular Velocity <= -0.01900
+-- Cart Velocity <= 0.00400
+--- LEFT
+--- Pole Angular Velocity <= -0.25200
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.79200
+---- LEFT
+---- RIGHT
+--- Pole Angular Velocity <= 0.13200
+---- Cart Velocity <= -0.05600
+----- LEFT
+----- RIGHT
+---- RIGHT
+
+Tree #96 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 13); ((original tree #46))
+----------
+- Pole Angular Velocity <= -0.02400
+-- Cart Velocity <= -0.05000
+--- LEFT
+--- Pole Angular Velocity <= -0.25200
+---- LEFT
+---- Pole Angle <= -0.06600
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.79200
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #97 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 13); ((original tree #47))
+----------
+- Pole Angular Velocity <= -0.02400
+-- Cart Velocity <= -0.05000
+--- LEFT
+--- Pole Angular Velocity <= -0.25200
+---- LEFT
+---- Pole Angle <= -0.06600
+----- LEFT
+----- RIGHT
+-- Pole Angle <= -0.01000
+--- Pole Angular Velocity <= 0.75400
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #98 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 11); ((original tree #48))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Cart Velocity <= 0.12800
+--- LEFT
+--- Pole Angular Velocity <= -0.25500
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.75400
+---- LEFT
+---- RIGHT
+--- RIGHT
+
+Tree #99 (Reward: 500.0 +- 0.0, Success Rate: 1.0, Size: 11); ((original tree #49))
+----------
+- Pole Angular Velocity <= -0.03800
+-- Cart Velocity <= 0.12800
+--- LEFT
+--- Pole Angle <= 0.00700
+---- LEFT
+---- RIGHT
+-- Pole Angle <= -0.01100
+--- Pole Angular Velocity <= 0.75400
+---- LEFT
+---- RIGHT
+--- RIGHT
+

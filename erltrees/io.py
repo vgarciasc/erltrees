@@ -13,7 +13,7 @@ def save_history_to_file(config, history, filepath, elapsed_time=None, prefix=""
     
     if history is not None:
         trees, rewards, sizes, _ = zip(*history)
-        successes = [1 if r > config["reward_to_success"] else 0 for r in rewards]
+        successes = [1 if r > config["task_solution_threshold"] else 0 for r in rewards]
         trees = np.array(trees)
 
         string += f"Mean Best Reward: {np.mean(rewards)} +- {np.std(rewards)}\n"

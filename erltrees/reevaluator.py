@@ -17,6 +17,7 @@ if __name__ == "__main__":
     parser.add_argument('--task', help="Which task to run?", required=True)
     parser.add_argument('--file', help="Input file", required=True, type=str)
     parser.add_argument('--episodes', help='Number of episodes to run when evaluating model', required=False, default=10, type=int)
+    parser.add_argument('--episodes_to_evaluate_best', help='Number of episodes to run when evaluating best model at the end', required=False, default=100, type=int)
     parser.add_argument('--norm_state', help="Should normalize state?", required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--alpha', help="Which alpha to use?", required=False, default=1.0, type=float)
     parser.add_argument('--select_tree', help="Should select a single tree?", required=False, default=None, type=int)
@@ -96,6 +97,7 @@ if __name__ == "__main__":
         print(tree)
 
     io.console.rule("[red]SUMMARY[/red]")
+    print(f"[green]File: \"{args['file']}\"[/green]")
     if args["should_prune_by_visits"]:
         print("Before pruning:")
         print(f"  Average reward before pruning: {'{:.3f}'.format(np.mean(avg_rewards_before_pruning))} ± {'{:.3f}'.format(np.mean(std_rewards_before_pruning))}")
@@ -110,6 +112,13 @@ if __name__ == "__main__":
         print(f"  Average success rate: {'{:.3f}'.format(np.mean(success_rates_before_pruning))} ± {'{:.3f}'.format(np.std(success_rates_before_pruning))}")
         print(f"  Average tree size: {'{:.3f}'.format(np.mean(tree_sizes))} ± {'{:.3f}'.format(np.std(tree_sizes))}")
     
+    rl.collect_metrics(config, trees=[best_tree], alpha=args["alpha"],
+        task_solution_threshold=args["task_solution_threshold"],
+        episodes=args["episodes_to_evaluate_best"], should_norm_state=False, 
+        should_fill_attributes=True, penalize_std=True,
+        n_jobs=args["n_jobs"])
+    
+    print()
     print(f"Best tree (pocket): tree #{best_tree.best_id}")
     print(f"  Tree size: {best_tree.get_tree_size()} nodes")
     print(f"  Mean reward, std reward: {best_tree.reward} ± {best_tree.std_reward}")
