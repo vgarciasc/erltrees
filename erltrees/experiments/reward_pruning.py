@@ -53,7 +53,7 @@ def fill_tree_given_data(tree, rewards, alpha, task_solution_threshold):
 def reward_pruning(tree, node, config, episodes=100, alpha=0,
     task_solution_threshold=0, should_norm_state=True, 
     should_use_kstest=True, n_jobs=4, verbose=False,
-    run_id="default"):
+    kstest_threshold=0.1, run_id="default"):
 
     tree = tree.copy()
     history = []
@@ -87,7 +87,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
         stats, pvalue = ks_2samp(rewards_curr, rewards_alt_1)
         printv(f"------ KL Stat: {stats}, P-value: {pvalue}", verbose)
 
-        if (tree_alt_1.fitness > tree.fitness) or (tree_alt_1.success_rate > tree.success_rate) or (stats < 0.1 and should_use_kstest):
+        if (tree_alt_1.fitness > tree.fitness) or (tree_alt_1.success_rate > tree.success_rate) or (stats < kstest_threshold and should_use_kstest):
             printv(f"------ [green]Maintaining change.[/green] ([yellow]{'fitness' if tree_alt_1.fitness > tree.fitness else ('success rate' if tree_alt_1.success_rate > tree.success_rate else 'kstest')}[/yellow])", verbose)
             tree = tree_alt_1
             rewards_curr = rewards_alt_1
@@ -107,7 +107,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
             stats, pvalue = ks_2samp(rewards_curr, rewards_alt_2)
             printv(f"------ KL Stat: {stats}, P-value: {pvalue}", verbose)
 
-            if (tree_alt_2.fitness > tree.fitness) or (tree_alt_2.success_rate > tree.success_rate) or (stats < 0.1 and should_use_kstest):
+            if (tree_alt_2.fitness > tree.fitness) or (tree_alt_2.success_rate > tree.success_rate) or (stats < kstest_threshold and should_use_kstest):
                 printv(f"------ [green]Maintaining change.[/green] ([yellow]{'fitness' if tree_alt_2.fitness > tree.fitness else ('success rate' if tree_alt_2.success_rate > tree.success_rate else 'kstest')}[/yellow])", verbose)
                 tree = tree_alt_2
                 rewards_curr = rewards_alt_2
@@ -123,7 +123,8 @@ if __name__ == "__main__":
     parser.add_argument('--task', help="Which task to execute?", type=str, required=True)
     parser.add_argument('--input', help="Which file to use as input?", type=str, required=True)
     parser.add_argument('--alpha', help='Which alpha to use?', required=True, default=1.0, type=float)
-    parser.add_argument('--should_use_kstest', help='Should use p-value to detect if trees are equal?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--should_use_kstest', help='Should use KS test to detect if trees are equal?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--kstest_threshold', help='Which KS test threshold to use?', required=False, default=0.1, type=float)
     parser.add_argument('--rounds', help='How many rounds for reward pruning?', required=True, default=1, type=int)
     parser.add_argument('--simulations', help='How many simulations to run?', required=True, type=int)
     parser.add_argument('--episodes', help='How many episodes to run?', required=True, type=int)
@@ -171,7 +172,8 @@ if __name__ == "__main__":
             
             tree, hist = reward_pruning(tree, tree, config, episodes=args["episodes"], alpha=args["alpha"], 
                 should_norm_state=False, should_use_kstest=args["should_use_kstest"], n_jobs=args["n_jobs"],
-                task_solution_threshold=args["task_solution_threshold"], verbose=True, run_id=run_id)
+                task_solution_threshold=args["task_solution_threshold"], kstest_threshold=args["kstest_threshold"],
+                verbose=True, run_id=run_id)
             
             history += hist
 
