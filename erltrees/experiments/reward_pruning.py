@@ -19,7 +19,7 @@ def save_history_to_file(filepath, history):
         for row in history:
             file.write(";".join([str(r) for r in row]) + "\n")
 
-def save_trees_to_file(filepath, original_trees, trees, elapsed_time, prefix):
+def save_trees_to_file(filepath, original_trees, trees, prefix):
     string = prefix
 
     rewards = [tree.reward for tree in trees]
@@ -30,13 +30,11 @@ def save_trees_to_file(filepath, original_trees, trees, elapsed_time, prefix):
     string += f"Mean Best Size: {np.mean(sizes)}\n"
     string += f"Average Evaluations to Success: -------\n"
     string += f"Success Rate: {np.mean(success_rates)}\n"
-    if elapsed_time:
-        string += f"Elapsed time: {elapsed_time} seconds"
     string += "\n-----\n\n"
 
     for i, tree in enumerate(trees):
         original_tree = original_trees[i]
-        string += f"Tree #{i} (Reward: {tree.reward} +- {tree.std_reward}, Success Rate: {tree.success_rate}, Size: {tree.get_tree_size()}); ((original tree #{original_tree.orig_id}))\n"
+        string += f"Tree #{i} (Reward: {'{:.3f}'.format(tree.reward)} +- {'{:.3f}'.format(tree.std_reward)}, Success Rate: {tree.success_rate}, Size: {tree.get_tree_size()}); elapsed time: {'{:.2f}'.format(tree.elapsed_time)} seconds; ((original tree #{original_tree.orig_id}))\n"
         string += "----------\n"
         string += str(tree)
         string += "\n"
@@ -148,7 +146,6 @@ if __name__ == "__main__":
     original_trees = []
     final_trees = []
     
-    START_TIME = time.time()
     for simulation_id in range(args["simulations"]):
         # Initialization
         run_id = datetime.now().strftime("%Y-%m-%d_%I-%M-%S")
@@ -165,6 +162,7 @@ if __name__ == "__main__":
         if args["norm_state"]:
             tree.denormalize_thresholds()
 
+        START_TIME = time.time()
         # Running RP
         history = []
         for round in range(args["rounds"]):
@@ -176,6 +174,8 @@ if __name__ == "__main__":
                 verbose=True, run_id=run_id)
             
             history += hist
+        END_TIME = time.time()
+        tree.elapsed_time = END_TIME - START_TIME
 
         # Evaluating final tree
         rl.collect_metrics(config, [tree], args["alpha"], args["episodes"], should_norm_state=False, penalize_std=True, 
@@ -183,9 +183,5 @@ if __name__ == "__main__":
         final_trees.append(tree)
 
         # Housekeeping
-        save_trees_to_file(filepath, original_trees, final_trees, time.time() - START_TIME, command_line)
+        save_trees_to_file(filepath, original_trees, final_trees, command_line)
         save_history_to_file(history_filepath, history)
-
-    END_TIME = time.time()
-    elapsed_time = END_TIME - START_TIME
-    print(f"Elapsed time: {elapsed_time} seconds.")
