@@ -26,6 +26,7 @@ def save_trees_to_file(filepath, original_trees, trees, prefix):
     sizes = [tree.get_tree_size() for tree in trees]
     success_rates = [tree.success_rate for tree in trees]
 
+    string += f"\n\n"
     string += f"Mean Best Reward: {np.mean(rewards)} +- {np.std(rewards)}\n"
     string += f"Mean Best Size: {np.mean(sizes)}\n"
     string += f"Average Evaluations to Success: -------\n"

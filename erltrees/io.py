@@ -25,7 +25,7 @@ def save_history_to_file(config, history, filepath, elapsed_time=None, prefix=""
         string += "\n-----\n\n"
 
         for i, tree in enumerate(trees):
-            string += f"Tree #{i} (Reward: {tree.reward} +- {tree.std_reward}, Size: {tree.get_tree_size()})\n"
+            string += f"Tree #{i} (Reward: {tree.reward} +- {tree.std_reward}, Size: {tree.get_tree_size()}, Elapsed time: {tree.elapsed_time})\n"
             string += "----------\n"
             string += str(tree)
             string += "\n"
