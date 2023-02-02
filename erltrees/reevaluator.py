@@ -13,7 +13,7 @@ import erltrees.rl.configs as configs
 import erltrees.io as io
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Evolutionary Programming')
+    parser = argparse.ArgumentParser(description='Reevaluator')
     parser.add_argument('--task', help="Which task to run?", required=True)
     parser.add_argument('--file', help="Input file", required=True, type=str)
     parser.add_argument('--episodes', help='Number of episodes to run when evaluating model', required=False, default=10, type=int)

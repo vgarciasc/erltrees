@@ -11,10 +11,11 @@ to_run = [
     # ("cartpole", "Custode and Iacca's best", "\n- Pole Angular Velocity <= 0.074\n-- Pole Angle <= 0.022\n--- LEFT\n--- RIGHT\n-- RIGHT"),
     # ("cartpole", "EL + IL best", ""),
     # ("cartpole", "RP best", ""),
+    ("cartpole", "test", "\n- Pole Angular Velocity <= -0.08700\n-- LEFT\n-- Pole Angle <= -0.00900\n--- Pole Angular Velocity <= 0.56200\n---- Cart Velocity <= -0.02800\n----- LEFT\n----- RIGHT\n---- RIGHT\n--- RIGHT"),
     # ("mountain_car", "Custode and Iacca's best", "\n- Car Velocity <= -0.0001\n-- Car Position <= -0.9\n--- RIGHT\n--- LEFT\n-- Car Position <= -0.3\n--- Car Velocity <= 0.035\n---- Car Position <= -0.45\n----- RIGHT\n----- Car Position <= -0.4\n------ RIGHT\n------ LEFT\n---- RIGHT\n--- RIGHT"),
     # ("mountain_car", "EL + IL best", "\n- Car Velocity <= -0.00010\n-- Car Position <= -0.94656\n--- RIGHT\n--- LEFT\n-- Car Velocity <= 0.01796\n--- Car Position <= -0.38836\n---- RIGHT\n---- LEFT\n--- RIGHT"),
     # ("mountain_car", "RP best", "\n"),
-    ("lunar_lander", "Silva et al. (2020)", "\n- Angular Velocity <= 0.04\n-- Y Velocity <= -0.35\n--- Angular Velocity <= -0.22\n---- Angle <= -0.04\n----- Leg 1 is Touching <= 0.5\n------ X Velocity <= 0.32\n------- Y Position <= -0.11\n-------- Angle <= 0.15\n--------- X Position <= -0.34\n---------- MAIN ENGINE\n---------- LEFT ENGINE\n--------- LEFT ENGINE\n-------- LEFT ENGINE\n------- MAIN ENGINE\n------ MAIN ENGINE\n----- LEFT ENGINE\n---- NOP\n--- NOP\n-- RIGHT ENGINE"),
+    # ("lunar_lander", "Silva et al. (2020)", "\n- Angular Velocity <= 0.04\n-- Y Velocity <= -0.35\n--- Angular Velocity <= -0.22\n---- Angle <= -0.04\n----- Leg 1 is Touching <= 0.5\n------ X Velocity <= 0.32\n------- Y Position <= -0.11\n-------- Angle <= 0.15\n--------- X Position <= -0.34\n---------- MAIN ENGINE\n---------- LEFT ENGINE\n--------- LEFT ENGINE\n-------- LEFT ENGINE\n------- MAIN ENGINE\n------ MAIN ENGINE\n----- LEFT ENGINE\n---- NOP\n--- NOP\n-- RIGHT ENGINE"),
 ]
 
 if __name__ == "__main__":
@@ -22,7 +23,9 @@ if __name__ == "__main__":
         config = get_config(task_name)
         tree = Individual.read_from_string(config, tree_str)
 
-        rl.fill_metrics(config, [tree], alpha=1.0, episodes=10, should_norm_state=False, penalize_std=True, task_solution_threshold=config["task_solution_threshold"], n_jobs=8)
+        rl.fill_metrics(config, [tree], alpha=1.0, episodes=1000, should_norm_state=False, 
+            penalize_std=True, task_solution_threshold=config["task_solution_threshold"], 
+            n_jobs=8)
 
         print(f"=== {task_name} => {tree_name}")
         print(f"Reward: {tree.reward} +- {tree.std_reward}")

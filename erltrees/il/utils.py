@@ -11,6 +11,7 @@ def get_dataset_from_model(config, model, episodes, verbose=False):
     
     X = []
     y = []
+    total_rewards = []
 
     printv("Collecting dataset from model.", verbose)
     for i in range(episodes):
@@ -19,22 +20,26 @@ def get_dataset_from_model(config, model, episodes, verbose=False):
 
         state = env.reset()
         done = False
-        
+        total_reward = 0
+
         while not done:
             action = model.act(state)
-            next_state, _, done, _ = env.step(action)
+            next_state, reward, done, _ = env.step(action)
 
             X.append(state)
             y.append(action)
 
             state = next_state
+            total_reward += reward
+        
+        total_rewards.append(total_reward)
     
     env.close()
 
     X = np.array(X)
     y = np.array(y)
 
-    return X, y
+    return X, y, total_rewards
 
 def label_dataset_with_model(model, X):
     y = model.batch_predict(X)

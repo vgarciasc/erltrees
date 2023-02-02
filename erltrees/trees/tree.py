@@ -257,6 +257,11 @@ class TreeNode:
     
     def normalize_thresholds(self):
         (_, _, (xmin, xmax)) = self.config["attributes"][self.attribute]
+        if abs(xmax) > 9999:
+            xmax = 1
+        if abs(xmin) > 9999:
+            xmin = -1
+
         self.threshold = (self.threshold - xmin) / (xmax - xmin) * 2 - 1
 
         if not self.is_leaf():
@@ -265,7 +270,6 @@ class TreeNode:
     
     def denormalize_thresholds(self):
         (_, _, (xmin, xmax)) = self.config["attributes"][self.attribute]
-
         if abs(xmax) > 9999:
             xmax = 1
         if abs(xmin) > 9999:

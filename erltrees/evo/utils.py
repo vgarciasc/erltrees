@@ -26,25 +26,21 @@ def initialize_population(config, initial_depth, popsize, initial_pop, alpha,
     
     return population
 
-def get_initial_pop(config, popsize, initial_depth, alpha, jobs_to_parallelize,
-        should_penalize_std=False, should_norm_state=True, episodes=10, filename=None):
+def get_initial_pop(config, alpha, popsize, depth_random_indiv, should_penalize_std=False, 
+    should_norm_state=True, episodes=10, initial_pop=None, n_jobs=-1):
     
     # Initialize from file
     population = []
-    if filename:
+    if type(initial_pop) == str:
         with open(filename) as f:
             json_obj = json.load(f)
         
         population = [evo_tree.Individual.read_from_string(config, json_str) for json_str in json_obj]
+    elif initial_pop is not None:
+        population = initial_pop
         
-        if should_norm_state:
-            for tree in population:
-                tree.normalize_thresholds()
-
-    rl.fill_metrics(config, population, alpha=alpha, 
-        episodes=episodes, should_norm_state=should_norm_state,
-        penalize_std=should_penalize_std, 
-        n_jobs=jobs_to_parallelize)
+    for _ in range(len(population), popsize):
+        population.append(evo_tree.Individual.generate_random_tree(config, depth_random_indiv))
 
     return population
 

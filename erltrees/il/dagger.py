@@ -16,25 +16,28 @@ from erltrees.io import console
 import erltrees.rl.utils as rl
 import erltrees.il.utils as il
 
-def run_dagger(config, X, y, model_name, expert, alpha=0.1, 
-    iterations=50, episodes=100, should_penalize_std=False,
+def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1, 
+    fitness_alpha=0.1, iterations=50, episodes=100, should_penalize_std=False,
     task_solution_threshold=None, should_attenuate_alpha=False,
     n_jobs=-1):
 
     dt = get_model_to_train(config, model_name)
-    dt.fit(X, y, pruning=alpha)
+    dt.fit(X, y, pruning=pruning_alpha)
+    rl.fill_metrics(config, [dt], alpha=fitness_alpha, 
+        episodes=episodes, penalize_std=should_penalize_std, 
+        task_solution_threshold=task_solution_threshold, n_jobs=n_jobs)
 
     history = []
-    curr_alpha = alpha
-    best_fitness = -9999
-    best_model = None
+    curr_alpha = pruning_alpha
+    best_fitness = dt.fitness
+    best_model = dt
 
     for i in range(iterations):
         if should_attenuate_alpha:
-            curr_alpha = alpha * (i/iterations)
+            curr_alpha = pruning_alpha * (i/iterations)
         
         # Collect trajectories from student and correct them with expert
-        X2, _ = il.get_dataset_from_model(config, dt, episodes)
+        X2, _, rewards = il.get_dataset_from_model(config, dt, episodes)
         y2 = il.label_dataset_with_model(expert, X2)
 
         # Aggregate datasets
@@ -51,13 +54,11 @@ def run_dagger(config, X, y, model_name, expert, alpha=0.1,
         dt.fit(X, y, pruning=curr_alpha)
 
         # Evaluating student
-        rewards = rl.collect_rewards(config, dt, episodes, 
-            should_norm_state=False, n_jobs=n_jobs)
-        metrics = rl.calc_metrics(dt, rewards, curr_alpha, 
+        metrics = rl.calc_metrics(dt, rewards, fitness_alpha, 
             should_penalize_std, task_solution_threshold)
         dt.reward, dt.std_reward, _, dt.success_rate = metrics
         dt.fitness = rl.calc_fitness(dt.reward, dt.std_reward, dt.get_size(),
-            curr_alpha, should_penalize_std=should_penalize_std)
+            fitness_alpha, should_penalize_std=should_penalize_std)
         
         # Housekeeping
         
@@ -72,11 +73,12 @@ def run_dagger(config, X, y, model_name, expert, alpha=0.1,
         if best_model is not None:
             # Recalculate best fitness according to current alpha
             best_fitness = rl.calc_fitness(best_model.reward, best_model.std_reward, 
-                best_model.get_size(), curr_alpha, should_penalize_std=should_penalize_std)
+                best_model.get_size(), fitness_alpha, should_penalize_std=should_penalize_std)
 
         if best_model is None or dt.fitness > best_fitness:
             best_fitness = dt.fitness
             best_model = dt
+            print(f"[green]New best tree.[/green]")
     
     return best_model, best_fitness, zip(*history)
 

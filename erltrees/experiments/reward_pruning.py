@@ -70,7 +70,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
         printv("-----------------------", verbose)
         printv(f"-- Pruning a tree with {tree.get_tree_size()} nodes.", verbose)
         process = psutil.Process(os.getpid())
-        printv(f'-- RAM %: {process.memory_percent()}', verbose)
+        # printv(f'-- RAM %: {process.memory_percent()}', verbose)
 
         tree_alt_1 = tree.copy()
         node = tree_alt_1.get_node_by_path(node_path)
