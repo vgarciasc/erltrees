@@ -125,11 +125,13 @@ if __name__ == "__main__":
     parser.add_argument('--should_grade_expert', help='Should collect expert\'s metrics?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_visualize', help='Should visualize final tree?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_plot', help='Should plot performance?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
-    parser.add_argument('--should_save_models', help='Should save trees?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_attenuate_alpha', help='Should attenuate alpha?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_penalize_std', help='Should penalize std?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
-    parser.add_argument('--save_models_pathname', help='Where to save trees?', required=False, default="imitation_learning/models/tmp.txt", type=str)
     parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=False, default=0, type=int)
+    parser.add_argument('--simulations', help='How many simulations to run?', required=False, default=1, type=int)
+    parser.add_argument('--should_save_models', help='Should save trees?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--should_only_save_best', help='When saving trees, should save only the best, or everything produced?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--save_models_pathname', help='Where to save trees?', required=False, default="imitation_learning/models/tmp.txt", type=str)
     parser.add_argument('--verbose', help='Is verbose?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--n_jobs', help='How many jobs to parallelize?', required=False, default=-1, type=int)
     args = vars(parser.parse_args())
@@ -139,57 +141,64 @@ if __name__ == "__main__":
     expert, X, y = handle_args(args, config)
     print(f"Running {args['class']} DAgger for {config['name']} with pruning = {args['pruning']}.")
 
-    # Running DAgger
-    dt, reward, history = run_dagger(
-        config, X, y,
-        expert=expert, 
-        model_name=args['class'],
-        pruning_alpha=args['pruning'],
-        fitness_alpha=args['fitness_alpha'],
-        iterations=args['iterations'],
-        episodes=args['episodes'],
-        should_penalize_std=args['should_penalize_std'],
-        task_solution_threshold=args['task_solution_threshold'],
-        should_attenuate_alpha=args['should_attenuate_alpha'],
-        n_jobs=args['n_jobs'])
-    iterations, avg_rewards, deviations, model_sizes, models = history
+    all_models = []
 
-    # Printing the best model
-    rewards = rl.collect_metrics(config, [dt], alpha=0.0, episodes=args["episodes"],
-        should_fill_attributes=True, task_solution_threshold=args["task_solution_threshold"],
-        verbose=False, n_jobs=args["n_jobs"])
-    print()
-    print(f"- Average reward for the best policy is {dt.reward} ± {dt.std_reward}.")
-    print(f"- Success rate is {dt.success_rate}.")
-    print(f"- Obtained tree with {dt.get_size()} nodes.")
-
-    # Plotting results
-    if args['should_plot']:
-        plot_dagger(
-            config=config,
-            avg_rewards=avg_rewards,
-            deviations=deviations,
-            nodes=model_sizes,
-            alpha=args['pruning'],
+    for simulation in range(args['simulations']):
+        # Running DAgger
+        dt, reward, history = run_dagger(
+            config, X, y,
+            expert=expert, 
+            model_name=args['class'],
+            pruning_alpha=args['pruning'],
+            fitness_alpha=args['fitness_alpha'],
+            iterations=args['iterations'],
             episodes=args['episodes'],
-            show=args['should_plot'])
+            should_penalize_std=args['should_penalize_std'],
+            task_solution_threshold=args['task_solution_threshold'],
+            should_attenuate_alpha=args['should_attenuate_alpha'],
+            n_jobs=args['n_jobs'])
+        iterations, avg_rewards, deviations, model_sizes, models = history
 
-    # Visualizing the best model
-    if args['should_visualize']:
-        print(f"Visualizing final tree:")
-        rl.collect_metrics(config, [dt], episodes=10, 
-            should_norm_state=False, render=True, verbose=True)
+        # Printing the best model
+        rewards = rl.collect_metrics(config, [dt], alpha=0.0, episodes=args["episodes"],
+            should_fill_attributes=True, task_solution_threshold=args["task_solution_threshold"],
+            verbose=False, n_jobs=args["n_jobs"])
+        print()
+        print(f"- Average reward for the best policy is {dt.reward} ± {dt.std_reward}.")
+        print(f"- Success rate is {dt.success_rate}.")
+        print(f"- Obtained tree with {dt.get_size()} nodes.")
 
-    # Saving best model
-    dt.save_model(f"data/dagger_best_tree_{config['name']}")
-    date = datetime.now().strftime("tree_%Y-%m-%d_%H-%M")
-    filename = f"data/{config['name']}_{date}_dagger_{args['pruning']}"
-    print(dt.get_as_viztree())
+        # Plotting results
+        if args['should_plot']:
+            plot_dagger(
+                config=config,
+                avg_rewards=avg_rewards,
+                deviations=deviations,
+                nodes=model_sizes,
+                alpha=args['pruning'],
+                episodes=args['episodes'],
+                show=args['should_plot'])
 
-    # Saving models
-    if args['should_save_models']:
-        model_strs = [model.get_as_viztree() for model in models]
-        
-        with open(args['save_models_pathname'], "w") as f:
-            json.dump(model_strs, f)
-        
+        # Visualizing the best model
+        if args['should_visualize']:
+            print(f"Visualizing final tree:")
+            rl.collect_metrics(config, [dt], episodes=10, 
+                should_norm_state=False, render=True, verbose=True)
+
+        # Saving best model
+        dt.save_model(f"data/dagger_best_tree_{config['name']}")
+        date = datetime.now().strftime("tree_%Y-%m-%d_%H-%M")
+        filename = f"data/{config['name']}_{date}_dagger_{args['pruning']}"
+        print(dt.get_as_viztree())
+
+        # Saving models
+        if args['should_save_models']:
+            if args['should_only_save_best']:
+                all_models.append(dt)
+            else:
+                all_models += models
+                
+            model_strs = [model.get_as_viztree() for model in all_models]
+            
+            with open(args['save_models_pathname'], "w") as f:
+                json.dump(model_strs, f)
