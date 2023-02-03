@@ -31,8 +31,9 @@ def get_initial_pop(config, alpha, popsize, depth_random_indiv, should_penalize_
     
     # Initialize from file
     population = []
+
     if type(initial_pop) == str:
-        with open(filename) as f:
+        with open(initial_pop) as f:
             json_obj = json.load(f)
         
         population = [evo_tree.Individual.read_from_string(config, json_str) for json_str in json_obj]
