@@ -110,6 +110,7 @@ if __name__ == "__main__":
     parser.add_argument('-e','--expert_class', help='Expert class is MLP or KerasDNN?', required=True)
     parser.add_argument('-f','--expert_filepath', help='Filepath for expert', required=True)
     parser.add_argument('-p','--pruning', help='Pruning alpha to use', required=True, type=float)
+    parser.add_argument('-a','--fitness_alpha', help='Fitness alpha to use when evaluating trees', required=False, default=1.0, type=float)
     parser.add_argument('-i','--iterations', help='Number of iterations to run', required=True, type=int)
     parser.add_argument('-j','--episodes', help='Number of episodes to collect every iteration', required=True, type=int)
     parser.add_argument('--should_collect_dataset', help='Should collect and save new dataset?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
@@ -137,7 +138,8 @@ if __name__ == "__main__":
         config, X, y,
         expert=expert, 
         model_name=args['class'],
-        alpha=args['pruning'],
+        pruning_alpha=args['pruning'],
+        fitness_alpha=args['fitness_alpha'],
         iterations=args['iterations'],
         episodes=args['episodes'],
         should_penalize_std=args['should_penalize_std'],
