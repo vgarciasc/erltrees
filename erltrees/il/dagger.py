@@ -1,6 +1,7 @@
 import json
 import gym
 import pickle
+import time
 import pdb
 import argparse
 import numpy as np
@@ -35,6 +36,8 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
     for i in range(iterations):
         if should_attenuate_alpha:
             curr_alpha = pruning_alpha * (i/iterations)
+
+        start_time = time.time()
         
         # Collect trajectories from student and correct them with expert
         X2, _, rewards = il.get_dataset_from_model(config, dt, episodes)
@@ -61,12 +64,15 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
             fitness_alpha, should_penalize_std=should_penalize_std)
         
         # Housekeeping
+
+        elapsed_time = time.time() - start_time
         
         console.rule(f"[red]Step #{i}[/red]")
         print(f"Average reward is {dt.reward} ± {dt.std_reward}.")
         print(f"Fitness is {dt.fitness}. Success rate is {dt.success_rate}")
         print(f"-- Dataset length: {len(X)}")
         print(f"-- Obtained tree with {dt.get_size()} nodes.")
+        print(f"-- Elapsed time: {elapsed_time}.")
 
         history.append((i, dt.reward, dt.std_reward, dt.get_size(), dt))
         
