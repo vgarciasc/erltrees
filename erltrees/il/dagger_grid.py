@@ -52,7 +52,7 @@ def run_grid_dagger(config, X, y, expert, start, end, steps,
     # pruning_params, avg_rewards, deviations, leaves, depths = zip(*history)
     return zip(*history)
 
-def plot_behavior_cloning(history):
+def plot_behavior_cloning(history, filename=None):
     pruning_params, avg_rewards, deviations, sizes, depths, success_rates = history
     
     avg_rewards = np.array(avg_rewards)
@@ -67,7 +67,11 @@ def plot_behavior_cloning(history):
     ax2.set_ylabel("Number of sizes")
     ax2.set_xlabel("Pruning $\\alpha$")
     plt.suptitle(f"DAgger for {config['name']}")
-    plt.show()
+
+    if filename is None:
+        plt.show()
+    else:
+        plt.savefig(filename)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Behavior Cloning Grid')
@@ -87,6 +91,7 @@ if __name__ == "__main__":
     parser.add_argument('--episodes_to_grade_model', help='How many episodes to grade model?', required=False, default=100, type=int)
     parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=False, default=None, type=int)
     parser.add_argument('--verbose', help='Is verbose?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('-o','--output', help='Output filename', required=False, default=None, type=str)
     args = vars(parser.parse_args())
     
     config = get_config(args['task'])
@@ -121,5 +126,5 @@ if __name__ == "__main__":
         json.dump(string, f, indent=2)
 
     # Plotting behavior cloning
-    plot_behavior_cloning(history)
+    plot_behavior_cloning(history, args['output'])
     
