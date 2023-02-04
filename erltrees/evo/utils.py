@@ -39,6 +39,10 @@ def get_initial_pop(config, alpha, popsize, depth_random_indiv, should_penalize_
         population = [evo_tree.Individual.read_from_string(config, json_str) for json_str in json_obj]
     elif initial_pop is not None:
         population = initial_pop
+    
+    if should_norm_state:
+        for p in population:
+            p.normalize_thresholds()
         
     for _ in range(len(population), popsize):
         population.append(evo_tree.Individual.generate_random_tree(config, depth_random_indiv))
