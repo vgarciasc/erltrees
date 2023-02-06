@@ -8,7 +8,6 @@ from datetime import datetime
 from rich import print
 
 import erltrees.rl.utils as rl
-from erltrees.il.parser import handle_args
 from erltrees.il.distilled_tree import DistilledTree
 from erltrees.rl.configs import get_config
 
@@ -40,6 +39,8 @@ if __name__ == "__main__":
     
     # Initialization
     config = get_config(args['task'])
+
+    from erltrees.il.parser import handle_args
     expert, X, y = handle_args(args, config)
     
     # Train decision tree

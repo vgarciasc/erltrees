@@ -11,7 +11,6 @@ from datetime import datetime
 from rich import print
 
 from erltrees.il.behavioral_cloning import get_model_to_train
-from erltrees.il.parser import handle_args
 from erltrees.rl.configs import get_config
 from erltrees.io import console
 import erltrees.rl.utils as rl
@@ -135,6 +134,8 @@ if __name__ == "__main__":
     parser.add_argument('--verbose', help='Is verbose?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--n_jobs', help='How many jobs to parallelize?', required=False, default=-1, type=int)
     args = vars(parser.parse_args())
+    
+    from erltrees.il.parser import handle_args
     
     # Initializing
     config = get_config(args['task'])
