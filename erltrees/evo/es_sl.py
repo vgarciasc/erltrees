@@ -124,10 +124,15 @@ if __name__ == "__main__":
     io.save_history_to_file(config, None, output_path, prefix=command_line)
 
     # Setting up initial population
-    initial_pop = evo.get_initial_pop(config, args["lambda"], args["initial_depth"],
+    initial_pop = evo.get_initial_pop(config, 
         alpha=(0 if args["should_attenuate_alpha"] else args["alpha"]),
-        jobs_to_parallelize=args["jobs_to_parallelize"], should_penalize_std=args["should_penalize_std"], 
-        should_norm_state=args["should_norm_state"], episodes=100, filename=args["initial_pop"])    
+        popsize=args["lambda"], depth_random_indiv=args["initial_depth"],
+        should_penalize_std=args["should_penalize_std"], should_norm_state=args["should_norm_state"], 
+        episodes=100, initial_pop=args["initial_pop"], n_jobs=args["jobs_to_parallelize"])    
+    
+    rl.fill_metrics(config, initial_pop, alpha=(0 if args["should_attenuate_alpha"] else args["alpha"]), 
+        episodes=100, should_norm_state=args["should_norm_state"],
+        penalize_std=args["should_penalize_std"], n_jobs=args["jobs_to_parallelize"])
 
     # Running simulations
     sim_history = []
