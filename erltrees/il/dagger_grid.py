@@ -19,18 +19,19 @@ import erltrees.rl.utils as rl
 def run_grid_dagger(config, X, y, expert, start, end, steps,
     dagger_iterations=50, dagger_episodes=100,
     task_solution_threshold=None,
-    episodes_to_grade=100, verbose=False):
+    episodes_to_grade=100, verbose=False, n_jobs=-1):
     history = []
 
     for i, pruning_alpha in enumerate(np.linspace(start, end, steps)):
         # Run behavior cloning for this value of pruning
-        dt, _, _ = run_dagger(config, X, y, "DistilledTree", expert, alpha=pruning_alpha, 
+        dt, _, _ = run_dagger(config, X, y, "DistilledTree", expert, fitness_alpha=0.001, pruning_alpha=pruning_alpha, 
             iterations=dagger_iterations, episodes=dagger_episodes, should_penalize_std=True,
-            task_solution_threshold=task_solution_threshold, should_attenuate_alpha=False)
+            task_solution_threshold=task_solution_threshold, should_attenuate_alpha=False,
+            n_jobs=n_jobs)
 
         # Evaluating tree
         rl.collect_metrics(config, [dt], episodes=episodes_to_grade, 
-            task_solution_threshold=task_solution_threshold, should_fill_attributes=True)
+            task_solution_threshold=task_solution_threshold, should_fill_attributes=True, n_jobs=n_jobs)
         
         # Keeping history of trees
         size = dt.get_size()
@@ -52,7 +53,7 @@ def run_grid_dagger(config, X, y, expert, start, end, steps,
     # pruning_params, avg_rewards, deviations, leaves, depths = zip(*history)
     return zip(*history)
 
-def plot_behavior_cloning(history, filename=None):
+def plot_dagger_grid(history, filename=None):
     pruning_params, avg_rewards, deviations, sizes, depths, success_rates = history
     
     avg_rewards = np.array(avg_rewards)
@@ -91,6 +92,7 @@ if __name__ == "__main__":
     parser.add_argument('--episodes_to_grade_model', help='How many episodes to grade model?', required=False, default=100, type=int)
     parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=False, default=None, type=int)
     parser.add_argument('--verbose', help='Is verbose?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--n_jobs', help='How many jobs?', required=False, default=-1, type=int)
     parser.add_argument('-o','--output', help='Output filename', required=False, default=None, type=str)
     args = vars(parser.parse_args())
     
@@ -108,7 +110,8 @@ if __name__ == "__main__":
         steps=args['steps'],
         episodes_to_grade=args['episodes_to_grade_model'],
         task_solution_threshold=args['task_solution_threshold'],
-        verbose=args['verbose'])
+        verbose=args['verbose'],
+        n_jobs=args['n_jobs'])
     history = list(history)
     
     output_file = "data/imitation_learning/dagger_grid_" + datetime.now().strftime("%Y_%m_%d-%I_%M_%S") + ".txt"
@@ -126,5 +129,5 @@ if __name__ == "__main__":
         json.dump(string, f, indent=2)
 
     # Plotting behavior cloning
-    plot_behavior_cloning(history, args['output'])
+    plot_dagger_grid(history, args['output'])
     

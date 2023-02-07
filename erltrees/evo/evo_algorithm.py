@@ -160,7 +160,7 @@ class EvolutionaryAlgorithm():
                 f"[grey]Avg: {'{:.3f}'.format(pop_avg_fitness)} ± {'{:.3f}'.format(pop_std_fitness)}[/grey]}}", self.verbose)
         io.printv(f"[underline]Reward [/underline]: {{[green]All best: {'{:.3f}'.format(allbest_reward)} ± {'{:.3f}'.format(allbest_std_reward)}[/green], " + \
                 f"[yellow]Gen best: {'{:.3f}'.format(popbest_avg_reward)} ± {'{:.3f}'.format(popbest_std_reward)}[/yellow], " + \
-                f"[grey]Avg: {'{:.3f}'.format(pop_avg_reward)} ± {'{:.3f}'.format(pop_std_reward)}[/grey]", self.verbose)
+                f"[grey]Avg: {'{:.3f}'.format(pop_avg_reward)} ± {'{:.3f}'.format(pop_std_reward)}[/grey]}}", self.verbose)
         io.printv(f"[underline]Size   [/underline]: {{[green]All best: {allbest_size}[/green], " + \
                 f"[yellow]Gen best: {popbest_size}[/yellow], " + \
                 f"[grey]Avg: {'{:.3f}'.format(pop_avg_size)} ± {'{:.3f}'.format(pop_std_size)}[/grey]}}", self.verbose)
