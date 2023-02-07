@@ -56,7 +56,8 @@ class EvolutionaryStrategySL(EvolutionaryAlgorithm):
             candidate_population = child_population
             rl.fill_metrics(self.config, candidate_population, alpha=current_alpha,
                 episodes=self.fit_episodes, should_norm_state=self.should_norm_state,
-                penalize_std=self.should_penalize_std, n_jobs=self.jobs_to_parallelize)
+                penalize_std=self.should_penalize_std, n_jobs=self.jobs_to_parallelize,
+                task_solution_threshold=self.config["task_solution_threshold"])
 
             # Survivor selection (truncation selection)
             population = candidate_population
@@ -147,6 +148,7 @@ if __name__ == "__main__":
 
     for _ in range(args['simulations']):
         # Executing EA
+        start_time = time.time()
         es = EvolutionaryStrategySL(tournament_size=args["tournament_size"], 
             config=config,
             mu=args["mu"], lamb=args["lambda"], alpha=args["alpha"], 
@@ -162,6 +164,8 @@ if __name__ == "__main__":
             jobs_to_parallelize=args["jobs_to_parallelize"], 
             verbose=args["verbose"])
         es.run(args['generations'], initial_pop, args['should_plot'], args['should_save_plot'])
+        elapsed_time = time.time() - start_time
+        es.allbest.elapsed_time = elapsed_time
 
         # Logging results
         sim_history.append((es.allbest, es.allbest.reward, es.allbest.get_tree_size(), None))
