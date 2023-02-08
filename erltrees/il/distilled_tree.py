@@ -58,7 +58,7 @@ class DistilledTree:
                     prob = np.max(values[node_id][0]) / sum(values[node_id][0])
                     content += f" ({'{:.2f}'.format(prob)})"
             else:
-                content = self.config['attributes'][feature[node_id]][0] + " <= " + '{:.3f}'.format(threshold[node_id])
+                content = self.config['attributes'][feature[node_id]][0] + " <= " + threshold[node_id]
 
                 stack.append((children_right[node_id], depth + 1))
                 stack.append((children_left[node_id], depth + 1))
