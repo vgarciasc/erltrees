@@ -12,11 +12,30 @@ import erltrees.rl.utils as rl
 import erltrees.rl.configs as configs
 import erltrees.io as io
 
+def get_trees_from_logfile(filepath):
+    tree_strings = []
+    with open(filepath) as f:
+        curr_line_idx = 0
+        lines = f.readlines()
+
+        while curr_line_idx < len(lines):
+            if "Tree #" in lines[curr_line_idx] or "CRO-DT-RL (" in lines[curr_line_idx]:
+                curr_line_idx += 2
+                start_line = curr_line_idx
+                while curr_line_idx < len(lines)-1 and lines[curr_line_idx] != "\n":
+                    curr_line_idx += 1
+                end_line = curr_line_idx
+                tree_string = "\n" + "".join(lines[start_line:end_line]).rstrip()
+                tree_strings.append(tree_string)
+            else:
+                curr_line_idx += 1
+    return tree_strings
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Reevaluator')
-    parser.add_argument('--task', help="Which task to run?", required=True)
-    parser.add_argument('--file', help="Input file", required=True, type=str)
-    parser.add_argument('--episodes', help='Number of episodes to run when evaluating model', required=False, default=10, type=int)
+    parser.add_argument('-t','--task', help="Which task to run?", required=True)
+    parser.add_argument('-f','--file', help="Input file", required=True, type=str)
+    parser.add_argument('-e','--episodes', help='Number of episodes to run when evaluating model', required=False, default=10, type=int)
     parser.add_argument('--episodes_to_evaluate_best', help='Number of episodes to run when evaluating best model at the end', required=False, default=100, type=int)
     parser.add_argument('--norm_state', help="Should normalize state?", required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--alpha', help="Which alpha to use?", required=False, default=1.0, type=float)
@@ -30,8 +49,12 @@ if __name__ == "__main__":
     config = configs.get_config(args['task'])
     task_solution_threshold = args['task_solution_threshold']
     norm_state = args['norm_state']
+    
+    history = []
+    command_line = "\n\npython -m erltrees.reevaluator " + " ".join([f"--{key} {val}" for (key, val) in args.items()]) + "\n\n---\n\n"
+    reeval_filename = args['file'].split('.')[0] + "_reevaluated.txt"
 
-    tree_strings = io.get_trees_from_logfile(args['file'])
+    tree_strings = get_trees_from_logfile(args['file'])
 
     tree_sizes = []
     avg_rewards_before_pruning = []
@@ -88,6 +111,11 @@ if __name__ == "__main__":
         avg_rewards_after_pruning.append(tree.reward)
         std_rewards_after_pruning.append(tree.std_reward)
         success_rates_after_pruning.append(tree.success_rate)
+
+        tree.elapsed_time = -1
+        history.append((tree, tree.reward, tree.get_tree_size(), None))
+
+        io.save_history_to_file(config, history, reeval_filename, None, command_line)
 
         if best_tree is None or tree.fitness > best_tree.fitness:
             best_tree = tree
