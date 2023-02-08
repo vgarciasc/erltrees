@@ -119,13 +119,13 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Reward Pruning')
-    parser.add_argument('--task', help="Which task to execute?", type=str, required=True)
-    parser.add_argument('--input', help="Which file to use as input?", type=str, required=True)
-    parser.add_argument('--alpha', help='Which alpha to use?', required=True, default=1.0, type=float)
+    parser.add_argument('-t','--task', help="Which task to execute?", type=str, required=True)
+    parser.add_argument('-f','--input', help="Which file to use as input?", type=str, required=True)
+    parser.add_argument('-a','--alpha', help='Which alpha to use?', required=True, default=1.0, type=float)
     parser.add_argument('--should_use_kstest', help='Should use KS test to detect if trees are equal?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--kstest_threshold', help='Which KS test threshold to use?', required=False, default=0.1, type=float)
     parser.add_argument('--rounds', help='How many rounds for reward pruning?', required=True, default=1, type=int)
-    parser.add_argument('--simulations', help='How many simulations to run?', required=True, type=int)
+    parser.add_argument('--simulations', help='How many simulations to run?', required=False, default=-1, type=int)
     parser.add_argument('--episodes', help='How many episodes to run?', required=True, type=int)
     parser.add_argument('--norm_state', help="Should normalize state?", required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--n_jobs', help="How many jobs to run?", type=int, required=False, default=-1)
@@ -146,8 +146,13 @@ if __name__ == "__main__":
     
     original_trees = []
     final_trees = []
+
+    if args['simulations'] == -1:
+        simulations = len(tree_strs)
+    else:
+        simulations = args["simulations"]
     
-    for simulation_id in range(args["simulations"]):
+    for simulation_id in range(simulations):
         # Initialization
         run_id = datetime.now().strftime("%Y-%m-%d_%I-%M-%S")
 

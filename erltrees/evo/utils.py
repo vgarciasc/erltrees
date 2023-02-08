@@ -3,6 +3,7 @@ import pdb
 import numpy as np
 import erltrees.evo.evo_tree as evo_tree
 import erltrees.rl.utils as rl
+from copy import deepcopy
 
 def initialize_population(config, initial_depth, popsize, initial_pop, alpha, 
     episodes, norm_state, should_penalize_std, jobs_to_parallelize):
@@ -38,7 +39,7 @@ def get_initial_pop(config, alpha, popsize, depth_random_indiv, should_penalize_
         
         population = [evo_tree.Individual.read_from_string(config, json_str) for json_str in json_obj]
     elif initial_pop is not None:
-        population = initial_pop
+        population = [deepcopy(x) for x in initial_pop]
     
     if should_norm_state:
         for p in population:
