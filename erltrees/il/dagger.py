@@ -31,29 +31,15 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
     curr_alpha = pruning_alpha
     best_fitness = dt.fitness
     best_model = dt
+    elapsed_time = 0
 
     for i in range(iterations):
         if should_attenuate_alpha:
             curr_alpha = pruning_alpha * (i/iterations)
-
-        start_time = time.time()
         
         # Collect trajectories from student and correct them with expert
         X2, _, rewards = il.get_dataset_from_model(config, dt, episodes)
         y2 = il.label_dataset_with_model(expert, X2)
-
-        # Aggregate datasets
-        X = np.concatenate((X, X2))
-        y = np.concatenate((y, y2))
-
-        # Sample from dataset aggregation
-        # D = list(zip(X, y))
-        # D = random.sample(D, args['dataset_size'])
-        # X, y = zip(*D)
-
-        # Train new student
-        dt = get_model_to_train(config, model_name)
-        dt.fit(X, y, pruning=curr_alpha)
 
         # Evaluating student
         metrics = rl.calc_metrics(dt, rewards, fitness_alpha, 
@@ -61,10 +47,6 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
         dt.reward, dt.std_reward, _, dt.success_rate = metrics
         dt.fitness = rl.calc_fitness(dt.reward, dt.std_reward, dt.get_size(),
             fitness_alpha, should_penalize_std=should_penalize_std)
-        
-        # Housekeeping
-
-        elapsed_time = time.time() - start_time
         
         console.rule(f"[red]Step #{i}[/red]")
         print(f"Average reward is {dt.reward} ± {dt.std_reward}.")
@@ -84,6 +66,24 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
             best_fitness = dt.fitness
             best_model = dt
             print(f"[green]New best tree.[/green]")
+
+        # Aggregate datasets
+        X = np.concatenate((X, X2))
+        y = np.concatenate((y, y2))
+
+        # Sample from dataset aggregation
+        # D = list(zip(X, y))
+        # D = random.sample(D, args['dataset_size'])
+        # X, y = zip(*D)
+
+        start_time = time.time()
+
+        # Train new student
+        dt = get_model_to_train(config, model_name)
+        dt.fit(X, y, pruning=curr_alpha)
+        
+        # Housekeeping
+        elapsed_time = time.time() - start_time
     
     return best_model, best_fitness, zip(*history)
 
