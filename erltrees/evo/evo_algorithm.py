@@ -70,7 +70,8 @@ class EvolutionaryAlgorithm():
                 rl.fill_metrics(self.config, [self.popbest], alpha, 
                     episodes=self.recheck_popbest_episodes,
                     should_norm_state=self.should_norm_state, 
-                    penalize_std=self.should_penalize_std, 
+                    penalize_std=self.should_penalize_std,
+                    task_solution_threshold=self.config["task_solution_threshold"],
                     n_jobs=self.jobs_to_parallelize)
 
                 print(f"Individual max fitness (rechecked): (reward: {'{:.3f}'.format(self.popbest.reward)}, " + \
@@ -98,7 +99,8 @@ class EvolutionaryAlgorithm():
         ids, trees = zip(*candidates)
 
         rl.fill_metrics(self.config, trees, self.alpha, 100, 
-            self.should_norm_state, self.should_penalize_std, 
+            self.should_norm_state, self.should_penalize_std,
+            task_solution_threshold=self.config["task_solution_threshold"],
             n_jobs=self.jobs_to_parallelize)
         
         candidates = [(ids[i], tree) for (i, tree) in enumerate(trees)]
@@ -114,33 +116,39 @@ class EvolutionaryAlgorithm():
         rewards = [i.reward for i in population]
         fitnesses = [i.fitness for i in population]
         tree_sizes = [i.get_tree_size() for i in population]
+        success_rates = [i.success_rate for i in population]
         popbest = population[np.argmax(fitnesses)] if not hasattr(self, "popbest") else self.popbest
 
         popbest_fitness = popbest.fitness
         popbest_avg_reward = popbest.reward
         popbest_std_reward = popbest.std_reward
+        popbest_success_rate = popbest.success_rate
         popbest_size = popbest.get_tree_size()
         allbest_fitness = self.allbest.fitness
         allbest_reward = self.allbest.reward
         allbest_std_reward = self.allbest.std_reward
         allbest_size = self.allbest.get_tree_size()
+        allbest_success_rate = self.allbest.success_rate
         pop_avg_fitness = np.mean(fitnesses)
         pop_std_fitness = np.mean(fitnesses)
         pop_avg_reward = np.mean(rewards)
         pop_std_reward = np.std(rewards)
         pop_avg_size = np.mean(tree_sizes)
         pop_std_size = np.std(tree_sizes)
+        pop_avg_success_rate = np.mean(success_rates)
+        pop_std_success_rate = np.std(success_rates)
 
         fitness_metrics = (popbest_fitness, pop_avg_fitness, pop_std_fitness, allbest_fitness)
-        reward_metrics = (popbest_avg_reward, popbest_std_reward, pop_avg_reward, 
+        reward_metrics = (popbest_avg_reward, popbest_std_reward, pop_avg_reward,
             pop_std_reward, allbest_reward, allbest_std_reward)
         size_metrics = (popbest_size, pop_avg_size, pop_std_size, allbest_size)
+        success_rate_metrics = (popbest_success_rate, pop_avg_success_rate, pop_std_success_rate, allbest_success_rate)
 
-        return fitness_metrics, reward_metrics, size_metrics
+        return fitness_metrics, reward_metrics, size_metrics, success_rate_metrics
 
     def increment_log_history(self, population):
-        fitness_metrics, reward_metrics, size_metrics = self.get_population_metrics(population)
-        self.history.append((fitness_metrics, reward_metrics, size_metrics))
+        fitness_metrics, reward_metrics, size_metrics, success_rate_metrics = self.get_population_metrics(population)
+        self.history.append((fitness_metrics, reward_metrics, size_metrics, success_rate_metrics))
     
     def print_last_metrics(self):
         if not self.verbose:
@@ -149,26 +157,30 @@ class EvolutionaryAlgorithm():
         generation = len(self.history)        
         io.console.rule(f"[bold red]Generation #{generation}")
 
-        fitness_metrics, reward_metrics, size_metrics = self.history[-1]
+        fitness_metrics, reward_metrics, size_metrics, success_rate_metrics = self.history[-1]
         (popbest_fitness, pop_avg_fitness, pop_std_fitness, allbest_fitness) = fitness_metrics
         (popbest_avg_reward, popbest_std_reward, pop_avg_reward, 
             pop_std_reward, allbest_reward, allbest_std_reward) = reward_metrics
         (popbest_size, pop_avg_size, pop_std_size, allbest_size) = size_metrics
+        (popbest_success_rate, pop_avg_success_rate, pop_std_success_rate, allbest_success_rate) = success_rate_metrics
 
         io.printv(f"[underline]Fitness[/underline]: {{[green]All best: {'{:.3f}'.format(allbest_fitness)}[/green], " + \
-                f"[yellow]Gen best: {'{:.3f}'.format(popbest_fitness)}[/yellow], " + \
-                f"[grey]Avg: {'{:.3f}'.format(pop_avg_fitness)} ± {'{:.3f}'.format(pop_std_fitness)}[/grey]}}", self.verbose)
+                f"\t\t[yellow]Gen best: {'{:.3f}'.format(popbest_fitness)}[/yellow], " + \
+                f"\t\t[grey]Avg: {'{:.3f}'.format(pop_avg_fitness)} ± {'{:.3f}'.format(pop_std_fitness)}[/grey]}}", self.verbose)
         io.printv(f"[underline]Reward [/underline]: {{[green]All best: {'{:.3f}'.format(allbest_reward)} ± {'{:.3f}'.format(allbest_std_reward)}[/green], " + \
-                f"[yellow]Gen best: {'{:.3f}'.format(popbest_avg_reward)} ± {'{:.3f}'.format(popbest_std_reward)}[/yellow], " + \
-                f"[grey]Avg: {'{:.3f}'.format(pop_avg_reward)} ± {'{:.3f}'.format(pop_std_reward)}[/grey]}}", self.verbose)
+                f"\t[yellow]Gen best: {'{:.3f}'.format(popbest_avg_reward)} ± {'{:.3f}'.format(popbest_std_reward)}[/yellow], " + \
+                f"\t[grey]Avg: {'{:.3f}'.format(pop_avg_reward)} ± {'{:.3f}'.format(pop_std_reward)}[/grey]}}", self.verbose)
         io.printv(f"[underline]Size   [/underline]: {{[green]All best: {allbest_size}[/green], " + \
-                f"[yellow]Gen best: {popbest_size}[/yellow], " + \
-                f"[grey]Avg: {'{:.3f}'.format(pop_avg_size)} ± {'{:.3f}'.format(pop_std_size)}[/grey]}}", self.verbose)
+                f"\t\t[yellow]Gen best: {popbest_size}[/yellow], " + \
+                f"\t\t\t[grey]Avg: {'{:.3f}'.format(pop_avg_size)} ± {'{:.3f}'.format(pop_std_size)}[/grey]}}", self.verbose)
+        io.printv(f"[underline]Success[/underline]: {{[green]All best: {'{:.3f}'.format(allbest_success_rate)}[/green], " + \
+                f"\t\t[yellow]Gen best: {'{:.3f}'.format(popbest_success_rate)}[/yellow], " + \
+                f"\t\t[grey]Avg: {'{:.3f}'.format(pop_avg_success_rate)} ± {'{:.3f}'.format(pop_std_success_rate)}[/grey]}}", self.verbose)
 
     def plot_metrics(self, should_plot=False, should_save_plot=True):
         x = range(len(self.history))
 
-        fitnesses, rewards, sizes = zip(*self.history)
+        fitnesses, rewards, sizes, success_rates = zip(*self.history)
         popbest_fitnesses, pop_avg_fitnesses, pop_std_fitnesses, allbest_fitnesses = zip(*fitnesses)
         popbest_avg_rewards, popbest_std_rewards, pop_avg_rewards, pop_std_rewards, allbest_rewards, allbest_std_rewards = zip(*rewards)
         popbest_sizes, pop_avg_sizes, pop_std_sizes, allbest_sizes = zip(*sizes)

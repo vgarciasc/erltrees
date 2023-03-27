@@ -22,6 +22,7 @@ def initialize_population(config, initial_depth, popsize, initial_pop, alpha,
     
     rl.fill_metrics(config, population, alpha=alpha, 
         episodes=episodes, should_norm_state=norm_state,
+        task_solution_threshold=config["task_solution_threshold"],
         penalize_std=should_penalize_std, 
         n_jobs=jobs_to_parallelize)
     
@@ -45,8 +46,8 @@ def get_initial_pop(config, alpha, popsize, depth_random_indiv, should_penalize_
         for p in population:
             p.normalize_thresholds()
         
-    for _ in range(len(population), popsize):
-        population.append(evo_tree.Individual.generate_random_tree(config, depth_random_indiv))
+    # for _ in range(len(population), popsize):
+    #     population.append(evo_tree.Individual.generate_random_tree(config, depth_random_indiv))
 
     return population
 
@@ -62,7 +63,8 @@ def fill_initial_pop(config, population, popsize, initial_depth, alpha, jobs_to_
     
     rl.fill_metrics(config, new_population, alpha=alpha, 
         episodes=episodes, should_norm_state=should_norm_state,
-        penalize_std=should_penalize_std, 
+        penalize_std=should_penalize_std,
+        task_solution_threshold=config["task_solution_threshold"],
         n_jobs=jobs_to_parallelize)
     
     return population + new_population

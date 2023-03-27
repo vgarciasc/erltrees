@@ -40,19 +40,19 @@ if __name__ == "__main__":
     parser.add_argument('--norm_state', help="Should normalize state?", required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--alpha', help="Which alpha to use?", required=False, default=1.0, type=float)
     parser.add_argument('--select_tree', help="Should select a single tree?", required=False, default=None, type=int)
-    parser.add_argument('--task_solution_threshold', help="At which reward is the episode considered solved?", required=True, type=int)
     parser.add_argument('--should_prune_by_visits', help='Should prune trees by visits?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_print_tree', help='Should print tree?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--denormalize_thresholds', help='Should denormalize thresholds?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--n_jobs', help="How many jobs to run?", type=int, required=False, default=-1)
     args = vars(parser.parse_args())
 
     config = configs.get_config(args['task'])
-    task_solution_threshold = args['task_solution_threshold']
     norm_state = args['norm_state']
     
     history = []
     command_line = "\n\npython -m erltrees.reevaluator " + " ".join([f"--{key} {val}" for (key, val) in args.items()]) + "\n\n---\n\n"
-    reeval_filename = args['file'].split('.')[0] + "_reevaluated.txt"
+    reeval_filename = args['file'][:-4] + "_reevaluated.txt"
+    print(f"Saving reevaluation to {reeval_filename}.")
 
     tree_strings = get_trees_from_logfile(args['file'])
 
@@ -74,9 +74,6 @@ if __name__ == "__main__":
         io.console.rule(f"Evaluating Tree {i} / {len(tree_strings) - 1}")
         tree = evo_tree.Individual.read_from_string(config, string=string)
 
-        if norm_state:
-            tree.denormalize_thresholds()
-
         print("[yellow]> Evaluating fitness:[/yellow]")
         print(f"Tree size: {tree.get_tree_size()} nodes")
 
@@ -84,8 +81,8 @@ if __name__ == "__main__":
             print(tree)
 
         rl.collect_metrics(config, trees=[tree], alpha=args["alpha"],
-            task_solution_threshold=args["task_solution_threshold"],
-            episodes=args['episodes'], should_norm_state=False, 
+            task_solution_threshold=config["task_solution_threshold"],
+            episodes=args['episodes'], should_norm_state=norm_state,
             should_fill_attributes=True, penalize_std=True,
             n_jobs=-1)
         print(f"Mean reward, std reward: {tree.reward} ± {tree.std_reward}, fitness: {tree.fitness}, SR: {tree.success_rate}")
@@ -100,8 +97,8 @@ if __name__ == "__main__":
             print(f"Tree size: {tree.get_tree_size()} nodes")
 
             rl.collect_metrics(config, trees=[tree], alpha=args["alpha"],
-                task_solution_threshold=args["task_solution_threshold"],
-                episodes=args['episodes'], should_norm_state=False, 
+                task_solution_threshold=config["task_solution_threshold"],
+                episodes=args['episodes'], should_norm_state=norm_state,
                 should_fill_attributes=True, penalize_std=True,
                 n_jobs=args["n_jobs"])
             print(f"Mean reward, std reward: {tree.reward} ± {tree.std_reward}, fitness: {tree.fitness}, SR: {tree.success_rate}")
@@ -112,8 +109,12 @@ if __name__ == "__main__":
         std_rewards_after_pruning.append(tree.std_reward)
         success_rates_after_pruning.append(tree.success_rate)
 
+        #Denormalize thresholds
+        if args["denormalize_thresholds"]:
+            tree.denormalize_thresholds()
+
         tree.elapsed_time = -1
-        history.append((tree, tree.reward, tree.get_tree_size(), None))
+        history.append((tree, tree.reward, tree.get_tree_size(), tree.success_rate))
 
         io.save_history_to_file(config, history, reeval_filename, None, command_line)
 
@@ -141,7 +142,7 @@ if __name__ == "__main__":
         print(f"  Average tree size: {'{:.3f}'.format(np.mean(tree_sizes))} ± {'{:.3f}'.format(np.std(tree_sizes))}")
     
     rl.collect_metrics(config, trees=[best_tree], alpha=args["alpha"],
-        task_solution_threshold=args["task_solution_threshold"],
+        task_solution_threshold=config["task_solution_threshold"],
         episodes=args["episodes_to_evaluate_best"], should_norm_state=False, 
         should_fill_attributes=True, penalize_std=True,
         n_jobs=args["n_jobs"])

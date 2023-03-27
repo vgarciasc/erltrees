@@ -17,18 +17,18 @@ import erltrees.io as io
 import erltrees.rl.utils as rl
 import erltrees.rl.configs as configs
 
-# Implementation of (λ, μ) Evolutionary Strategy as defined in 
+# Implementation of (λ, μ) Evolutionary Strategy as defined in
 # 'Essentials of Metaheuristics' (Sean Luke, 2016)
 
 class EvolutionaryStrategySL(EvolutionaryAlgorithm):
     def __init__(self, tournament_size=0, **kwargs):
         super(EvolutionaryStrategySL, self).__init__(**kwargs)
         self.tournament_size = tournament_size
-    
+
     def run(self, generations, initial_pop=None,
-            should_plot=False, should_save_plot=False, 
+            should_plot=False, should_save_plot=False,
             should_render=False, render_every=None):
-        
+
         # Seeding initial population
         population = evo.fill_initial_pop(self.config, initial_pop, self.lamb, self.initial_depth,
             (0 if args["should_attenuate_alpha"] else args["alpha"]),
@@ -39,11 +39,11 @@ class EvolutionaryStrategySL(EvolutionaryAlgorithm):
 
         for generation in range(generations):
             current_alpha = self.calc_alpha(population, generation, generations)
-            
+
             # Parent selection (mu fittest individuals)
             population.sort(key=lambda x : x.fitness, reverse=True)
             parent_population = population[:self.mu]
-            
+
             # Offspring generation
             child_population = []
             for parent in parent_population:
@@ -51,7 +51,7 @@ class EvolutionaryStrategySL(EvolutionaryAlgorithm):
                     child = parent.copy()
                     mutate(child, mutation=self.mutation_type)
                     child_population.append(child)
-            
+
             # Evaluating candidate population (only children)
             candidate_population = child_population
             rl.fill_metrics(self.config, candidate_population, alpha=current_alpha,
@@ -78,11 +78,12 @@ class EvolutionaryStrategySL(EvolutionaryAlgorithm):
         #     rl.collect_and_prune_by_visits(
         #         self.allbest, threshold=5, episodes=100, 
         #         should_norm_state=self.should_norm_state)
-            
+
         self.plot_metrics(should_plot, should_save_plot)
         # self.allbest = self.evaluate_popbests(candidate_pool_size=10, verbose=self.verbose)
-        rl.fill_metrics(self.config, [self.allbest], self.alpha, 1000, 
-            self.should_norm_state, self.should_penalize_std)
+        rl.fill_metrics(self.config, [self.allbest], self.alpha, 1000,
+            self.should_norm_state, self.should_penalize_std,
+            task_solution_threshold=self.config["task_solution_threshold"])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Evolutionary Programming')
@@ -101,8 +102,9 @@ if __name__ == "__main__":
     parser.add_argument('--should_norm_state', help="Should normalize state?", required=False, default=True, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_prune_by_visits', help='Should prune every tree by visits?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_prune_best_by_visits', help='Should prune best tree by visits?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
-    parser.add_argument('--should_recheck_popbest', help='Should recheck population best?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_include_allbest', help='Should always include all-time best individual in the population?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--should_pair_individual_simulation', help='Should initialize one individual at a time (e.g. first simulation draws first individual from the initial pop, and so on and so forth?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--should_recheck_popbest', help='Should recheck population best?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--recheck_popbest_episodes', help='How many episodes to run a recheck on popbest?', required=False, default=100, type=int)
     parser.add_argument('--should_attenuate_alpha', help='Should attenuate alpha?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_penalize_std', help='Should penalize standard deviation?', required=False, default=True, type=lambda x: (str(x).lower() == 'true'))
@@ -114,7 +116,7 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
 
     config = configs.get_config(args["task"])
-    
+
     TIME_START = time.time()
 
     command_line = str(args)
@@ -125,15 +127,16 @@ if __name__ == "__main__":
     io.save_history_to_file(config, None, output_path, prefix=command_line)
 
     # Setting up initial population
-    initial_pop = evo.get_initial_pop(config, 
-        alpha=(0 if args["should_attenuate_alpha"] else args["alpha"]),
-        popsize=args["lambda"], depth_random_indiv=args["initial_depth"],
-        should_penalize_std=args["should_penalize_std"], should_norm_state=args["should_norm_state"], 
-        episodes=100, initial_pop=args["initial_pop"], n_jobs=args["jobs_to_parallelize"])    
-    
-    rl.fill_metrics(config, initial_pop, alpha=(0 if args["should_attenuate_alpha"] else args["alpha"]), 
-        episodes=100, should_norm_state=args["should_norm_state"],
-        penalize_std=args["should_penalize_std"], n_jobs=args["jobs_to_parallelize"])
+    print(f"Setting up initial population...")
+    original_initial_indivs = evo.get_initial_pop(config,
+                                                  alpha=(0 if args["should_attenuate_alpha"] else args["alpha"]),
+                                                  popsize=args["lambda"], depth_random_indiv=args["initial_depth"],
+                                                  should_penalize_std=args["should_penalize_std"], should_norm_state=args["should_norm_state"],
+                                                  episodes=9, initial_pop=args["initial_pop"], n_jobs=args["jobs_to_parallelize"])
+
+    rl.fill_metrics(config, original_initial_indivs, alpha=(0 if args["should_attenuate_alpha"] else args["alpha"]),
+                    episodes=9, should_norm_state=args["should_norm_state"], task_solution_threshold=config["task_solution_threshold"],
+                    penalize_std=args["should_penalize_std"], n_jobs=args["jobs_to_parallelize"])
 
     # Running simulations
     sim_history = []
@@ -141,29 +144,45 @@ if __name__ == "__main__":
 
     def handler(sig, frame):
         print(f"Saving and exiting... Output path: {output_path}")
+        es.allbest.elapsed_time = time.time() - TIME_START
         sim_history.append((es.allbest, es.allbest.reward, es.allbest.get_tree_size(), None))
         io.save_history_to_file(config, sim_history, output_path, prefix=command_line + "\n(Interrupted)\n\n")
         sys.exit(1)
     signal.signal(signal.SIGINT, handler)
 
-    for _ in range(args['simulations']):
+    for simulation in range(args['simulations']):
+        # Setting up initial population
+        print(f"Setting up initial population... (simulation {simulation+1}/{args['simulations']})")
+        if args['should_pair_individual_simulation']:
+            initial_indivs = evo.get_initial_pop(config,
+                 alpha=(0 if args["should_attenuate_alpha"] else args["alpha"]),
+                 popsize=args["lambda"], depth_random_indiv=args["initial_depth"],
+                 should_penalize_std=args["should_penalize_std"], should_norm_state=False,
+                 episodes=9, initial_pop=[original_initial_indivs[simulation]], n_jobs=args["jobs_to_parallelize"])
+
+            rl.fill_metrics(config, initial_indivs, alpha=(0 if args["should_attenuate_alpha"] else args["alpha"]),
+                episodes=9, should_norm_state=args["should_norm_state"], task_solution_threshold=config["task_solution_threshold"],
+                penalize_std=args["should_penalize_std"], n_jobs=args["jobs_to_parallelize"])
+        else:
+            initial_indivs = original_initial_indivs
+
         # Executing EA
         start_time = time.time()
-        es = EvolutionaryStrategySL(tournament_size=args["tournament_size"], 
+        es = EvolutionaryStrategySL(tournament_size=args["tournament_size"],
             config=config,
-            mu=args["mu"], lamb=args["lambda"], alpha=args["alpha"], 
+            mu=args["mu"], lamb=args["lambda"], alpha=args["alpha"],
             initial_depth=args["initial_depth"], fit_episodes=args["episodes"],
             mutation_type=args["mutation_type"], should_norm_state=args["should_norm_state"],
-            should_penalize_std=args["should_penalize_std"], 
+            should_penalize_std=args["should_penalize_std"],
             should_recheck_popbest=args["should_recheck_popbest"],
             should_include_allbest=args["should_include_allbest"],
             recheck_popbest_episodes=args["recheck_popbest_episodes"],
             should_prune_by_visits=args["should_prune_by_visits"],
             should_attenuate_alpha=args["should_attenuate_alpha"],
             should_prune_best_by_visits=args["should_prune_best_by_visits"],
-            jobs_to_parallelize=args["jobs_to_parallelize"], 
+            jobs_to_parallelize=args["jobs_to_parallelize"],
             verbose=args["verbose"])
-        es.run(args['generations'], initial_pop, args['should_plot'], args['should_save_plot'])
+        es.run(args['generations'], initial_indivs, args['should_plot'], args['should_save_plot'])
         elapsed_time = time.time() - start_time
         es.allbest.elapsed_time = elapsed_time
 
@@ -176,6 +195,6 @@ if __name__ == "__main__":
         print(f"output_path: '{output_path}'")
 
         TIME_END = time.time()
-        io.save_history_to_file(config, sim_history, output_path, 
+        io.save_history_to_file(config, sim_history, output_path,
             elapsed_time=TIME_END-TIME_START, prefix=command_line)
         es.save_history_as_csv()

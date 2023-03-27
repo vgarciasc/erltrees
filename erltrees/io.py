@@ -12,8 +12,7 @@ def save_history_to_file(config, history, filepath, elapsed_time=None, prefix=""
     string = prefix
     
     if history is not None:
-        trees, rewards, sizes, _ = zip(*history)
-        successes = [1 if r > config["task_solution_threshold"] else 0 for r in rewards]
+        trees, rewards, sizes, successes = zip(*history)
         trees = np.array(trees)
 
         string += f"Mean Best Reward: {np.mean(rewards)} +- {np.std(rewards)}\n"
@@ -25,7 +24,7 @@ def save_history_to_file(config, history, filepath, elapsed_time=None, prefix=""
         string += "\n-----\n\n"
 
         for i, tree in enumerate(trees):
-            string += f"Tree #{i} (Reward: {tree.reward} +- {tree.std_reward}, Size: {tree.get_tree_size()}, Elapsed time: {tree.elapsed_time})\n"
+            string += f"Tree #{i} (Reward: {tree.reward} +- {tree.std_reward}, Size: {tree.get_tree_size()}, Success Rate: {tree.success_rate}, Elapsed time: {tree.elapsed_time})\n"
             string += "----------\n"
             string += str(tree)
             string += "\n"
