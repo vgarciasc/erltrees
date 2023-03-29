@@ -129,7 +129,6 @@ if __name__ == "__main__":
     parser.add_argument('--should_plot', help='Should plot performance?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_attenuate_alpha', help='Should attenuate alpha?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_penalize_std', help='Should penalize std?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
-    parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=False, default=0, type=int)
     parser.add_argument('--simulations', help='How many simulations to run?', required=False, default=1, type=int)
     parser.add_argument('--should_save_models', help='Should save trees?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_only_save_best', help='When saving trees, should save only the best, or everything produced?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
@@ -158,7 +157,7 @@ if __name__ == "__main__":
             iterations=args['iterations'],
             episodes=args['episodes'],
             should_penalize_std=args['should_penalize_std'],
-            task_solution_threshold=args['task_solution_threshold'],
+            task_solution_threshold=config['task_solution_threshold'],
             should_attenuate_alpha=args['should_attenuate_alpha'],
             n_jobs=args['n_jobs'])
         iterations, avg_rewards, deviations, model_sizes, models = history
@@ -166,7 +165,7 @@ if __name__ == "__main__":
         # Printing the best model
         rewards = rl.collect_metrics(config, [dt], alpha=0.0, episodes=args["episodes"],
                                      should_fill_attributes=True,
-                                     task_solution_threshold=args["task_solution_threshold"],
+                                     task_solution_threshold=config["task_solution_threshold"],
                                      verbose=False, n_jobs=args["n_jobs"])
         print()
         print(f"- Average reward for the best policy is {dt.reward} ± {dt.std_reward}.")
