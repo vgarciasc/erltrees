@@ -44,7 +44,7 @@ def save_trees_to_file(filepath, original_trees, trees, prefix):
         text_file.write(string)
 
 def fill_tree_given_data(tree, rewards, alpha, task_solution_threshold):
-    tree.fitness = rl.calc_fitness(np.mean(rewards), np.std(rewards), tree.get_tree_size(), alpha, should_penalize_std=True)
+    tree.fitness = rl.calc_fitness(np.mean(rewards), np.std(rewards), tree.get_tree_size(), alpha, should_penalize_std=False)
     tree.success_rate = np.mean([(1 if r > task_solution_threshold else 0) for r in rewards])
     tree.reward = np.mean(rewards)
     tree.std_reward = np.std(rewards)
@@ -86,7 +86,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
         stats, pvalue = ks_2samp(rewards_curr, rewards_alt_1)
         printv(f"------ KL Stat: {stats}, P-value: {pvalue}", verbose)
 
-        if (tree_alt_1.fitness > tree.fitness) or (tree_alt_1.success_rate > tree.success_rate) or (stats < kstest_threshold and should_use_kstest):
+        if (tree_alt_1.fitness >= tree.fitness) or (tree_alt_1.success_rate >= tree.success_rate) or (stats < kstest_threshold and should_use_kstest):
             printv(f"------ [green]Maintaining change.[/green] ([yellow]{'fitness' if tree_alt_1.fitness > tree.fitness else ('success rate' if tree_alt_1.success_rate > tree.success_rate else 'kstest')}[/yellow])", verbose)
             tree = tree_alt_1
             rewards_curr = rewards_alt_1
@@ -106,7 +106,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
             stats, pvalue = ks_2samp(rewards_curr, rewards_alt_2)
             printv(f"------ KL Stat: {stats}, P-value: {pvalue}", verbose)
 
-            if (tree_alt_2.fitness > tree.fitness) or (tree_alt_2.success_rate > tree.success_rate) or (stats < kstest_threshold and should_use_kstest):
+            if (tree_alt_2.fitness >= tree.fitness) or (tree_alt_2.success_rate >= tree.success_rate) or (stats < kstest_threshold and should_use_kstest):
                 printv(f"------ [green]Maintaining change.[/green] ([yellow]{'fitness' if tree_alt_2.fitness > tree.fitness else ('success rate' if tree_alt_2.success_rate > tree.success_rate else 'kstest')}[/yellow])", verbose)
                 tree = tree_alt_2
                 rewards_curr = rewards_alt_2
@@ -122,6 +122,7 @@ if __name__ == "__main__":
     parser.add_argument('-t','--task', help="Which task to execute?", type=str, required=True)
     parser.add_argument('-f','--input', help="Which file to use as input?", type=str, required=True)
     parser.add_argument('-a','--alpha', help='Which alpha to use?', required=True, default=1.0, type=float)
+    parser.add_argument('-o','--output', help="Which file to use as output?", type=str, required=True)
     parser.add_argument('--should_use_kstest', help='Should use KS test to detect if trees are equal?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--kstest_threshold', help='Which KS test threshold to use?', required=False, default=0.1, type=float)
     parser.add_argument('--rounds', help='How many rounds for reward pruning?', required=True, default=1, type=int)
@@ -132,7 +133,7 @@ if __name__ == "__main__":
     parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=True, default=None, type=int)
     args = vars(parser.parse_args())
 
-    filepath = "data/reward_pruning_" + datetime.now().strftime("%Y_%m_%d-%I_%M_%S") + ".txt"
+    filepath = args["output"]
     history_filepath = "data/reward_pruning_log.txt"
 
     command_line = str(args)

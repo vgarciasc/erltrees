@@ -259,7 +259,38 @@ def lunar_lander_solutions():
     # Show the plot
     plt.show()
 
+def generic_plot(files, algos):
+    success_rates = []
+    tree_sizes = []
+    groups = []
+
+    for i, file in enumerate(files):
+        sol = parse_file(file)
+        success_rates.extend(sol[:, 3])
+        tree_sizes.extend(sol[:, 2])
+        groups.extend([algos[i]] * len(sol[:, 3]))
+
+    data_dict = {'Tree Size': np.int_(tree_sizes), 'Success Rate': success_rates, 'Group': groups}
+    df = pd.DataFrame(data_dict)
+    fig, ax = plt.subplots(figsize=(14, 6))
+    sns.swarmplot(x='Tree Size', y='Success Rate', data=df, ax=ax, hue='Group')
+    ax.set_xlabel('Tree Size')
+    plt.show()
+
 if __name__ == '__main__':
-    cartpole_solutions()
+    # cartpole_solutions()
     # mountain_car_solutions()
     # lunar_lander_solutions()
+
+    generic_plot([
+            # "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_IL_p015_reevaluated.txt",
+            # "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_IL-RP_reevaluated.txt",
+            "../../../CRO_DT_RL/results/complete/mountain-car_CRO__2023_02_08-11_08_34_reevaluated.txt",
+            "../../../CRO_DT_RL/results/complete/mountain-car_IL-CRO__2023_03_21-13_15_47_reevaluated.txt",
+            "../../../CRO_DT_RL/results/complete/mountain-car_IL-RP-CRO__2023_03_24-12_15_07_reevaluated.txt"
+        ],
+        [
+            "CRO-DT-RL (R)",
+            "CRO-DT-RL (IL)",
+            "CRP-DT-RL (P)"
+        ])

@@ -53,7 +53,7 @@ class DistilledTree:
             is_leaf = children_left[node_id] == children_right[node_id]
 
             if is_leaf:
-                content = self.config['actions'][np.argmax(values[node_id][0])].upper()
+                content = self.config['actions'][self.model.classes_[np.argmax(values[node_id][0])]].upper()
                 if show_prob:
                     prob = np.max(values[node_id][0]) / sum(values[node_id][0])
                     content += f" ({'{:.2f}'.format(prob)})"

@@ -12,10 +12,10 @@ def save_history_to_file(config, history, filepath, elapsed_time=None, prefix=""
     string = prefix
     
     if history is not None:
-        trees, rewards, sizes, successes = zip(*history)
+        trees, rewards, std_rewards, sizes, successes = zip(*history)
         trees = np.array(trees)
 
-        string += f"Mean Best Reward: {np.mean(rewards)} +- {np.std(rewards)}\n"
+        string += f"Mean Best Reward: {np.mean(rewards)} +- {np.mean(std_rewards)}\n"
         string += f"Mean Best Size: {np.mean(sizes)}\n"
         string += f"Average Evaluations to Success: -------\n"
         string += f"Success Rate: {np.mean(successes)}\n"

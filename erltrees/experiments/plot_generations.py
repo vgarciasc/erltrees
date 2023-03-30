@@ -63,8 +63,73 @@ def generic_plot_1(title, files, algos):
     plt.legend()
     plt.show()
 
-def generic_plot_2(title, files, algos):
+def generic_plot_2(title, files, algos, solution_threshold):
+    fig, ax = plt.subplots(2, 2, figsize=(16, 4))
+
+    x = range(200) # Number of generations
+    colors = ["red", "blue", "green", "orange", "purple", "brown", "pink", "gray", "olive", "cyan"]
+
+    ax = plt.subplot(2, 2, 1)
+
+    for i, file in enumerate(files):
+        sol = parse_file(file)
+        sol_mean = np.mean(sol, axis=0)[:, 0]
+        sol_std = np.std(sol, axis=0)[:, 0]
+        ax.plot(x, sol_mean, label=algos[i], color=colors[i])
+        ax.fill_between(x, sol_mean - sol_std, sol_mean + sol_std, alpha=0.2, color=colors[i])
+
+    # Set the x-axis label
+    ax.set_xlabel('Generations')
+    ax.set_ylabel('Average best fitness')
+
+    ax = plt.subplot(2, 2, 2)
+
+    for i, file in enumerate(files):
+        sol = parse_file(file)
+        sol_mean = np.mean(sol, axis=0)[:, 1]
+        sol_std = np.std(sol, axis=0)[:, 1]
+        ax.plot(x, sol_mean, label=algos[i], color=colors[i])
+        ax.fill_between(x, sol_mean - sol_std, sol_mean + sol_std, alpha=0.2, color=colors[i])
+
+    ax.plot(x, np.ones(len(x)) * solution_threshold, label="Solution threshold", color="black", linestyle="dashed")
+
+    ax.set_xlabel('Generations')
+    ax.set_ylabel('Average reward of best individual')
+
+    ax = plt.subplot(2, 2, 3)
+
+    for i, file in enumerate(files):
+        sol = parse_file(file)
+        sol_mean = np.mean(sol, axis=0)[:, 2]
+        sol_std = np.std(sol, axis=0)[:, 2]
+        ax.plot(x, sol_mean, label=algos[i], color=colors[i])
+        ax.fill_between(x, sol_mean - sol_std, sol_mean + sol_std, alpha=0.2, color=colors[i])
+
+    ax.set_xlabel('Generations')
+    ax.set_ylabel('Average stdev. of reward of best individual')
+
+    ax = plt.subplot(2, 2, 4)
+
+    for i, file in enumerate(files):
+        sol = parse_file(file)
+        sol_mean = np.mean(sol, axis=0)[:, 3]
+        sol_std = np.std(sol, axis=0)[:, 3]
+        ax.plot(x, sol_mean, label=algos[i], color=colors[i])
+        ax.fill_between(x, sol_mean - sol_std, sol_mean + sol_std, alpha=0.2, color=colors[i])
+
+    ax.set_xlabel('Generations')
+    ax.set_ylabel('Average tree size of best individual')
+
+    # Show the plot
+    plt.suptitle(title)
+    # plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.legend()
+    plt.subplots_adjust(left=0.043, top=0.91, wspace=0.255)
+    plt.show()
+
+def generic_plot_3(title, files, algos, solution_threshold):
     fig, ax = plt.subplots(1, 3, figsize=(14, 4))
+    sns.set_theme()
 
     x = range(200) # Number of generations
     colors = ["red", "blue", "green", "orange", "purple", "brown", "pink", "gray", "olive", "cyan"]
@@ -91,6 +156,8 @@ def generic_plot_2(title, files, algos):
         ax.plot(x, sol_mean, label=algos[i], color=colors[i])
         ax.fill_between(x, sol_mean - sol_std, sol_mean + sol_std, alpha=0.2, color=colors[i])
 
+    ax.plot(x, np.ones(len(x)) * solution_threshold, label="Solution threshold", color="black", linestyle="dashed")
+
     ax.set_xlabel('Generations')
     ax.set_ylabel('Average Reward')
 
@@ -113,17 +180,17 @@ def generic_plot_2(title, files, algos):
     plt.show()
 
 if __name__ == '__main__':
-    generic_plot_2("Cartpole", ["../../../CRO_DT_RL/results/complete/cartpole_CRO__tmp_2023_03_23-15_22_26.txt",
-        "../../../CRO_DT_RL/results/complete/cartpole_IL-CRO__tmp_2023_02_10-11_44_21.txt",
-        "../../../CRO_DT_RL/results/complete/cartpole_IL-RP-CRO__tmp_2023_02_09-14_35_38.txt"],
-                   algos=["CRO", "IL-CRO", "IL-RP-CRO"])
+    # generic_plot_2("Cartpole", ["../../../CRO_DT_RL/results/complete/cartpole_CRO__tmp_2023_03_23-15_22_26.txt",
+    #     "../../../CRO_DT_RL/results/complete/cartpole_IL-CRO__tmp_2023_02_10-11_44_21.txt",
+    #     "../../../CRO_DT_RL/results/complete/cartpole_IL-RP-CRO__tmp_2023_02_09-14_35_38.txt"],
+    #                ["CRO", "IL-CRO", "IL-RP-CRO"], 495)
 
-    generic_plot_2("Mountain Car", ["../../../CRO_DT_RL/results/complete/mountain-car_CRO__tmp_2023_02_08-11_08_34.txt",
-        "../../../CRO_DT_RL/results/complete/mountain-car_IL-CRO__tmp_2023_03_21-13_15_47.txt",
-        "../../../CRO_DT_RL/results/complete/mountain-car_IL-RP-CRO__tmp_2023_03_24-12_15_07.txt"],
-                   algos=["CRO", "IL-CRO", "IL-RP-CRO"])
+    # generic_plot_2("Mountain Car", ["../../../CRO_DT_RL/results/complete/mountain-car_CRO__tmp_2023_02_08-11_08_34.txt",
+    #     "../../../CRO_DT_RL/results/complete/mountain-car_IL-CRO__tmp_2023_03_21-13_15_47.txt",
+    #     "../../../CRO_DT_RL/results/complete/mountain-car_IL-RP-CRO__tmp_2023_03_24-12_15_07.txt"],
+    #                ["CRO", "IL-CRO", "IL-RP-CRO"], -110)
 
     generic_plot_2("Lunar Lander", ["../../../CRO_DT_RL/results/complete/lunarlander_CRO__tmp_2023_02_27-18_53_54.txt",
         "../../../CRO_DT_RL/results/complete/lunarlander_IL-CRO__tmp_2023_03_02-11_35_43_GRAFTED.txt",
         "../../../CRO_DT_RL/results/complete/lunarlander_IL-RP-CRO__tmp_2023_02_17-12_56_21.txt"],
-                   algos=["CRO", "IL-CRO", "IL-RP-CRO"])
+                   ["CRO", "IL-CRO", "IL-RP-CRO"], 200)

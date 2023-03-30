@@ -57,14 +57,13 @@ def boxplot_solutions(title, files, algos):
     plt.suptitle(title)
     plt.show()
 
-
 if __name__ == '__main__':
     algorithm_names = [
                         # "IL",
                         # "IL $\\rightarrow$ RP",
-                        "CRO",
-                        "IL $\\rightarrow$ CRO",
-                        "IL $\\rightarrow$ RP $\\rightarrow$ CRO"
+                        "CRO-DT-RL (R)",
+                        "CRO-DT-RL (IL)",
+                        "CRO-DT-RL (P)"
     ]
 
     boxplot_solutions("Cartpole",
@@ -81,9 +80,9 @@ if __name__ == '__main__':
                       [
                           # "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_IL_p015_reevaluated.txt",
                           #  "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_IL-RP_reevaluated.txt",
-                           "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_CRO__2023_02_08-11_08_34_reevaluated.txt",
-                           "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_IL-CRO__2023_03_21-13_15_47_reevaluated.txt",
-                           "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_IL-RP-CRO__2023_03_24-12_15_07_reevaluated.txt"
+                           "../../../CRO_DT_RL/results/complete/mountain-car_CRO__2023_02_08-11_08_34_reevaluated.txt",
+                           "../../../CRO_DT_RL/results/complete/mountain-car_IL-CRO__2023_03_21-13_15_47_reevaluated.txt",
+                           "../../../CRO_DT_RL/results/complete/mountain-car_IL-RP-CRO__2023_03_24-12_15_07_reevaluated.txt"
                       ],
                       algorithm_names)
 

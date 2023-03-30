@@ -33,7 +33,8 @@ class PPOAgent:
         self.model = None
 
     def act(self, state):
-        state = np.clip((state - np.array([-0.4374382, 0.00898582])) / np.sqrt(np.array([0.15740141, 0.00069881]) + 1e-08), -10, 10)
+        if self.config['name'] == 'MountainCar-v0':
+            state = np.clip((state - np.array([-0.4374382, 0.00898582])) / np.sqrt(np.array([0.15740141, 0.00069881]) + 1e-08), -10, 10)
         return self.model.predict(state, deterministic=True)[0]
 
     def batch_predict(self, states):
@@ -42,3 +43,40 @@ class PPOAgent:
     def load_model(self, filename):
         env = gym.make(self.config["name"])
         self.model = PPO.load(filename, env=env)
+
+if __name__ == "__main__":
+    # Load environment, model file, and number of episodes from command line
+    parser = argparse.ArgumentParser(description='Stable Baselines Load')
+    parser.add_argument('-t', '--task', help="Which task to run?", required=True)
+    parser.add_argument('-f', '--file', help="Which file to load?", required=True)
+    parser.add_argument('-e', '--episodes', help="How many episodes to run?", required=False, default=10, type=int)
+    parser.add_argument('-s', '--task_solution_threshold', help="What is the threshold for a task to be considered solved?", required=False, default=0, type=int)
+    args = vars(parser.parse_args())
+
+    # Load config
+    config = get_config(args['task'])
+    agent = PPOAgent(config)
+    agent.load_model(args['file'])
+
+    # Print rewards
+    total_rewards = []
+
+    env = gym.make(config["name"])
+    env.reset()
+
+    for ep in range(args['episodes']):
+        print(f"Episode {ep}")
+        obs = env.reset()
+        done = False
+        total_rewards.append(0)
+
+        while not done:
+            action = agent.act(obs)
+            obs, reward, done, info = env.step(action)
+            total_rewards[-1] += reward
+
+        print(f"Total reward: {total_rewards[-1]}")
+
+    print(f"Average reward: {np.mean(total_rewards)} +/- {np.std(total_rewards)}")
+    print(f"Success rate: {np.mean([1 if r > args['task_solution_threshold'] else 0 for r in total_rewards])}")
+

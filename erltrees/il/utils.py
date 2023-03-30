@@ -4,6 +4,8 @@ import pickle
 import numpy as np
 
 from rich import print
+
+from erltrees.il.ppo import PPOAgent
 from erltrees.io import printv
 
 def get_dataset_from_model(config, model, episodes, verbose=False):
@@ -42,8 +44,11 @@ def get_dataset_from_model(config, model, episodes, verbose=False):
     return X, y, total_rewards
 
 def label_dataset_with_model(model, X):
-    y = model.batch_predict(X)
-    y = [np.argmax(q) for q in y]
+    if type(model) == PPOAgent:
+        y = [model.act(x) for x in X]
+    else:
+        y = model.batch_predict(X)
+        y = [np.argmax(q) for q in y]
     return y
 
 def save_dataset(filename, X, y):
