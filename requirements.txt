@@ -7,3 +7,10 @@ numpy==1.23.3
 rich==12.6.0
 scikit_learn==1.1.2
 scipy==1.9.1
+erltrees~=0.1
+tensorflow~=2.11.0
+keras~=2.11.0
+scikit-learn~=1.1.2
+CityLearn~=1.5.0
+simglucose~=0.2.3
+setuptools~=65.5.1

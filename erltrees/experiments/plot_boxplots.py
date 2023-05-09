@@ -70,9 +70,9 @@ if __name__ == '__main__':
                       [
                           # "../../../CRO_DT_RL/results/complete/reevaluations/cartpole_IL_p002_reevaluated.txt",
                           #  "../../../CRO_DT_RL/results/complete/reevaluations/cartpole_IL-RP_reevaluated.txt",
-                           "../../../CRO_DT_RL/results/complete/reevaluations/cartpole_CRO__2023_03_23-15_22_26_reevaluated.txt",
-                           "../../../CRO_DT_RL/results/complete/reevaluations/cartpole_IL-CRO__2023_02_10-11_44_21_reevaluated.txt",
-                           "../../../CRO_DT_RL/results/complete/reevaluations/cartpole_IL-RP-CRO_reevaluated.txt"
+                           "../../../CRO_DT_RL/results/cartpole_depth2_CRO__2023_04_04-18_38_50.txt",
+                           "../../../CRO_DT_RL/results/cartpole_depth2_IL-CRO__2023_04_04-18_39_15.txt",
+                           "../../../CRO_DT_RL/results/cartpole_depth2_IL-RP-CRO__2023_04_03-15_20_49.txt"
                       ],
                       algorithm_names)
     #

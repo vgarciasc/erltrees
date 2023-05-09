@@ -259,7 +259,7 @@ def lunar_lander_solutions():
     # Show the plot
     plt.show()
 
-def generic_plot(files, algos):
+def generic_plot(files, algos, title):
     success_rates = []
     tree_sizes = []
     groups = []
@@ -275,6 +275,7 @@ def generic_plot(files, algos):
     fig, ax = plt.subplots(figsize=(14, 6))
     sns.swarmplot(x='Tree Size', y='Success Rate', data=df, ax=ax, hue='Group')
     ax.set_xlabel('Tree Size')
+    plt.title(title)
     plt.show()
 
 if __name__ == '__main__':
@@ -282,15 +283,32 @@ if __name__ == '__main__':
     # mountain_car_solutions()
     # lunar_lander_solutions()
 
+    # generic_plot([
+    #         # "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_IL_p015_reevaluated.txt",
+    #         # "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_IL-RP_reevaluated.txt",
+    #         "../../../CRO_DT_RL/results/complete/mountain-car_CRO__2023_02_08-11_08_34_reevaluated.txt",
+    #         "../../../CRO_DT_RL/results/complete/mountain-car_IL-CRO__2023_03_21-13_15_47_reevaluated.txt",
+    #         "../../../CRO_DT_RL/results/complete/mountain-car_IL-RP-CRO__2023_03_24-12_15_07_reevaluated.txt"
+    #     ],
+    #     [
+    #         "CRO-DT-RL (R)",
+    #         "CRO-DT-RL (IL)",
+    #         "CRP-DT-RL (P)"
+    #     ],
+    #     "Mountain Car"
+    # )
+
     generic_plot([
-            # "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_IL_p015_reevaluated.txt",
-            # "../../../CRO_DT_RL/results/complete/reevaluations/mountain-car_IL-RP_reevaluated.txt",
-            "../../../CRO_DT_RL/results/complete/mountain-car_CRO__2023_02_08-11_08_34_reevaluated.txt",
-            "../../../CRO_DT_RL/results/complete/mountain-car_IL-CRO__2023_03_21-13_15_47_reevaluated.txt",
-            "../../../CRO_DT_RL/results/complete/mountain-car_IL-RP-CRO__2023_03_24-12_15_07_reevaluated.txt"
+            # "../../../CRO_DT_RL/results/complete/reevaluations/cartpole_IL_p002_reevaluated.txt",
+            # "../../../CRO_DT_RL/results/complete/reevaluations/cartpole_IL-RP_reevaluated.txt",
+            "../../../CRO_DT_RL/results/complete/reevaluations/cartpole_CRO__2023_03_23-15_22_26_reevaluated.txt",
+            "../../../CRO_DT_RL/results/complete/reevaluations/cartpole_IL-CRO__2023_03_30-16_39_00_reevaluated.txt",
+            "../../../CRO_DT_RL/results/complete/reevaluations/cartpole_IL-RP-CRO__2023_03_30-16_38_59_reevaluated.txt"
         ],
         [
             "CRO-DT-RL (R)",
             "CRO-DT-RL (IL)",
             "CRP-DT-RL (P)"
-        ])
+        ],
+        "Cartpole"
+    )

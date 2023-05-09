@@ -64,7 +64,7 @@ def generic_plot_1(title, files, algos):
     plt.show()
 
 def generic_plot_2(title, files, algos, solution_threshold):
-    fig, ax = plt.subplots(2, 2, figsize=(16, 4))
+    fig, ax = plt.subplots(2, 2, figsize=(10, 7))
 
     x = range(200) # Number of generations
     colors = ["red", "blue", "green", "orange", "purple", "brown", "pink", "gray", "olive", "cyan"]
@@ -124,7 +124,7 @@ def generic_plot_2(title, files, algos, solution_threshold):
     plt.suptitle(title)
     # plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     plt.legend()
-    plt.subplots_adjust(left=0.043, top=0.91, wspace=0.255)
+    plt.subplots_adjust(left=0.07, bottom=0.11, right=0.98, top=0.938, wspace=0.214, hspace=0.2)
     plt.show()
 
 def generic_plot_3(title, files, algos, solution_threshold):
@@ -180,17 +180,17 @@ def generic_plot_3(title, files, algos, solution_threshold):
     plt.show()
 
 if __name__ == '__main__':
-    # generic_plot_2("Cartpole", ["../../../CRO_DT_RL/results/complete/cartpole_CRO__tmp_2023_03_23-15_22_26.txt",
-    #     "../../../CRO_DT_RL/results/complete/cartpole_IL-CRO__tmp_2023_02_10-11_44_21.txt",
-    #     "../../../CRO_DT_RL/results/complete/cartpole_IL-RP-CRO__tmp_2023_02_09-14_35_38.txt"],
-    #                ["CRO", "IL-CRO", "IL-RP-CRO"], 495)
+    generic_plot_3("Cartpole", ["../../../CRO_DT_RL/results/complete/cartpole_CRO__tmp_2023_03_23-15_22_26.txt",
+        "../../../CRO_DT_RL/results/complete/cartpole_IL-CRO__tmp_2023_03_30-16_39_00.txt",
+        "../../../CRO_DT_RL/results/complete/cartpole_IL-RP-CRO__tmp_2023_03_30-16_38_59.txt"],
+                   ["CRO-DT-RL (R)", "CRO-DT-RL (IL)", "CRO-DT-RL (P)"], 495)
 
-    # generic_plot_2("Mountain Car", ["../../../CRO_DT_RL/results/complete/mountain-car_CRO__tmp_2023_02_08-11_08_34.txt",
-    #     "../../../CRO_DT_RL/results/complete/mountain-car_IL-CRO__tmp_2023_03_21-13_15_47.txt",
-    #     "../../../CRO_DT_RL/results/complete/mountain-car_IL-RP-CRO__tmp_2023_03_24-12_15_07.txt"],
-    #                ["CRO", "IL-CRO", "IL-RP-CRO"], -110)
+    generic_plot_2("Mountain Car", ["../../../CRO_DT_RL/results/complete/mountain-car_CRO__tmp_2023_02_08-11_08_34.txt",
+        "../../../CRO_DT_RL/results/complete/mountain-car_IL-CRO__tmp_2023_03_21-13_15_47.txt",
+        "../../../CRO_DT_RL/results/complete/mountain-car_IL-RP-CRO__tmp_2023_03_24-12_15_07.txt"],
+                   ["CRO-DT-RL (R)", "CRO-DT-RL (IL)", "CRO-DT-RL (P)"], -110)
 
     generic_plot_2("Lunar Lander", ["../../../CRO_DT_RL/results/complete/lunarlander_CRO__tmp_2023_02_27-18_53_54.txt",
         "../../../CRO_DT_RL/results/complete/lunarlander_IL-CRO__tmp_2023_03_02-11_35_43_GRAFTED.txt",
         "../../../CRO_DT_RL/results/complete/lunarlander_IL-RP-CRO__tmp_2023_02_17-12_56_21.txt"],
-                   ["CRO", "IL-CRO", "IL-RP-CRO"], 200)
+                   ["CRO-DT-RL (R)", "CRO-DT-RL (IL)", "CRO-DT-RL (P)"], 200)
