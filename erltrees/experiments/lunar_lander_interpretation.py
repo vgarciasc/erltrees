@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     config = get_config("lunar_lander")
     tree = Individual.read_from_string(config, tree_str)
-    env = gym.make(config['name'])
+    env = config['maker']()
 
     history = []
     total_rewards = []

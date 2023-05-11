@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     config = get_config("mountain_car")
     trees = [Individual.read_from_string(config, tree_str) for tree_str in tree_strs]
-    env = gym.make(config['name'])
+    env = config['maker']()
 
     for tree in trees:
         tree.denormalize_thresholds()

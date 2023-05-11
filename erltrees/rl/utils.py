@@ -49,7 +49,7 @@ def run_episode(tree, env, config, should_norm_state=False, render=False):
     return total_reward
 
 def collect_rewards_seq(config, tree, episodes, should_norm_state, render=False):
-    env = gym.make(config["name"])
+    env = config['maker']()
     total_rewards = []
 
     for episode in range(episodes):
@@ -103,7 +103,7 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
 
     output = []
 
-    env = gym.make(config["name"])
+    env = config['maker']()
 
     for tree in trees:
         rewards = collect_rewards(config, tree, episodes, 
@@ -133,7 +133,7 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
 
 #     output = []
 
-#     env = gym.make(config["name"])
+#     env = config['maker']()
 
 #     for tree in trees:
 #         total_rewards = []
@@ -186,7 +186,7 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
 
 #     output = []
 
-#     envs = [gym.make(config["name"]) for _ in range(episodes)]
+#     envs = [config["maker"].make() for _ in range(episodes)]
 
 #     for tree in trees:
 #         if should_norm_state:

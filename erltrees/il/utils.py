@@ -9,7 +9,7 @@ from erltrees.il.ppo import PPOAgent
 from erltrees.io import printv
 
 def get_dataset_from_model(config, model, episodes, verbose=False):
-    env = gym.make(config["name"])
+    env = config['maker']()
     
     X = []
     y = []

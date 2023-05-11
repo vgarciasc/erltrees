@@ -18,7 +18,7 @@ def init_qlearning(tree, config):
         leaf.elig_trace = 0
 
 def run_qlearning(tree, config, episodes=10, lr=0.1, discount=0.9, should_train=True, should_act_by_labels=False, verbose=False):    
-    env = gym.make(config["name"])
+    env = config['maker']()
     total_rewards = []
 
     for episode in range(episodes):
@@ -65,7 +65,7 @@ def run_qlearning(tree, config, episodes=10, lr=0.1, discount=0.9, should_train=
     return np.mean(total_rewards), np.std(total_rewards)
 
 def run_watkinsQ(tree, config, episodes=10, lamb=0.9, lr=0.1, discount=0.9, should_train=True, should_act_by_labels=False, verbose=False):    
-    env = gym.make(config["name"])
+    env = config['maker']()
     total_rewards = []
 
     for episode in range(episodes):

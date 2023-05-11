@@ -26,5 +26,5 @@ if __name__ == "__main__":
     labels = tree.get_label_vector()
     print(labels)
 
-    env = gym.make(config["name"])
+    env = config['maker']()
     state = env.reset()

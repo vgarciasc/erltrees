@@ -61,7 +61,7 @@ if __name__ == "__main__":
     # Print rewards
     total_rewards = []
 
-    env = gym.make(config["name"])
+    env = config['maker']()
     env.reset()
 
     for ep in range(args['episodes']):

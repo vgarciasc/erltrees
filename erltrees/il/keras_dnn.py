@@ -78,7 +78,7 @@ if __name__ == '__main__':
     #
     # # Initialization
     # config = get_config(args['task'])
-    # env = gym.make(config['name'])
+    # env = config['maker']()
     # ann = KerasDNN(config, args["exploration_rate"])
     #
     # # Fitting model
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     # Print rewards
     total_rewards = []
 
-    env = gym.make(config["name"])
+    env = config['maker']()
     env.reset()
 
     for ep in range(args['episodes']):

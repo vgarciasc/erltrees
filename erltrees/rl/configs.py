@@ -1,4 +1,5 @@
 import math
+import gym
 import numpy as np
 
 config_CP = {
@@ -19,6 +20,7 @@ config_CP = {
         ("Cart Velocity", "continuous", [-math.inf, math.inf]),
         ("Pole Angle", "continuous", [-0.418, 0.418]),
         ("Pole Angular Velocity", "continuous", [-math.inf, math.inf])],
+    "maker": lambda : gym.make("CartPole-v1"),
 }
 
 config_MC = {
@@ -37,6 +39,7 @@ config_MC = {
     "attributes": [
         ("Car Position", "continuous", [-1.2, 0.6]),
         ("Car Velocity", "continuous", [-0.07, 0.07])],
+    "maker": lambda : gym.make("MountainCar-v0"),
 }
 
 config_LL = {
@@ -60,6 +63,7 @@ config_LL = {
         ("Angular Velocity", "continuous", [-5.0, 5.0]),
         ("Leg 1 is Touching", "binary", [0, 1]),
         ("Leg 2 is Touching", "binary", [0, 1])],
+    "maker": lambda : gym.make("LunarLander-v2"),
 }
 
 config_BJ = {
@@ -77,6 +81,7 @@ config_BJ = {
         ("Player's Sum", "discrete", 0, 22),
         ("Dealer's Card", "discrete", 1, 11),
         ("Usable Ace", "binary", -1, -1)],
+    "maker": lambda : gym.make("Blackjack-v0"),
 }
 
 config_AB = {
@@ -96,7 +101,8 @@ config_AB = {
         ("Cosine Theta2", "continuous", (-1, +1)),
         ("Sine Theta2", "continuous", (-1, +1)),
         ("Angvel Theta1", "continuous", (-12.567, 12.567)),
-        ("Angvel Theta2", "continuous", (-28.274, 28.274))]
+        ("Angvel Theta2", "continuous", (-28.274, 28.274))],
+    "maker": lambda : gym.make("Acrobot-v1"),
 }
 
 def get_config(task_name):
