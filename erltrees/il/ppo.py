@@ -41,7 +41,7 @@ class PPOAgent:
         return [self.act(state) for state in states]
 
     def load_model(self, filename):
-        env = gym.make(self.config["name"])
+        env = self.config["maker"]()
         self.model = PPO.load(filename, env=env)
 
 if __name__ == "__main__":

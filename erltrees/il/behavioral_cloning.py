@@ -9,11 +9,14 @@ from rich import print
 
 import erltrees.rl.utils as rl
 from erltrees.il.distilled_tree import DistilledTree
+from erltrees.il.regressor_tree import RegressorTree
 from erltrees.rl.configs import get_config
 
 def get_model_to_train(config, name):
     if name == "DistilledTree":
         return DistilledTree(config)
+    if name == "RegressorTree":
+        return RegressorTree(config)
     return None
 
 def run_behavior_cloning(config, X, y, model_name, pruning_alpha):
