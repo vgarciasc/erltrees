@@ -113,7 +113,7 @@ class MLPAgent:
         self.model = keras.models.load_model(filename)
 
 def collect_data(config, args, verbose=False):
-    env = gym.make(config["name"])
+    env = config['maker']()
     model = MLPAgent(config)
 
     best_reward = -9999

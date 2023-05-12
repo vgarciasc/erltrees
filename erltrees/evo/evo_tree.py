@@ -278,7 +278,10 @@ class Individual(tree.TreeNode):
                     left=None, right=None, parent=parent)
 
             if is_leaf:
-                label = actions.index(content.lower())
+                if config["action_type"] == "continuous":
+                    label = float(content)
+                elif config["action_type"] == "discrete":
+                    label = actions.index(content.lower())
 
                 node = Individual(fitness=-1, reward=-1, std_reward=-1, success_rate=-1,
                     config=config, attribute=0, threshold=0, label=label,
