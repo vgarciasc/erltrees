@@ -1,6 +1,9 @@
 import math
 import gym
 import numpy as np
+import gym_dssat_pdi
+
+from erltrees.rl.sb3_wrapper_dssat import GymDssatWrapper
 
 config_CP = {
     "name": "CartPole-v1",
@@ -12,6 +15,7 @@ config_CP = {
     "should_convert_state_to_array": False,
     "conversion_fn": lambda a,b,c : c,
     "episode_termination_score": 0,
+    "action_type": "discrete",
     "n_actions": 2,
     "actions": ["left", "right"],
     "n_attributes": 4,              
@@ -33,6 +37,7 @@ config_MC = {
     "should_convert_state_to_array": False,
     "conversion_fn": lambda a,b,c : c,
     "episode_termination_score": 0,
+    "action_type": "discrete",
     "n_actions": 3,
     "actions": ["left", "nop", "right"],
     "n_attributes": 2,              
@@ -53,6 +58,7 @@ config_LL = {
     "should_convert_state_to_array": False,
     "episode_termination_score": 0,
     "actions": ["nop", "left engine", "main engine", "right engine"],
+    "action_type": "discrete",
     "n_attributes": 8,              
     "attributes": [
         ("X Position", "continuous", [-1.5, 1.5]),
@@ -74,6 +80,7 @@ config_BJ = {
     "should_convert_state_to_array": True,
     "conversion_fn": lambda a,b,c : c,
     "episode_termination_score": None,
+    "action_type": "discrete",
     "n_actions": 2,
     "actions": ["stick", "hit"],
     "n_attributes": 3,
@@ -92,6 +99,7 @@ config_AB = {
     "should_convert_state_to_array": True,
     "conversion_fn": lambda a,b,c : c,
     "episode_termination_score": None,
+    "action_type": "discrete",
     "n_actions": 3,
     "actions": ["minus_torque", "nop", "plus_torque"],
     "n_attributes": 6,
@@ -105,6 +113,35 @@ config_AB = {
     "maker": lambda : gym.make("Acrobot-v1"),
 }
 
+config_DSSAT = {
+    "name": "GymDssatPdi-v0",
+    "can_render": False,
+    "max_score": 0,
+    "should_force_episode_termination_score": False,
+    "should_convert_state_to_array": True,
+    "conversion_fn": lambda a,b,c : c,
+    "task_solution_threshold": 50,
+    "episode_termination_score": None,
+    "action_type": "continuous",
+    "n_actions": -1,
+    "actions": ["nitrogen"],
+    "n_attributes": 11,
+    "attributes": [
+        ("cumsumfert", "continuous", (0, 50000)),
+        ("dap", "continuous", (0, 366)),
+        ("dtt", "continuous", (0, 100)),
+        ("ep", "continuous", (0, 50)),
+        ("grnwt", "continuous", (0, 50000)),
+        ("istage", "continuous", (0, 9)),
+        ("nstres", "continuous", (0, 1)),
+        ("swfac", "continuous", (0, 1)),
+        ("topwt", "continuous", (0, 1)),
+        ("vstage", "continuous", (0, 30)),
+        ("xlai", "continuous", (0, 10)),
+    ],
+    "maker": lambda : GymDssatWrapper(gym.make('gym_dssat_pdi:GymDssatPdi-v0', **{'mode': 'fertilization'})),
+}
+
 def get_config(task_name):
     if task_name == "cartpole":
         return config_CP
@@ -116,6 +153,8 @@ def get_config(task_name):
         return config_BJ
     elif task_name == "acrobot":
         return config_AB
+    elif task_name == "dssat":
+        return config_DSSAT
         
     print(f"Invalid task_name {task_name}.")
     return None
