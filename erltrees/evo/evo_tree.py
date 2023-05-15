@@ -31,7 +31,11 @@ class Individual(tree.TreeNode):
     def generate_random_node(config):
         attribute = np.random.randint(config["n_attributes"])
         threshold = np.random.uniform(-1, 1)
-        label = np.random.randint(config["n_actions"])
+
+        if config["action_type"] == "continuous":
+            label = np.random.uniform(-1, 1)
+        else:
+            label = np.random.randint(config["n_actions"])
 
         return Individual(fitness=None, reward=None, std_reward=None, success_rate=None,
                           config=config, attribute=attribute,
@@ -90,6 +94,11 @@ class Individual(tree.TreeNode):
 
         self.label = new_label
 
+    def mutate_label_continuous(self, verbose=False):
+        io.printv("Mutating label continuous...", verbose)
+
+        self.label = np.random.uniform(-1, 1)
+
     def mutate_is_leaf(self, verbose=False):
         io.printv("Mutating is leaf...", verbose)
 
@@ -107,6 +116,18 @@ class Individual(tree.TreeNode):
                 size=2, replace=False)
             self.left.label = labels[0]
             self.right.label = labels[1]
+
+    def mutate_is_leaf_continuous(self, verbose=False):
+        io.printv("Mutating is leaf...", verbose)
+
+        if not self.is_leaf():
+            self.left = None
+            self.right = None
+        else:
+            self.left = Individual.generate_random_node(self.config)
+            self.right = Individual.generate_random_node(self.config)
+            self.left.parent = self
+            self.right.parent = self
 
     def mutate_add_inner_node(self, verbose=False):
         io.printv("Adding inner node...", verbose)
