@@ -43,8 +43,9 @@ def save_trees_to_file(filepath, original_trees, trees, prefix):
     with open(filepath, "w", encoding="utf-8") as text_file:
         text_file.write(string)
 
-def fill_tree_given_data(tree, rewards, alpha, task_solution_threshold):
-    tree.fitness = rl.calc_fitness(np.mean(rewards), np.std(rewards), tree.get_tree_size(), alpha, should_penalize_std=False)
+def fill_tree_given_data(tree, rewards, alpha, task_solution_threshold, should_penalize_std):
+    tree.fitness = rl.calc_fitness(np.mean(rewards), np.std(rewards), tree.get_tree_size(), alpha,
+                                   should_penalize_std=should_penalize_std)
     tree.success_rate = np.mean([(1 if r > task_solution_threshold else 0) for r in rewards])
     tree.reward = np.mean(rewards)
     tree.std_reward = np.std(rewards)
@@ -52,7 +53,7 @@ def fill_tree_given_data(tree, rewards, alpha, task_solution_threshold):
 def reward_pruning(tree, node, config, episodes=100, alpha=0,
     task_solution_threshold=0, should_norm_state=True, 
     should_use_kstest=True, n_jobs=4, verbose=False,
-    kstest_threshold=0.1, run_id="default"):
+    kstest_threshold=0.1, run_id="default", should_penalize_std=False):
 
     tree = tree.copy()
     history = []
@@ -64,12 +65,12 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
     node_paths = node_paths[:-1] #shouldn't try to remove root
 
     rewards_curr = rl.collect_rewards_par(config, tree, episodes, should_norm_state, n_jobs=n_jobs)
-    fill_tree_given_data(tree, rewards_curr, alpha, task_solution_threshold)
+    fill_tree_given_data(tree, rewards_curr, alpha, task_solution_threshold, should_penalize_std)
 
     for node_path in node_paths:
         printv("-----------------------", verbose)
         printv(f"-- Pruning a tree with {tree.get_tree_size()} nodes.", verbose)
-        process = psutil.Process(os.getpid())
+        # process = psutil.Process(os.getpid())
         # printv(f'-- RAM %: {process.memory_percent()}', verbose)
 
         tree_alt_1 = tree.copy()
@@ -77,7 +78,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
         node.left.cut_parent()
 
         rewards_alt_1 = rl.collect_rewards_par(config, tree_alt_1, episodes, should_norm_state, n_jobs=n_jobs)
-        fill_tree_given_data(tree_alt_1, rewards_alt_1, alpha, task_solution_threshold)
+        fill_tree_given_data(tree_alt_1, rewards_alt_1, alpha, task_solution_threshold, should_penalize_std)
 
         printv(f"---- Replaced '{config['attributes'][node.attribute][0]} <= {node.threshold}' with its left node.", verbose)
         printv(f"------ Tree:     {'{:.3f}'.format(np.mean(rewards_curr))} +- {'{:.3f}'.format(np.std(rewards_curr))}. (size: {tree.get_tree_size()}, fit: {tree.fitness}, sr: {tree.success_rate})", verbose)
@@ -87,7 +88,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
         printv(f"------ KL Stat: {stats}, P-value: {pvalue}", verbose)
 
         if (tree_alt_1.fitness >= tree.fitness) or (tree_alt_1.success_rate >= tree.success_rate) or (stats < kstest_threshold and should_use_kstest):
-            printv(f"------ [green]Maintaining change.[/green] ([yellow]{'fitness' if tree_alt_1.fitness > tree.fitness else ('success rate' if tree_alt_1.success_rate > tree.success_rate else 'kstest')}[/yellow])", verbose)
+            printv(f"------ [green]Maintaining change.[/green] ([yellow]{'fitness' if tree_alt_1.fitness > tree.fitness else ('success rate' if tree_alt_1.success_rate >= tree.success_rate else 'kstest')}[/yellow])", verbose)
             tree = tree_alt_1
             rewards_curr = rewards_alt_1
         else:
@@ -98,7 +99,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
             node.right.cut_parent()
 
             rewards_alt_2 = rl.collect_rewards_par(config, tree_alt_2, episodes, should_norm_state, n_jobs=n_jobs)
-            fill_tree_given_data(tree_alt_2, rewards_alt_2, alpha, task_solution_threshold)
+            fill_tree_given_data(tree_alt_2, rewards_alt_2, alpha, task_solution_threshold, should_penalize_std)
             printv(f"---- Replaced '{config['attributes'][node.attribute][0]} <= {node.threshold}' with its right node.", verbose)
             printv(f"------ Tree:     {'{:.3f}'.format(np.mean(rewards_curr))} +- {'{:.3f}'.format(np.std(rewards_curr))}. (size: {tree.get_tree_size()}, fit: {tree.fitness}, sr: {tree.success_rate})", verbose)
             printv(f"------ Alt tree: {'{:.3f}'.format(np.mean(rewards_alt_2))} +- {'{:.3f}'.format(np.std(rewards_alt_2))}. (size: {tree_alt_2.get_tree_size()}, fit: {tree_alt_2.fitness}, sr: {tree_alt_2.success_rate})", verbose)
@@ -107,7 +108,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
             printv(f"------ KL Stat: {stats}, P-value: {pvalue}", verbose)
 
             if (tree_alt_2.fitness >= tree.fitness) or (tree_alt_2.success_rate >= tree.success_rate) or (stats < kstest_threshold and should_use_kstest):
-                printv(f"------ [green]Maintaining change.[/green] ([yellow]{'fitness' if tree_alt_2.fitness > tree.fitness else ('success rate' if tree_alt_2.success_rate > tree.success_rate else 'kstest')}[/yellow])", verbose)
+                printv(f"------ [green]Maintaining change.[/green] ([yellow]{'fitness' if tree_alt_2.fitness > tree.fitness else ('success rate' if tree_alt_2.success_rate >= tree.success_rate else 'kstest')}[/yellow])", verbose)
                 tree = tree_alt_2
                 rewards_curr = rewards_alt_2
             else:
@@ -130,7 +131,9 @@ if __name__ == "__main__":
     parser.add_argument('--episodes', help='How many episodes to run?', required=True, type=int)
     parser.add_argument('--norm_state', help="Should normalize state?", required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--n_jobs', help="How many jobs to run?", type=int, required=False, default=-1)
+    parser.add_argument('--start_run_id', help='Which run id to start from?', required=False, default=0, type=int)
     parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=True, default=None, type=int)
+    parser.add_argument('--should_penalize_std', help='Should penalize standard deviation?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     args = vars(parser.parse_args())
 
     filepath = args["output"]
@@ -153,7 +156,7 @@ if __name__ == "__main__":
     else:
         simulations = args["simulations"]
     
-    for simulation_id in range(simulations):
+    for simulation_id in range(args["start_run_id"], simulations):
         # Initialization
         run_id = datetime.now().strftime("%Y-%m-%d_%I-%M-%S")
 
@@ -178,7 +181,7 @@ if __name__ == "__main__":
             tree, hist = reward_pruning(tree, tree, config, episodes=args["episodes"], alpha=args["alpha"], 
                 should_norm_state=False, should_use_kstest=args["should_use_kstest"], n_jobs=args["n_jobs"],
                 task_solution_threshold=args["task_solution_threshold"], kstest_threshold=args["kstest_threshold"],
-                verbose=True, run_id=run_id)
+                verbose=True, run_id=run_id, should_penalize_std=args["should_penalize_std"])
             
             history += hist
         END_TIME = time.time()
