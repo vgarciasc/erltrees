@@ -125,7 +125,11 @@ class TreeNode:
             output += "-" * depth + " "
 
             if node.is_leaf():
-                output += (self.config['actions'][node.label]).upper()
+                if self.config["action_type"] == "continuous":
+                    output += str(node.label)
+                else:
+                    output += (self.config['actions'][node.label]).upper()
+
                 if include_visits:
                     output += f" (visits: {node.visits})"
                 # output += (self.config['actions'][np.argmax(node.q_values)]).upper() + " " + str(node.q_values)
