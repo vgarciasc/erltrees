@@ -14,6 +14,34 @@ import erltrees.rl.utils as rl
 from scipy.stats import ks_2samp, anderson_ksamp
 from erltrees.io import printv, console
 
+def save_running_info_to_file(filepath, tree, command_line, simulation, iteration, round):
+    if (simulation + iteration) == 0:
+        mode = "w"
+    else:
+        mode = "a"
+
+    with open(filepath, mode) as file:
+        string = ""
+        if simulation == 0:
+            string += command_line
+            string += "\n\n"
+
+        if round == 0 and iteration == 0:
+            string += f"Simulation #{simulation}\n"
+            string += "-" * 50 + "\n"
+
+        if iteration == 0:
+            string += f"Round #{round}\n"
+            string += "-" * 50 + "\n"
+
+        string += f"Simulation #{simulation} // Round #{round} // Iteration #{iteration}\n"
+        string += f"Reward {tree.reward} +- {tree.std_reward}, Size {tree.get_tree_size()}, Success Rate {tree.success_rate} \n"
+        string += "-" * 50 + "\n"
+        string += str(tree)
+        string += "\n\n"
+
+        file.write(string)
+
 def save_history_to_file(filepath, history):
     with open(filepath, "a+") as file:
         for row in history:
@@ -51,9 +79,10 @@ def fill_tree_given_data(tree, rewards, alpha, task_solution_threshold, should_p
     tree.std_reward = np.std(rewards)
 
 def reward_pruning(tree, node, config, episodes=100, alpha=0,
-    task_solution_threshold=0, should_norm_state=True, 
-    should_use_kstest=True, n_jobs=4, verbose=False,
-    kstest_threshold=0.1, run_id="default", should_penalize_std=False):
+                   task_solution_threshold=0, should_norm_state=True,
+                   should_use_kstest=True, n_jobs=4, verbose=False,
+                   round_id=0, simulation_id=0, tmp_filepath="tmp.txt", command_line="default",
+                   kstest_threshold=0.1, run_id="default", should_penalize_std=False):
 
     tree = tree.copy()
     history = []
@@ -67,7 +96,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
     rewards_curr = rl.collect_rewards_par(config, tree, episodes, should_norm_state, n_jobs=n_jobs)
     fill_tree_given_data(tree, rewards_curr, alpha, task_solution_threshold, should_penalize_std)
 
-    for node_path in node_paths:
+    for iteration, node_path in enumerate(node_paths):
         printv("-----------------------", verbose)
         printv(f"-- Pruning a tree with {tree.get_tree_size()} nodes.", verbose)
         # process = psutil.Process(os.getpid())
@@ -115,6 +144,7 @@ def reward_pruning(tree, node, config, episodes=100, alpha=0,
                 printv(f"------ [red]Undoing change.[/red]", verbose)
         
         history.append((run_id, tree.get_tree_size(), tree.reward, tree.std_reward, tree.fitness, tree.success_rate))
+        save_running_info_to_file(tmp_filepath, tree, command_line, simulation_id, iteration, round_id)
 
     return tree, history        
 
@@ -138,6 +168,7 @@ if __name__ == "__main__":
 
     filepath = args["output"]
     history_filepath = "data/reward_pruning_log.txt"
+    tmp_filepath = filepath.split(".")[0] + "_tmp.txt"
 
     command_line = str(args)
     command_line += "\n\npython -m erltrees.experiments.reward_pruning " + " ".join([f"--{key} {val}" for (key, val) in args.items()])
@@ -181,7 +212,9 @@ if __name__ == "__main__":
             tree, hist = reward_pruning(tree, tree, config, episodes=args["episodes"], alpha=args["alpha"], 
                 should_norm_state=False, should_use_kstest=args["should_use_kstest"], n_jobs=args["n_jobs"],
                 task_solution_threshold=args["task_solution_threshold"], kstest_threshold=args["kstest_threshold"],
-                verbose=True, run_id=run_id, should_penalize_std=args["should_penalize_std"])
+                run_id=run_id, simulation_id=simulation_id, round_id=round, tmp_filepath=tmp_filepath,
+                command_line=command_line,
+                should_penalize_std=args["should_penalize_std"], verbose=True)
             
             history += hist
         END_TIME = time.time()
