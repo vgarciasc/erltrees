@@ -30,10 +30,10 @@ if __name__ == "__main__":
     history = []
     for i, tree in enumerate(trees):
         fill_metrics(config, [tree], alpha=0.0, episodes=args['episodes'], should_norm_state=False, penalize_std=False, task_solution_threshold=config["task_solution_threshold"], n_jobs=8)
-        print(f"\t[{i}/{len(trees)}]: Reward: {tree.reward} +- {tree.std_reward}, SR: {tree.success_rate}, Size: {tree.get_tree_size()}")
+        print(f"\t[{str.rjust(str(i), 2, ' ')}/{len(trees)}]: Reward: {tree.reward:.4f} ± {tree.std_reward:.4f}, SR: {tree.success_rate:.4f}, Size: {tree.get_tree_size()}")
         history.append((tree, tree.reward, tree.get_tree_size(), tree.success_rate))
 
-    print(f"[red]AVERAGE[/red]: reward: {np.mean([t.reward for t in trees])} +- {np.mean([t.std_reward for t in trees])}, SR: {np.mean([t.success_rate for t in trees])}, size: {np.mean([t.get_tree_size() for t in trees])}")
+    print(f"[red]AVERAGE[/red]: reward: {np.mean([t.reward for t in trees])} ± {np.mean([t.std_reward for t in trees])}, SR: {np.mean([t.success_rate for t in trees])}, size: {np.mean([t.get_tree_size() for t in trees])}")
 
     # Save to file
     if args['output'] is not None:
@@ -42,14 +42,14 @@ if __name__ == "__main__":
         trees, rewards, sizes, successes = zip(*history)
         trees = np.array(trees)
 
-        string += f"Mean Best Reward: {np.mean(rewards)} +- {np.std(rewards)}\n"
+        string += f"Mean Best Reward: {np.mean(rewards)} ± {np.std(rewards)}\n"
         string += f"Mean Best Size: {np.mean(sizes)}\n"
         string += f"Average Evaluations to Success: -------\n"
         string += f"Success Rate: {np.mean(successes)}\n"
         string += "\n-----\n\n"
 
         for i, tree in enumerate(trees):
-            string += f"Tree #{i} (Reward: {tree.reward} +- {tree.std_reward}, Size: {tree.get_tree_size()}, Success Rate: {tree.success_rate})\n"
+            string += f"Tree #{i} (Reward: {tree.reward:.5f} ± {tree.std_reward:.5f}, Size: {tree.get_tree_size()}, Success Rate: {tree.success_rate:.5f})\n"
             string += "----------\n"
             string += str(tree)
             string += "\n"

@@ -22,7 +22,7 @@ def save_running_info_to_file(filepath, tree, command_line, simulation, iteratio
 
     with open(filepath, mode) as file:
         string = ""
-        if simulation == 0:
+        if simulation == 0 and round == 0 and iteration == 0:
             string += command_line
             string += "\n\n"
 

@@ -16,11 +16,11 @@ from erltrees.io import console
 import erltrees.rl.utils as rl
 import erltrees.il.utils as il
 
-
 def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
                fitness_alpha=0.1, iterations=50, episodes=100, should_penalize_std=False,
                task_solution_threshold=None, should_attenuate_alpha=False,
                n_jobs=-1):
+
     dt = get_model_to_train(config, model_name)
     dt.fit(X, y, pruning=pruning_alpha)
     rl.fill_metrics(config, [dt], alpha=fitness_alpha,
@@ -36,6 +36,8 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
     for i in range(iterations):
         if should_attenuate_alpha:
             curr_alpha = pruning_alpha * (i / iterations)
+
+        start_time = time.perf_counter()
 
         # Collect trajectories from student and correct them with expert
         X2, _, rewards = il.get_dataset_from_model(config, dt, episodes)
@@ -53,7 +55,7 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
         print(f"Fitness is {dt.fitness}. Success rate is {dt.success_rate}")
         print(f"-- Dataset length: {len(X)}")
         print(f"-- Obtained tree with {dt.get_size()} nodes.")
-        print(f"-- Elapsed time: {elapsed_time}.")
+        print(f"-- Elapsed time: {elapsed_time:.3f} seconds.")
 
         history.append((i, dt.reward, dt.std_reward, dt.get_size(), dt))
 
@@ -77,14 +79,12 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
         # D = random.sample(D, args['dataset_size'])
         # X, y = zip(*D)
 
-        start_time = time.time()
-
         # Train new student
         dt = get_model_to_train(config, model_name)
         dt.fit(X, y, pruning=curr_alpha)
 
         # Housekeeping
-        elapsed_time = time.time() - start_time
+        elapsed_time = time.perf_counter() - start_time
 
     return best_model, best_fitness, zip(*history)
 

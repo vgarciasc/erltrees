@@ -5,7 +5,7 @@ import io
 from erltrees.evo.evo_tree import Individual
 
 def convert_tree_string_to_dot(string):
-    dot_string = "graph DecisionTree {\n"
+    dot_string = "graph DecisionTree {"
     lines = [line.strip() for line in string.split("\n")]
 
     parents = [None for _ in lines]
@@ -28,7 +28,7 @@ def convert_tree_string_to_dot(string):
         dot_string += f'{"  " * depth}{node_id}[label=\"{node_label}\", shape=box, style=filled, fillcolor={node_color}, color={edge_color}];\n'
 
         if parent_id:
-            dot_string += f'{"  " * depth}{parent_id} -- {node_id}[color={edge_color}];\n'
+            dot_string += f'{"  " * depth}{parent_id} -- {node_id}[color={edge_color}]; '
 
         parents[depth] = node_id
 
