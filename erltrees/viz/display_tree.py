@@ -5,8 +5,10 @@ import tkinter.ttk as ttk
 import pydotplus
 from PIL import ImageTk, Image
 import io
-from graph_utils import convert_tree_string_to_dot
+from erltrees.viz.graph_utils import convert_tree_string_to_dot
 from rich import print
+import os
+os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin/'
 
 decision_tree_string = """- maize growing stage <= 2
 -- biomass above <= 104.309
@@ -31,7 +33,8 @@ def get_current_image():
         return last_valid_image
 
 def update_image():
-    rendered_image = ImageTk.PhotoImage(get_current_image())
+    photo = get_current_image()
+    rendered_image = ImageTk.PhotoImage(photo)
     tree_image["image"] = rendered_image
 
 def save_image():
