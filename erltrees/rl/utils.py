@@ -270,7 +270,7 @@ def fill_metrics_par(n_jobs, config, trees, alpha, episodes=10, timeout=10*60,
                                                                                    penalize_std=penalize_std) for
                                                           partition in partitions)
             was_successful = True
-        except TimeoutError:
+        except TimeoutError as e:
             console.log("During 'fill_metrics_par': one of the jobs timed out after 10 minutes.")
             console.log("Trying again...")
 
