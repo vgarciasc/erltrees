@@ -1,10 +1,12 @@
 from gc import collect
 import pdb
-from time import time
+from time import time, perf_counter
 import numpy as np
 import gym
 
 from joblib import Parallel, delayed
+from rich import print, console
+console = console.Console()
 
 norm_state_mins = None
 norm_state_maxs = None
@@ -59,13 +61,20 @@ def collect_rewards_seq(config, tree, episodes, should_norm_state, render=False)
     env.close()
     return total_rewards
 
-def collect_rewards_par(config, tree, episodes, should_norm_state, n_jobs=4):
+def collect_rewards_par(config, tree, episodes, should_norm_state, n_jobs=4, timeout=10*60):
     episodes_partition = [episodes // n_jobs for _ in range(n_jobs)]
     episodes_partition[-1] += episodes % n_jobs
 
-    total_rewards = Parallel(n_jobs=n_jobs)(delayed(collect_rewards_seq)(
-        config, tree, partition, should_norm_state=should_norm_state)
-        for partition in episodes_partition)
+    was_successful = False
+    while not was_successful:
+        try:
+            total_rewards = Parallel(n_jobs=n_jobs, timeout=timeout)(delayed(collect_rewards_seq)(
+                config, tree, partition, should_norm_state=should_norm_state)
+                for partition in episodes_partition)
+            was_successful = True
+        except TimeoutError:
+            console.log("During 'collect_rewards_par': One of the jobs timed out after 10 minutes.")
+            console.log("Trying again...")
     total_rewards = [item for sublist in total_rewards for item in sublist]
 
     return total_rewards
@@ -105,8 +114,8 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
 
     env = config['maker']()
 
-    for tree in trees:
-        rewards = collect_rewards(config, tree, episodes, 
+    for i, tree in enumerate(trees):
+        rewards = collect_rewards(config, tree, episodes,
             should_norm_state=should_norm_state, render=render, 
             n_jobs=n_jobs)
 
@@ -244,18 +253,27 @@ def collect_metrics(config, trees, alpha=0.5, episodes=10,
 
 #     return output
 
-def fill_metrics_par(n_jobs, config, trees, alpha, episodes=10, 
+def fill_metrics_par(n_jobs, config, trees, alpha, episodes=10, timeout=10*60,
     should_norm_state=False, task_solution_threshold=None, penalize_std=False):
 
-    partitions = [trees[len(trees)//n_jobs * i : len(trees)//n_jobs * (i+1)] 
-        for i in range(n_jobs)]
+    partitions = [trees[len(trees)//n_jobs * i : len(trees)//n_jobs * (i+1)] for i in range(n_jobs)]
     partitions[-1] = trees[len(trees)//n_jobs * (n_jobs-1) :]
-    
-    metrics = Parallel(n_jobs=n_jobs)(delayed(collect_metrics)(config, 
-        partition, alpha=alpha, episodes=episodes, 
-        should_norm_state=should_norm_state, 
-        task_solution_threshold=task_solution_threshold,
-        penalize_std=penalize_std) for partition in partitions)
+
+    was_successful = False
+    while not was_successful:
+        try:
+            metrics = Parallel(n_jobs=n_jobs, timeout=timeout)(delayed(collect_metrics)(config,
+                                                                                   partition, alpha=alpha,
+                                                                                   episodes=episodes,
+                                                                                   should_norm_state=should_norm_state,
+                                                                                   task_solution_threshold=task_solution_threshold,
+                                                                                   penalize_std=penalize_std) for
+                                                          partition in partitions)
+            was_successful = True
+        except TimeoutError:
+            console.log("During 'fill_metrics_par': one of the jobs timed out after 10 minutes.")
+            console.log("Trying again...")
+
     metrics = [tree_metric for tree_metrics in metrics for tree_metric in tree_metrics]
 
     for (i, (reward, std_reward, fitness, success_rate)) in enumerate(metrics):
@@ -277,7 +295,7 @@ def fill_metrics(config, trees, alpha, episodes=10,
     should_norm_state=False, penalize_std=False,
     task_solution_threshold=None, n_jobs=-1):
 
-    if n_jobs == -1:
+    if n_jobs == -1 or n_jobs == 1:
         fill_metrics_seq(config, trees, alpha, episodes=episodes,
             should_norm_state=should_norm_state,
             task_solution_threshold=task_solution_threshold,
