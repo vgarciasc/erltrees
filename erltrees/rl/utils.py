@@ -75,7 +75,7 @@ def collect_rewards_par(config, tree, episodes, should_norm_state, n_jobs=4, tim
                 config, tree, partition, should_norm_state=should_norm_state)
                 for partition in episodes_partition)
             was_successful = True
-        except TimeoutError:
+        except multiprocessing.context.TimeoutError:
             console.log("During 'collect_rewards_par': One of the jobs timed out after 10 minutes.")
             console.log("Trying again...")
     total_rewards = [item for sublist in total_rewards for item in sublist]
