@@ -8,13 +8,13 @@ from datetime import datetime
 from rich import print
 
 import erltrees.rl.utils as rl
-from erltrees.il.distilled_tree import DistilledTree
+from erltrees.il.distilled_tree import ClassificationTree
 from erltrees.il.regressor_tree import RegressorTree
 from erltrees.rl.configs import get_config
 
 def get_model_to_train(config, name):
-    if name == "DistilledTree":
-        return DistilledTree(config)
+    if name == "ClassificationTree":
+        return ClassificationTree(config)
     if name == "RegressorTree":
         return RegressorTree(config)
     return None
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     print(f"Average reward is {dt.reward} ± {dt.std_reward}.")
 
     # Saving results
-    if args['class'] == "DistilledTree":
+    if args['class'] == "ClassificationTree":
         print(f"Resulting tree has {dt.get_size()} leaves and depth {dt.model.get_depth()}.")
 
         # dt.save_model(f"data/best_bc_{config['name']}")

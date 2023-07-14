@@ -5,10 +5,10 @@ import numpy as np
 from sklearn import tree
 from sklearn.tree._tree import TREE_LEAF
 
-from erltrees.il.distilled_tree import DistilledTree
+from erltrees.il.distilled_tree import ClassificationTree
 
 
-class RegressorTree(DistilledTree):
+class RegressorTree(ClassificationTree):
     def __init__(self, config):
         self.config = config
 

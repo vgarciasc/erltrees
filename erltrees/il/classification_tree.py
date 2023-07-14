@@ -5,7 +5,7 @@ import numpy as np
 from sklearn import tree
 from sklearn.tree._tree import TREE_LEAF
 
-class DistilledTree:
+class ClassificationTree:
     def __init__(self, config):
         self.config = config
     
@@ -68,7 +68,7 @@ class DistilledTree:
         return output
     
     def prune_redundant_leaves(self):
-        DistilledTree.prune_duplicate_leaves(self.model)
+        ClassificationTree.prune_duplicate_leaves(self.model)
 
     def is_leaf(inner_tree, index):
         # Check whether node is leaf node
@@ -79,14 +79,14 @@ class DistilledTree:
         # Start pruning from the bottom - if we start from the top, we might miss
         # nodes that become leaves during pruning.
         # Do not use this directly - use prune_duplicate_leaves instead.
-        if not DistilledTree.is_leaf(inner_tree, inner_tree.children_left[index]):
-            DistilledTree.prune_index(inner_tree, decisions, inner_tree.children_left[index])
-        if not DistilledTree.is_leaf(inner_tree, inner_tree.children_right[index]):
-            DistilledTree.prune_index(inner_tree, decisions, inner_tree.children_right[index])
+        if not ClassificationTree.is_leaf(inner_tree, inner_tree.children_left[index]):
+            ClassificationTree.prune_index(inner_tree, decisions, inner_tree.children_left[index])
+        if not ClassificationTree.is_leaf(inner_tree, inner_tree.children_right[index]):
+            ClassificationTree.prune_index(inner_tree, decisions, inner_tree.children_right[index])
 
         # Prune children if both children are leaves now and make the same decision:     
-        if (DistilledTree.is_leaf(inner_tree, inner_tree.children_left[index]) and
-            DistilledTree.is_leaf(inner_tree, inner_tree.children_right[index]) and
+        if (ClassificationTree.is_leaf(inner_tree, inner_tree.children_left[index]) and
+            ClassificationTree.is_leaf(inner_tree, inner_tree.children_right[index]) and
             (decisions[index] == decisions[inner_tree.children_left[index]]) and 
             (decisions[index] == decisions[inner_tree.children_right[index]])):
             # turn node into a leaf by "unlinking" its children
@@ -97,4 +97,4 @@ class DistilledTree:
     def prune_duplicate_leaves(mdl):
         # Remove leaves if both 
         decisions = mdl.tree_.value.argmax(axis=2).flatten().tolist() # Decision for each node
-        DistilledTree.prune_index(mdl.tree_, decisions)
+        ClassificationTree.prune_index(mdl.tree_, decisions)

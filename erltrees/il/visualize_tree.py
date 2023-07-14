@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     # Printing size
     tree_size = None
-    if args['class'] == "DistilledTree":
+    if args['class'] == "ClassificationTree":
         tree_size = model.get_size()
         depth = model.model.get_depth()
         print(f"Tree has {tree_size} nodes and depth {depth}.")

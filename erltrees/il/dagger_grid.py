@@ -24,7 +24,7 @@ def run_grid_dagger(config, X, y, expert, start, end, steps,
 
     for i, pruning_alpha in enumerate(np.linspace(start, end, steps)):
         # Run behavior cloning for this value of pruning
-        dt, _, _ = run_dagger(config, X, y, "DistilledTree", expert, fitness_alpha=0.001, pruning_alpha=pruning_alpha, 
+        dt, _, _ = run_dagger(config, X, y, "ClassificationTree", expert, fitness_alpha=0.001, pruning_alpha=pruning_alpha,
             iterations=dagger_iterations, episodes=dagger_episodes, should_penalize_std=True,
             task_solution_threshold=task_solution_threshold, should_attenuate_alpha=False,
             n_jobs=n_jobs)

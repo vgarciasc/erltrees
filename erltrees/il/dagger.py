@@ -114,7 +114,7 @@ def plot_dagger(config, avg_rewards, deviations, nodes, alpha, episodes, show=Fa
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='DAgger')
     parser.add_argument('-t', '--task', help="Which task to run?", required=True)
-    parser.add_argument('-c', '--class', help='Model to use', required=True)
+    parser.add_argument('-c', '--class', help='Model to use', required=False, default='ClassificationTree')
     parser.add_argument('-e', '--expert_class', help='Expert class is MLP or KerasDNN?', required=True)
     parser.add_argument('-f', '--expert_filepath', help='Filepath for expert', required=True)
     parser.add_argument('-p', '--pruning', help='Pruning alpha to use', required=True, type=float)

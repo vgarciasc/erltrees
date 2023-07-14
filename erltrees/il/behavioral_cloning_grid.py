@@ -24,7 +24,7 @@ def run_grid_behavior_cloning(config, X, y, start, end, steps,
     for i, pruning_alpha in enumerate(np.linspace(start, end, steps)):
         # Run behavior cloning for this value of pruning
         dt = run_behavior_cloning(
-            config, X, y, "DistilledTree",
+            config, X, y, "ClassificationTree",
             pruning_alpha=pruning_alpha)
 
         # Evaluating tree
