@@ -1,7 +1,7 @@
 import math
 import gym
 import numpy as np
-import gym_dssat_pdi
+# import gym_dssat_pdi
 
 from erltrees.rl.sb3_wrapper_dssat import GymDssatWrapper
 
