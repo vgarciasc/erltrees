@@ -1,0 +1,4 @@
+.pdf
+.zip
+**/output
+**/__pycache__
