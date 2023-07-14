@@ -154,16 +154,15 @@ if __name__ == "__main__":
     parser.add_argument('-f','--input', help="Which file to use as input?", type=str, required=True)
     parser.add_argument('-a','--alpha', help='Which alpha to use?', required=True, default=1.0, type=float)
     parser.add_argument('-o','--output', help="Which file to use as output?", type=str, required=True)
-    parser.add_argument('--should_use_kstest', help='Should use KS test to detect if trees are equal?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
-    parser.add_argument('--kstest_threshold', help='Which KS test threshold to use?', required=False, default=0.1, type=float)
     parser.add_argument('--rounds', help='How many rounds for reward pruning?', required=True, default=1, type=int)
     parser.add_argument('--simulations', help='How many simulations to run?', required=False, default=-1, type=int)
     parser.add_argument('--episodes', help='How many episodes to run?', required=True, type=int)
     parser.add_argument('--norm_state', help="Should normalize state?", required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
-    parser.add_argument('--n_jobs', help="How many jobs to run?", type=int, required=False, default=-1)
-    parser.add_argument('--start_run_id', help='Which run id to start from?', required=False, default=0, type=int)
-    parser.add_argument('--task_solution_threshold', help='Minimum reward to solve task', required=True, default=None, type=int)
     parser.add_argument('--should_penalize_std', help='Should penalize standard deviation?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--should_use_kstest', help='Should use KS test to detect if trees are equal?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--kstest_threshold', help='Which KS test threshold to use?', required=False, default=0.1, type=float)
+    parser.add_argument('--start_run_id', help='Which run id to start from?', required=False, default=0, type=int)
+    parser.add_argument('--n_jobs', help="How many jobs to run?", type=int, required=False, default=-1)
     args = vars(parser.parse_args())
 
     filepath = args["output"]
@@ -211,7 +210,7 @@ if __name__ == "__main__":
             
             tree, hist = reward_pruning(tree, tree, config, episodes=args["episodes"], alpha=args["alpha"], 
                 should_norm_state=False, should_use_kstest=args["should_use_kstest"], n_jobs=args["n_jobs"],
-                task_solution_threshold=args["task_solution_threshold"], kstest_threshold=args["kstest_threshold"],
+                task_solution_threshold=config["task_solution_threshold"], kstest_threshold=args["kstest_threshold"],
                 run_id=run_id, simulation_id=simulation_id, round_id=round, tmp_filepath=tmp_filepath,
                 command_line=command_line,
                 should_penalize_std=args["should_penalize_std"], verbose=True)
@@ -222,7 +221,7 @@ if __name__ == "__main__":
 
         # Evaluating final tree
         rl.collect_metrics(config, [tree], args["alpha"], args["episodes"], should_norm_state=False, penalize_std=True, 
-            should_fill_attributes=True, task_solution_threshold=args["task_solution_threshold"], n_jobs=args["n_jobs"])
+            should_fill_attributes=True, task_solution_threshold=config["task_solution_threshold"], n_jobs=args["n_jobs"])
         final_trees.append(tree)
 
         # Housekeeping
