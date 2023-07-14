@@ -9,7 +9,7 @@ import erltrees.rl.utils as rl
 from erltrees.il.ppo import PPOAgent
 
 def handle_args(args, config):
-    filename = args['expert_filepath']
+    filename = args['expert_path']
 
     if args['expert_class'] == "KerasDNN":
         expert = KerasDNN(config, exploration_rate=args['expert_exploration_rate'])

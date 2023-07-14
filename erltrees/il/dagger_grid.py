@@ -77,7 +77,7 @@ def plot_dagger_grid(history, filename=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Behavior Cloning Grid')
     parser.add_argument('-t','--task',help="Which task to run?", required=True)
-    parser.add_argument('-f','--expert_filepath', help='Filepath for expert', required=True)
+    parser.add_argument('-f','--expert_path', help='Filepath for expert', required=True)
     parser.add_argument('-c','--expert_class', help='Expert class is MLP or KerasDNN?', required=True)
     parser.add_argument('-s','--start', help='Starting point for pruning alpha', required=True, type=float)
     parser.add_argument('-e','--end', help='Ending point for pruning alpha', required=True, type=float)

@@ -116,7 +116,7 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--task', help="Which task to run?", required=True)
     parser.add_argument('-c', '--class', help='Model to use', required=False, default='ClassificationTree')
     parser.add_argument('-e', '--expert_class', help='Expert class is MLP or KerasDNN?', required=True)
-    parser.add_argument('-f', '--expert_filepath', help='Filepath for expert', required=True)
+    parser.add_argument('-f', '--expert_path', help='Filepath for expert', required=True)
     parser.add_argument('-p', '--pruning', help='Pruning alpha to use', required=True, type=float)
     parser.add_argument('-a', '--fitness_alpha', help='Fitness alpha to use when evaluating trees', required=False, default=1.0, type=float)
     parser.add_argument('-i', '--iterations', help='Number of iterations to run', required=True, type=int)

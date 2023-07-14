@@ -29,7 +29,7 @@ if __name__ == "__main__":
     parser.add_argument('-t','--task',help="Which task to run?", required=True)
     parser.add_argument('-c','--class', help='Model to use', required=True)
     parser.add_argument('-e','--expert_class', help='Expert class is MLP or KerasDNN?', required=True)
-    parser.add_argument('-f','--expert_filepath', help='Filepath for expert', required=True)
+    parser.add_argument('-f','--expert_path', help='Filepath for expert', required=True)
     parser.add_argument('-p','--pruning', help='Pruning alpha to use', required=True, type=float)
     parser.add_argument('--should_collect_dataset', help='Should collect and save new dataset?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--dataset_size', help='Size of new dataset to create', required=False, default=0, type=int)
