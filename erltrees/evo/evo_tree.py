@@ -279,6 +279,9 @@ class Individual(tree.TreeNode):
         child_count = [0 for _ in lines]
 
         for line in lines[1:]:
+            if line.strip() == "":
+                continue
+
             depth = line.rindex("- ") + 1
 
             content = line[depth:].strip()

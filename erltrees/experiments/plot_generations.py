@@ -25,6 +25,10 @@ def parse_file(filename):
 
                 solutions[-1].append((fitness, avg_reward, std_reward, tree_size, success_rate))
 
+    print(f"Identified {len(solutions)} simulations.")
+    solutions = [np.array(sol) for sol in solutions if len(sol) == len(solutions[0])]
+    print(f"Selected {len(solutions)} simulations, after removing incomplete ones.")
+
     return np.array(solutions)
 
 def generic_plot_1(title, files, algos):
@@ -131,7 +135,7 @@ def generic_plot_3(title, files, algos, solution_threshold):
     fig, ax = plt.subplots(1, 3, figsize=(14, 4))
     sns.set_theme()
 
-    x = range(200) # Number of generations
+    x = range(50) # Number of generations
     colors = ["red", "blue", "green", "orange", "purple", "brown", "pink", "gray", "olive", "cyan"]
 
     ax = plt.subplot(1, 3, 1)
@@ -157,6 +161,7 @@ def generic_plot_3(title, files, algos, solution_threshold):
         ax.fill_between(x, sol_mean - sol_std, sol_mean + sol_std, alpha=0.2, color=colors[i])
 
     ax.plot(x, np.ones(len(x)) * solution_threshold, label="Solution threshold", color="black", linestyle="dashed")
+    ax.legend(loc='lower right')
 
     ax.set_xlabel('Generations')
     ax.set_ylabel('Average Reward')
@@ -175,22 +180,27 @@ def generic_plot_3(title, files, algos, solution_threshold):
 
     # Show the plot
     plt.suptitle(title)
-    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    # plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     plt.subplots_adjust(wspace=0.255)
     plt.show()
 
 if __name__ == '__main__':
-    generic_plot_3("Cartpole", ["../../../CRO_DT_RL/results/complete/cartpole_CRO__tmp_2023_03_23-15_22_26.txt",
-        "../../../CRO_DT_RL/results/complete/cartpole_IL-CRO__tmp_2023_03_30-16_39_00.txt",
-        "../../../CRO_DT_RL/results/complete/cartpole_IL-RP-CRO__tmp_2023_03_30-16_38_59.txt"],
-                   ["CRO-DT-RL (R)", "CRO-DT-RL (IL)", "CRO-DT-RL (P)"], 495)
+    generic_plot_3("DSSAT", ["../../../CRO_DT_RL/results/DSSAT/final/dssat_CRO_2023_06_07-11_56_31_FULL_tmp.txt",
+                             "../../../CRO_DT_RL/results/DSSAT/final/dssat_CRO-IL_2023_06_02-22_02_28_FULL_tmp.txt",
+                             "../../../CRO_DT_RL/results/DSSAT/final/dssat_CRO-IL-RP_2023_06_13-18_28_58_FULL_tmp.txt"],
+                   ["CRO-DT-RL (R)", "CRO-DT-RL (IL)", "CRO-DT-RL (P)"], 30)
 
-    generic_plot_2("Mountain Car", ["../../../CRO_DT_RL/results/complete/mountain-car_CRO__tmp_2023_02_08-11_08_34.txt",
-        "../../../CRO_DT_RL/results/complete/mountain-car_IL-CRO__tmp_2023_03_21-13_15_47.txt",
-        "../../../CRO_DT_RL/results/complete/mountain-car_IL-RP-CRO__tmp_2023_03_24-12_15_07.txt"],
-                   ["CRO-DT-RL (R)", "CRO-DT-RL (IL)", "CRO-DT-RL (P)"], -110)
-
-    generic_plot_2("Lunar Lander", ["../../../CRO_DT_RL/results/complete/lunarlander_CRO__tmp_2023_02_27-18_53_54.txt",
-        "../../../CRO_DT_RL/results/complete/lunarlander_IL-CRO__tmp_2023_03_02-11_35_43_GRAFTED.txt",
-        "../../../CRO_DT_RL/results/complete/lunarlander_IL-RP-CRO__tmp_2023_02_17-12_56_21.txt"],
-                   ["CRO-DT-RL (R)", "CRO-DT-RL (IL)", "CRO-DT-RL (P)"], 200)
+    # generic_plot_3("Cartpole", ["../../../CRO_DT_RL/results/complete/cartpole_CRO__tmp_2023_03_23-15_22_26.txt",
+    #     "../../../CRO_DT_RL/results/complete/cartpole_IL-CRO__tmp_2023_03_30-16_39_00.txt",
+    #     "../../../CRO_DT_RL/results/complete/cartpole_IL-RP-CRO__tmp_2023_03_30-16_38_59.txt"],
+    #                ["CRO-DT-RL (R)", "CRO-DT-RL (IL)", "CRO-DT-RL (P)"], 495)
+    #
+    # generic_plot_2("Mountain Car", ["../../../CRO_DT_RL/results/complete/mountain-car_CRO__tmp_2023_02_08-11_08_34.txt",
+    #     "../../../CRO_DT_RL/results/complete/mountain-car_IL-CRO__tmp_2023_03_21-13_15_47.txt",
+    #     "../../../CRO_DT_RL/results/complete/mountain-car_IL-RP-CRO__tmp_2023_03_24-12_15_07.txt"],
+    #                ["CRO-DT-RL (R)", "CRO-DT-RL (IL)", "CRO-DT-RL (P)"], -110)
+    #
+    # generic_plot_2("Lunar Lander", ["../../../CRO_DT_RL/results/complete/lunarlander_CRO__tmp_2023_02_27-18_53_54.txt",
+    #     "../../../CRO_DT_RL/results/complete/lunarlander_IL-CRO__tmp_2023_03_02-11_35_43_GRAFTED.txt",
+    #     "../../../CRO_DT_RL/results/complete/lunarlander_IL-RP-CRO__tmp_2023_02_17-12_56_21.txt"],
+    #                ["CRO-DT-RL (R)", "CRO-DT-RL (IL)", "CRO-DT-RL (P)"], 200)

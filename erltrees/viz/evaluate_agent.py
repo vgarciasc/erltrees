@@ -22,9 +22,9 @@ tree_str = "\n- Pole Angular Velocity <= 0.074\n-- Pole Angle <= 0.022\n--- LEFT
 # ---- RIGHT
 # ---- LEFT
 # --- RIGHT"""
-#
-config = get_config("lunar_lander")
-tree_str = "\n- Leg 1 is Touching <= 0.50000\n-- Y Velocity <= -0.09085\n--- Angle <= -0.04364\n---- Y Velocity <= -0.25810\n----- Y Position <= 0.20415\n------ MAIN ENGINE\n------ Angular Velocity <= -0.18925\n------- LEFT ENGINE\n------- X Velocity <= -0.17510\n-------- MAIN ENGINE\n-------- Angular Velocity <= -0.02175\n--------- LEFT ENGINE\n--------- MAIN ENGINE\n----- X Velocity <= 0.02710\n------ RIGHT ENGINE\n------ LEFT ENGINE\n---- Y Velocity <= -0.28725\n----- X Velocity <= -0.39615\n------ RIGHT ENGINE\n------ MAIN ENGINE\n----- Angle <= 0.21595\n------ X Position <= -0.02269\n------- RIGHT ENGINE\n------- Angular Velocity <= 0.18515\n-------- LEFT ENGINE\n-------- MAIN ENGINE\n------ RIGHT ENGINE\n--- Y Position <= 0.00074\n---- NOP\n---- Angle <= 0.02441\n----- LEFT ENGINE\n----- RIGHT ENGINE\n-- Y Velocity <= -0.06200\n--- MAIN ENGINE\n--- Angle <= -0.21080\n---- LEFT ENGINE\n---- NOP"
+
+# config = get_config("lunar_lander")
+# tree_str = "\n- Leg 1 is Touching <= 0.50000\n-- Y Velocity <= -0.09085\n--- Angle <= -0.04364\n---- Y Velocity <= -0.25810\n----- Y Position <= 0.20415\n------ MAIN ENGINE\n------ Angular Velocity <= -0.18925\n------- LEFT ENGINE\n------- X Velocity <= -0.17510\n-------- MAIN ENGINE\n-------- Angular Velocity <= -0.02175\n--------- LEFT ENGINE\n--------- MAIN ENGINE\n----- X Velocity <= 0.02710\n------ RIGHT ENGINE\n------ LEFT ENGINE\n---- Y Velocity <= -0.28725\n----- X Velocity <= -0.39615\n------ RIGHT ENGINE\n------ MAIN ENGINE\n----- Angle <= 0.21595\n------ X Position <= -0.02269\n------- RIGHT ENGINE\n------- Angular Velocity <= 0.18515\n-------- LEFT ENGINE\n-------- MAIN ENGINE\n------ RIGHT ENGINE\n--- Y Position <= 0.00074\n---- NOP\n---- Angle <= 0.02441\n----- LEFT ENGINE\n----- RIGHT ENGINE\n-- Y Velocity <= -0.06200\n--- MAIN ENGINE\n--- Angle <= -0.21080\n---- LEFT ENGINE\n---- NOP"
 
 agent = Individual.read_from_string(config, tree_str)
 # agent.denormalize_thresholds()
@@ -33,8 +33,8 @@ agent = Individual.read_from_string(config, tree_str)
 # Create a Tkinter window
 window = tk.Tk()
 window.title("Decision Tree Agent Evaluation")
-window.geometry("1300x800+400+100")
-window.columnconfigure(0, weight=2, uniform="x")
+window.geometry("600x600+400+100")
+window.columnconfigure(0, weight=1, uniform="x")
 window.columnconfigure(1, weight=1, uniform="x")
 window.rowconfigure(0, weight=1, uniform="y")
 window.rowconfigure(1, weight=1, uniform="y")
@@ -151,7 +151,8 @@ def log_state(state):
 
 
 # Loop to update the environment and display frames
-for episode in range(100):
+episode = 0
+while True:
     # Initialize the Cartpole environment
     state = env.reset()
     done = False
@@ -187,6 +188,7 @@ for episode in range(100):
         # Update the Tkinter window
         window.update()
 
+    episode += 1
     log_message(f"Episode #{str(episode + 1).ljust(2, ' ')}: Reward = {total_reward}\n")
 
 # Close the Cartpole environment

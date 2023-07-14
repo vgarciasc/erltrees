@@ -14,6 +14,7 @@ from rich.console import Console
 
 console = Console()
 
+
 def run_parallel_experiment_1(alpha=0.5, episodes=30, num_trees=100):
     # Initialize population
 
@@ -35,15 +36,16 @@ def run_parallel_experiment_1(alpha=0.5, episodes=30, num_trees=100):
         console.rule(title)
         TIME_START = time()
         rl.fill_metrics(config=config, trees=trees,
-            alpha=alpha, episodes=episodes, 
-            should_norm_state=norm_state,
-            n_jobs=n_jobs)
+                        alpha=alpha, episodes=episodes,
+                        should_norm_state=norm_state,
+                        n_jobs=n_jobs)
         TIME_END = time()
         print(f"Elapsed time: {TIME_END - TIME_START} seconds")
         rewards = [t.reward for t in trees]
         print(f"Average reward: {np.mean(rewards)} +- {np.std(rewards)}")
 
     pdb.set_trace()
+
 
 def run_parallel_experiment_2(episodes=500):
     # Initialize population
@@ -69,16 +71,17 @@ def run_parallel_experiment_2(episodes=500):
         TIME_START = time()
         if n_jobs == -1:
             rewards = rl.collect_rewards(config, tree, episodes,
-                should_norm_state=norm_state)
+                                         should_norm_state=norm_state)
         else:
-            rewards = rl.collect_rewards_par(config, tree, episodes, 
-                should_norm_state=norm_state, n_jobs=n_jobs)
+            rewards = rl.collect_rewards_par(config, tree, episodes,
+                                             should_norm_state=norm_state, n_jobs=n_jobs)
         TIME_END = time()
 
         print(f"Elapsed time: {TIME_END - TIME_START} seconds")
         print(f"Average reward: {np.mean(rewards)} +- {np.std(rewards)}")
 
     pdb.set_trace()
+
 
 def run_parallel_experiment_3(alpha=0.5, episodes=30, num_trees=100):
     # Initialize population
@@ -97,30 +100,30 @@ def run_parallel_experiment_3(alpha=0.5, episodes=30, num_trees=100):
 
     # for n_jobs in [8, 16, 32]:
     for n_jobs in [32, 16, 8, 4, 2, -1]:
-    # for n_jobs in [-1, 2, 4, 8, 16, 32]:
+        # for n_jobs in [-1, 2, 4, 8, 16, 32]:
         title = f"PARALLEL w/ {n_jobs} JOBS" if n_jobs > 1 else "SEQUENTIAL"
         console.rule(title)
         print(f"[yellow]Parallel trees with sequential episodes:")
         TIME_START = time()
-        
+
         rl.fill_metrics(config=config, trees=trees,
-            alpha=alpha, episodes=episodes, 
-            should_norm_state=norm_state,
-            n_jobs=n_jobs)
-        
+                        alpha=alpha, episodes=episodes,
+                        should_norm_state=norm_state,
+                        n_jobs=n_jobs)
+
         TIME_END = time()
         print(f"Elapsed time: {TIME_END - TIME_START} seconds")
         rewards = [t.reward for t in trees]
         print(f"Average reward: {np.mean(rewards)} +- {np.std(rewards)}")
         print()
-        
+
         print(f"[yellow]Parallel episodes with sequential trees:")
         TIME_START = time()
-        
+
         rl.collect_metrics(config, trees, alpha, episodes=episodes,
-            should_norm_state=norm_state, penalize_std=True, 
-            should_fill_attributes=True, render=False, n_jobs=n_jobs)
-        
+                           should_norm_state=norm_state, penalize_std=True,
+                           should_fill_attributes=True, render=False, n_jobs=n_jobs)
+
         TIME_END = time()
         print(f"Elapsed time: {TIME_END - TIME_START} seconds")
         rewards = [t.reward for t in trees]
@@ -128,13 +131,14 @@ def run_parallel_experiment_3(alpha=0.5, episodes=30, num_trees=100):
 
     pdb.set_trace()
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Parallel Experiments')
-    parser.add_argument('-e','--experiment', help="Which experiment to run?", type=int, required=True)
+    parser.add_argument('-e', '--experiment', help="Which experiment to run?", type=int, required=True)
     args = vars(parser.parse_args())
 
     print(f"Starting experiment {args['experiment']}. . .")
-    
+
     if args["experiment"] == 1:
         run_parallel_experiment_1()
     elif args["experiment"] == 2:

@@ -127,17 +127,17 @@ config_DSSAT = {
     "actions": ["nitrogen"],
     "n_attributes": 11,
     "attributes": [
-        ("cumsumfert", "continuous", (0, 50000)),
-        ("dap", "continuous", (0, 366)),
-        ("dtt", "continuous", (0, 100)),
-        ("ep", "continuous", (0, 50)),
-        ("grnwt", "continuous", (0, 50000)),
-        ("istage", "continuous", (0, 9)),
-        ("nstres", "continuous", (0, 1)),
-        ("swfac", "continuous", (0, 1)),
-        ("topwt", "continuous", (0, 1)),
-        ("vstage", "continuous", (0, 30)),
-        ("xlai", "continuous", (0, 10)),
+        ("cumsumfert", "continuous", (0, 50000)), # cumulative nitrogen fertilizer applications (kg/ha)
+        ("dap", "continuous", (0, 366)),          # days after planting (day)
+        ("dtt", "continuous", (0, 100)),          # growing degree days for current day (◦C/day)
+        ("ep", "continuous", (0, 50)),            # actual plant transpiration rate (L/m2/day)
+        ("grnwt", "continuous", (0, 50000)),      # grain weight dry matter (kg/ha)
+        ("istage", "continuous", (0, 9)),         # DSSAT maize growing stage
+        ("nstres", "continuous", (0, 1)),         # index of plant nitrogen stress (unitless)
+        ("swfac", "continuous", (0, 1)),          # index of plant water stress (unitless)
+        ("topwt", "continuous", (0, 1)),          # above the ground population biomass (kg/ha)
+        ("vstage", "continuous", (0, 30)),        # vegetative growth stage (number of leaves)
+        ("xlai", "continuous", (0, 10)),          # plant population leaf area index (m2 leaf/m2 soil)
     ],
     "maker": lambda : GymDssatWrapper(gym.make('gym_dssat_pdi:GymDssatPdi-v0', **{'mode': 'fertilization'})),
 }

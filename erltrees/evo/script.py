@@ -7,11 +7,11 @@ from rich import print
 
 to_run = [
     # ("cartpole", "Silva et al. (2020)", "\n- Pole Angular Velocity <= 0.44\n-- Pole Angle <= 0.01\n--- LEFT\n--- RIGHT\n-- Pole Angular Velocity <= -0.3\n--- Pole Angle <= 0.0\n---- RIGHT\n---- LEFT\n--- Pole Angle <= -0.41\n---- LEFT\n---- RIGHT"),
-    # ("cartpole", "Silva et al. (2020)'s best, as reported by Custode and Iacca", "\n- Pole Angular Velocity <= 0.18\n-- Pole Angle <= 0.00\n--- LEFT\n--- Pole Angular Velocity <= -0.3\n---- LEFT\n---- RIGHT\n-- Pole Angular Velocity <= -0.3\n--- Pole Angle <= 0.00\n---- RIGHT\n---- LEFT\n--- Pole Angle <= -0.41\n---- LEFT\n---- RIGHT"),
-    # ("cartpole", "Custode and Iacca's best", "\n- Pole Angular Velocity <= 0.074\n-- Pole Angle <= 0.022\n--- LEFT\n--- RIGHT\n-- RIGHT"),
+    ("cartpole", "Silva et al. (2020)'s best, as reported by Custode and Iacca", "\n- Pole Angular Velocity <= 0.18\n-- Pole Angle <= 0.00\n--- LEFT\n--- Pole Angular Velocity <= -0.3\n---- LEFT\n---- RIGHT\n-- Pole Angular Velocity <= -0.3\n--- Pole Angle <= 0.00\n---- RIGHT\n---- LEFT\n--- Pole Angle <= -0.41\n---- LEFT\n---- RIGHT"),
+    ("cartpole", "Custode and Iacca's best", "\n- Pole Angular Velocity <= 0.074\n-- Pole Angle <= 0.022\n--- LEFT\n--- RIGHT\n-- RIGHT"),
     # ("cartpole", "EL + IL best", ""),
     # ("cartpole", "RP best", ""),
-    ("cartpole", "test", "\n- Pole Angular Velocity <= -0.08700\n-- LEFT\n-- Pole Angle <= -0.00900\n--- Pole Angular Velocity <= 0.56200\n---- Cart Velocity <= -0.02800\n----- LEFT\n----- RIGHT\n---- RIGHT\n--- RIGHT"),
+    # ("cartpole", "test", "\n- Pole Angular Velocity <= -0.08700\n-- LEFT\n-- Pole Angle <= -0.00900\n--- Pole Angular Velocity <= 0.56200\n---- Cart Velocity <= -0.02800\n----- LEFT\n----- RIGHT\n---- RIGHT\n--- RIGHT"),
     # ("mountain_car", "Custode and Iacca's best", "\n- Car Velocity <= -0.0001\n-- Car Position <= -0.9\n--- RIGHT\n--- LEFT\n-- Car Position <= -0.3\n--- Car Velocity <= 0.035\n---- Car Position <= -0.45\n----- RIGHT\n----- Car Position <= -0.4\n------ RIGHT\n------ LEFT\n---- RIGHT\n--- RIGHT"),
     # ("mountain_car", "EL + IL best", "\n- Car Velocity <= -0.00010\n-- Car Position <= -0.94656\n--- RIGHT\n--- LEFT\n-- Car Velocity <= 0.01796\n--- Car Position <= -0.38836\n---- RIGHT\n---- LEFT\n--- RIGHT"),
     # ("mountain_car", "RP best", "\n"),
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         config = get_config(task_name)
         tree = Individual.read_from_string(config, tree_str)
 
-        rl.fill_metrics(config, [tree], alpha=1.0, episodes=1000, should_norm_state=False, 
+        rl.fill_metrics(config, [tree], alpha=1.0, episodes=10000, should_norm_state=False,
             penalize_std=True, task_solution_threshold=config["task_solution_threshold"], 
             n_jobs=8)
 
