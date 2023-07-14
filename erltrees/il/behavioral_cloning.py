@@ -8,7 +8,7 @@ from datetime import datetime
 from rich import print
 
 import erltrees.rl.utils as rl
-from erltrees.il.distilled_tree import ClassificationTree
+from erltrees.il.classification_tree import ClassificationTree
 from erltrees.il.regressor_tree import RegressorTree
 from erltrees.rl.configs import get_config
 
@@ -38,12 +38,14 @@ if __name__ == "__main__":
     parser.add_argument('--grading_episodes', help='How many episodes to grade model?', required=False, default=100, type=int)
     parser.add_argument('--should_visualize', help='Should visualize final tree?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--verbose', help='Is verbose?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('--seed', help='Which seed to use?', required=False, default=0, type=int)
     args = vars(parser.parse_args())
-    
-    # Initialization
-    config = get_config(args['task'])
 
     from erltrees.il.parser import handle_args
+
+    # Initialization
+    np.random.seed(args['seed'])
+    config = get_config(args['task'])
     expert, X, y = handle_args(args, config)
     
     # Train decision tree

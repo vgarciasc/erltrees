@@ -19,7 +19,7 @@ from keras.regularizers import l1
 from keras.optimizers import Adam
 
 from erltrees.rl.configs import get_config
-from erltrees.il.distilled_tree import ClassificationTree
+from erltrees.il.classification_tree import ClassificationTree
 import erltrees.rl.utils as rl
 
 GAMMA = 0.99

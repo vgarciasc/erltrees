@@ -132,15 +132,18 @@ if __name__ == "__main__":
     parser.add_argument('--simulations', help='How many simulations to run?', required=False, default=1, type=int)
     parser.add_argument('--should_save_models', help='Should save trees?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--should_only_save_best', help='When saving trees, should save only the best, or everything produced?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
-    parser.add_argument('--save_models_pathname', help='Where to save trees?', required=False, default="imitation_learning/models/tmp.txt", type=str)
+    parser.add_argument('--save_models_path', help='Where to save trees?', required=False, default="imitation_learning/models/tmp.txt", type=str)
     parser.add_argument('--verbose', help='Is verbose?', required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--n_jobs', help='How many jobs to parallelize?', required=False, default=-1, type=int)
+    parser.add_argument('--seed', help='Which seed to use?', required=False, default=0, type=int)
     args = vars(parser.parse_args())
 
     from erltrees.il.parser import handle_args
 
     # Initializing
     config = get_config(args['task'])
+    np.random.seed(args['seed'])
+
     expert, X, y = handle_args(args, config)
     print(f"Running {args['class']} DAgger for {config['name']} with pruning = {args['pruning']}.")
 
@@ -204,5 +207,5 @@ if __name__ == "__main__":
 
             model_strs = [model.get_as_viztree() for model in all_models]
 
-            with open(args['save_models_pathname'], "w") as f:
+            with open(args['save_models_path'], "w") as f:
                 json.dump(model_strs, f)

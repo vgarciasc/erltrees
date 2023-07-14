@@ -5,7 +5,7 @@ import numpy as np
 from sklearn import tree
 from sklearn.tree._tree import TREE_LEAF
 
-from erltrees.il.distilled_tree import ClassificationTree
+from erltrees.il.classification_tree import ClassificationTree
 
 
 class RegressorTree(ClassificationTree):
