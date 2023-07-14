@@ -32,12 +32,11 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
     best_fitness = dt.fitness
     best_model = dt
     elapsed_time = 0
+    start_time = time.perf_counter()
 
     for i in range(iterations):
         if should_attenuate_alpha:
             curr_alpha = pruning_alpha * (i / iterations)
-
-        start_time = time.perf_counter()
 
         # Collect trajectories from student and correct them with expert
         X2, _, rewards = il.get_dataset_from_model(config, dt, episodes)
@@ -49,6 +48,9 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
         dt.reward, dt.std_reward, _, dt.success_rate = metrics
         dt.fitness = rl.calc_fitness(dt.reward, dt.std_reward, dt.get_size(),
                                      fitness_alpha, should_penalize_std=should_penalize_std)
+
+        # Housekeeping
+        elapsed_time = time.perf_counter() - start_time
 
         console.rule(f"[red]Step #{i}[/red]")
         print(f"Average reward is {dt.reward} ± {dt.std_reward}.")
@@ -84,7 +86,7 @@ def run_dagger(config, X, y, model_name, expert, pruning_alpha=0.1,
         dt.fit(X, y, pruning=curr_alpha)
 
         # Housekeeping
-        elapsed_time = time.perf_counter() - start_time
+        start_time = time.perf_counter()
 
     return best_model, best_fitness, zip(*history)
 
