@@ -17,7 +17,6 @@ def save_history_to_file(config, history, filepath, elapsed_time=None, prefix=""
 
         string += f"Mean Best Reward: {np.mean(rewards)} +- {np.mean(std_rewards)}\n"
         string += f"Mean Best Size: {np.mean(sizes)}\n"
-        string += f"Average Evaluations to Success: -------\n"
         string += f"Success Rate: {np.mean(successes)}\n"
         if elapsed_time:
             string += f"Elapsed time: {elapsed_time} seconds"
@@ -29,6 +28,26 @@ def save_history_to_file(config, history, filepath, elapsed_time=None, prefix=""
             string += str(tree)
             string += "\n"
     
+    with open(filepath, "w", encoding="utf-8") as text_file:
+        text_file.write(string)
+
+def save_full_history_to_file(config, history, filepath, prefix=""):
+    string = prefix
+
+    if history is not None:
+        string += "\n-----\n\n"
+
+        for i, simulation in enumerate(history):
+            string += f"Simulation #{i+1}\n"
+            string += "="*50 + "\n"
+
+            for j, (best_fitness, tree) in enumerate(simulation):
+                string += f"Generation #{j+1}\n"
+                string += f"Reward: {tree.reward} +- {tree.std_reward}, Size: {tree.get_tree_size()}, Success Rate: {tree.success_rate}\n"
+                string += "-"*50 + "\n"
+                string += str(tree)
+                string += "\n\n"
+
     with open(filepath, "w", encoding="utf-8") as text_file:
         text_file.write(string)
 

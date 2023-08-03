@@ -32,7 +32,7 @@ config_MC = {
     "can_render": True,
     "max_score": 0,
     "min_score": -200,
-    "task_solution_threshold": -105,
+    "task_solution_threshold": -110,
     "should_force_episode_termination_score": False,
     "should_convert_state_to_array": False,
     "conversion_fn": lambda a,b,c : c,
