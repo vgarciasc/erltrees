@@ -8,7 +8,12 @@ from erltrees.viz.graph_utils import convert_tree_to_tree_string, convert_tree_s
 from erltrees.rl.utils import fill_metrics
 import argparse
 
-def run_viz(config, agent, tree_str):
+agent = None
+
+def run_viz(config, init_agent, tree_str):
+    global agent
+    agent = init_agent
+
     # Create a Tkinter window
     window = tk.Tk()
     window.title("Decision Tree Agent Evaluation")
@@ -98,6 +103,8 @@ def run_viz(config, agent, tree_str):
     episodes_launch_button.grid(row=1, column=2, padx=5, pady=5, sticky="w")
 
     def launch_episodes():
+        global agent
+
         try:
             episodes = int(episodes_text.get("1.0", tk.END))
         except:
@@ -166,7 +173,7 @@ def run_viz(config, agent, tree_str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--task", type=str, default="cartpole")
+    parser.add_argument("--task", type=str, default="lunar_lander")
     args = parser.parse_args()
 
     config = get_config(args.task)
