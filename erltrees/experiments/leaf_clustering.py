@@ -56,7 +56,7 @@ if __name__ == "__main__":
     # run louvain community detection
     louvain_communities = nx.algorithms.community.louvain_communities(G, weight="weight")
     greedy_modularity_communities = nx.algorithms.community.greedy_modularity_communities(G, weight="weight")
-    communities = greedy_modularity_communities
+    communities = louvain_communities
 
     tree_string = convert_tree_to_tree_string_with_communities(config, agent, louvain_communities)
     dot_string = convert_tree_string_to_dot(tree_string)
@@ -64,11 +64,11 @@ if __name__ == "__main__":
     graph.render(filename="tmp_louvain", cleanup=True)
     graph.view()
 
-    tree_string = convert_tree_to_tree_string_with_communities(config, agent, greedy_modularity_communities)
-    dot_string = convert_tree_string_to_dot(tree_string)
-    graph = graphviz.Source(dot_string, format="png")
-    graph.render(filename="tmp_greedy", cleanup=True)
-    graph.view()
+    # tree_string = convert_tree_to_tree_string_with_communities(config, agent, greedy_modularity_communities)
+    # dot_string = convert_tree_string_to_dot(tree_string)
+    # graph = graphviz.Source(dot_string, format="png")
+    # graph.render(filename="tmp_greedy", cleanup=True)
+    # graph.view()
 
     get_community = lambda leaf_id : [i for (i, c) in enumerate(communities) if str(leaf_id) in c]
 
